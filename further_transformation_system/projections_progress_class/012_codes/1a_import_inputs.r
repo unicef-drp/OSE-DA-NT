@@ -218,6 +218,8 @@ country_series <- country_series_raw %>%
       TRUE ~ TRUE
     )
   ) %>%
+  # Hardcoded exclusion: BHR overweight should not be included in projections outputs.
+  filter(!(INDICATOR == "NT_ANT_WHZ_PO2_MOD" & REF_AREA == "BHR")) %>%
   mutate(AGE = unname(projection_indicator_age[INDICATOR])) %>%
   standardize_projection_rows()
 

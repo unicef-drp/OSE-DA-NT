@@ -136,13 +136,13 @@ agg_input_path <- file.path(interdir, "out_dw_nut_country_for_agg.csv")
 
 
 
-# source(file.path(dwCodesNTProj,  "1a_import_inputs.r"))
-# source(file.path(dwCodesNTProj,  "1b_population_lookup.r"))
-# source(file.path(dwCodesNTProj,  "2_ant_ovwt_series.r"))
-# source(file.path(dwCodesNTProj,  "3_ane_wra_series.r"))
-# source(file.path(dwCodesNTProj,  "4_ant_wst_survey.r"))
-# source(file.path(dwCodesNTProj,  "5_ant_stnt_series.r"))
-# source(file.path(dwCodesNTProj,  "6_bw_lbw_series.r"))
-# source(file.path(dwCodesNTProj,  "7_iycf_exbf_survey.r"))
+source(file.path(dwCodesNTProj,  "1a_import_inputs.r"))
+source(file.path(dwCodesNTProj,  "1b_population_lookup.r"))
+source(file.path(dwCodesNTProj,  "2_ant_ovwt_series.r"))
+source(file.path(dwCodesNTProj,  "3_ane_wra_series.r"))
+source(file.path(dwCodesNTProj,  "4_ant_wst_survey.r"))
+source(file.path(dwCodesNTProj,  "5_ant_stnt_series.r"))
+source(file.path(dwCodesNTProj,  "6_bw_lbw_series.r"))
+source(file.path(dwCodesNTProj,  "7_iycf_exbf_survey.r"))
 
 source(file.path(dwCodesNTProj, "8_format_output.r"))
