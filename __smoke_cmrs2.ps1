@@ -1,5 +1,0 @@
-Set-Location "C:/Users/jconkle/Documents/GitHub/OSE-DA-NT"
-Rscript "analysis_datasets/02_codes/2_build_cmrs2_series.r"
-Rscript "analysis_datasets/02_codes/2_build_cmrs2_bw.r"
-Get-ChildItem "C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis Space/github/analysis_datasets/cmrs2_series.parquet"
-Get-ChildItem "C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis Space/github/analysis_datasets/cmrs2_bw.parquet"

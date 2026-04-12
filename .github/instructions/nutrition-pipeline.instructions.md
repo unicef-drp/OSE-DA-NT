@@ -36,6 +36,12 @@ These instructions apply to work in this repository.
 - Do not add user-specific absolute paths in new logic.
 - If a script depends on %USERPROFILE%/.config/user_config.yml, keep fallback behavior explicit.
 
+## Temp And Debug Script Rules
+
+- Never save temporary or diagnostic R/PowerShell scripts to the repository root. Use a system temp path instead: `$tmp = Join-Path $env:TEMP 'script_name.R'` in PowerShell or `tempfile(fileext = ".R")` in R.
+- Always clean up temp files after use (Remove-Item / unlink).
+- If a diagnostic script is reusable, place it in the appropriate `02_codes/` or `adhoc_analysis/` subfolder with a proper header; otherwise discard it after use.
+
 ## Documentation Rules
 
 - If script order or output contracts change, update 00_documentation in the same change.
