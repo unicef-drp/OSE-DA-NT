@@ -254,6 +254,75 @@ derive_iod_region_dim <- function(df) {
   out
 }
 
+derive_iycf_age_dim <- function(df) {
+  bg <- str_squish(get_chr_col(df, "BackgroundCharacteristics"))
+  std <- str_squish(get_chr_col(df, "StandardDisaggregations"))
+
+  out <- rep("_T", nrow(df))
+
+  months_idx <- bg == "Age in months"
+  months <- str_match(std, regex("^([0-9]{1,2})\\s+months?\\s+old$", ignore_case = TRUE))[, 2]
+  out[months_idx & !is.na(months)] <- paste0("M", sprintf("%02d", as.integer(months[months_idx & !is.na(months)])))
+
+  age_group_idx <- bg == "Age Group"
+  out[age_group_idx & str_to_lower(std) == "0 to 3 months"] <- "M00T03"
+
+  out
+}
+
+derive_iycf_education_dim <- function(df) {
+  bg <- str_squish(get_chr_col(df, "BackgroundCharacteristics"))
+  std <- str_squish(get_chr_col(df, "StandardDisaggregations"))
+
+  out <- rep("_T", nrow(df))
+  idx <- bg == "Mother's Education"
+  out[idx & std == "Mother's Education - Missing Education Data"] <- "MISSING_EDU"
+
+  out
+}
+
+derive_iycf_delivery_assistance_dim <- function(df) {
+  bg <- str_squish(get_chr_col(df, "BackgroundCharacteristics"))
+  std <- str_squish(get_chr_col(df, "StandardDisaggregations"))
+
+  out <- rep("_T", nrow(df))
+  idx <- bg == "Assistance at Delivery"
+  out[idx & std == "Attendance at Birth - Health Professional"] <- "HEALTH_PROFESSIONAL"
+  out[idx & std == "Attendance at Birth - Other"] <- "OTHER"
+  out[idx & std == "Attendance at Birth - Traditional Birth Attendant"] <- "TRADITIONAL_BIRTH_ATTENDANT"
+  out[idx & std == "Attendance at Birth - No one"] <- "NO_ONE"
+
+  out
+}
+
+derive_iycf_place_of_delivery_dim <- function(df) {
+  bg <- str_squish(get_chr_col(df, "BackgroundCharacteristics"))
+  std <- str_squish(get_chr_col(df, "StandardDisaggregations"))
+
+  out <- rep("_T", nrow(df))
+  idx <- bg == "Place of Delivery"
+  out[idx & std == "Place of Delivery - Health Facility"] <- "HEALTH_FACILITY"
+  out[idx & std == "Place of Delivery - Home"] <- "HOME"
+  out[idx & std == "Place of Delivery - Other"] <- "OTHER"
+
+  out
+}
+
+derive_iycf_misc_region_dim <- function(df) {
+  bg <- str_squish(get_chr_col(df, "BackgroundCharacteristics"))
+  std <- str_squish(get_chr_col(df, "StandardDisaggregations"))
+
+  out <- rep("_T", nrow(df))
+  misc_idx <- bg %in% c("Ethnicity", "Religion", "Caste")
+  token_bg <- str_replace_all(str_to_upper(bg), "[^A-Z0-9]+", "_")
+  token_std <- str_replace_all(str_to_upper(std), "[^A-Z0-9]+", "_")
+  token <- str_replace_all(str_trim(paste0(token_bg, "_", token_std)), "_+", "_")
+  token <- str_replace_all(token, "^_|_$", "")
+  out[misc_idx & token != ""] <- paste0("DISAGG_", token[misc_idx & token != ""])
+
+  out
+}
+
 apply_dataset_fallback_dims <- function(df, dataset_name) {
   if (identical(dataset_name, "CMRS_BW.dta")) {
     return(
@@ -290,6 +359,23 @@ apply_dataset_fallback_dims <- function(df, dataset_name) {
           WEALTH = if_else(.data$WEALTH == "_T", derive_iod_wealth_dim(.), .data$WEALTH),
           RESIDENCE = if_else(.data$RESIDENCE == "_T", derive_iod_residence_dim(.), .data$RESIDENCE),
           HEAD_OF_HOUSEHOLD = if_else(.data$HEAD_OF_HOUSEHOLD == "_T", derive_iod_head_of_household_dim(.), .data$HEAD_OF_HOUSEHOLD),
+          REGION = if_else(.data$REGION == "_T", derive_iod_region_dim(.), .data$REGION)
+        )
+    )
+  }
+
+  if (identical(dataset_name, "CMRS_IYCF.dta")) {
+    return(
+      df %>%
+        mutate(
+          AGE = if_else(.data$AGE == "_T", derive_iycf_age_dim(.), .data$AGE),
+          EDUCATION = if_else(.data$EDUCATION == "_T", derive_iycf_education_dim(.), .data$EDUCATION),
+          DELIVERY_ASSISTANCE = if_else(.data$DELIVERY_ASSISTANCE == "_T", derive_iycf_delivery_assistance_dim(.), .data$DELIVERY_ASSISTANCE),
+          PLACE_OF_DELIVERY = if_else(.data$PLACE_OF_DELIVERY == "_T", derive_iycf_place_of_delivery_dim(.), .data$PLACE_OF_DELIVERY),
+          WEALTH = if_else(.data$WEALTH == "_T", derive_iod_wealth_dim(.), .data$WEALTH),
+          RESIDENCE = if_else(.data$RESIDENCE == "_T", derive_iod_residence_dim(.), .data$RESIDENCE),
+          HEAD_OF_HOUSEHOLD = if_else(.data$HEAD_OF_HOUSEHOLD == "_T", derive_iod_head_of_household_dim(.), .data$HEAD_OF_HOUSEHOLD),
+          REGION = if_else(.data$REGION == "_T", derive_iycf_misc_region_dim(.), .data$REGION),
           REGION = if_else(.data$REGION == "_T", derive_iod_region_dim(.), .data$REGION)
         )
     )

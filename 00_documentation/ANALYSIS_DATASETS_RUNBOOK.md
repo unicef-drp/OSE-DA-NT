@@ -34,6 +34,12 @@ The execute conductor currently sources:
 - 2_build_cmrs2_ant.r
 - 2_build_cmrs2_iycf.r
 
+Current CMRS2 non-series output files include:
+- cmrs2_bw.parquet
+- cmrs2_iod.parquet
+- cmrs2_ant.parquet
+- cmrs2_iycf.parquet
+
 The series builder currently depends on shared helpers in:
 - analysis_datasets/02_codes/1_layer2_utils.r
 
@@ -76,6 +82,6 @@ Future refactoring should move this workflow toward profile/config-based path re
 
 ## Recommended Documentation Follow-Up
 
-- Document each `2_build_cmrs2_*` output file and expected schema.
+- Document each `2_build_cmrs2_*` output file and expected schema (including the single-file IYCF output `cmrs2_iycf.parquet`).
 - Document the verification checks in _verify_all_outputs.r as a formal QA checklist.
 - Add a reference-data-manager note describing how indicator and disaggregation reference files are versioned and updated.

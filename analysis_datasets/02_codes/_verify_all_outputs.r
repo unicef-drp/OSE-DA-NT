@@ -14,8 +14,7 @@ file_specs <- list(
   list(output = "cmrs2_ant.parquet", source = "CMRS_ANT.dta"),
   list(output = "cmrs2_bw.parquet", source = "CMRS_BW.dta"),
   list(output = "cmrs2_iod.parquet", source = "CMRS_IOD.dta"),
-  list(output = "cmrs2_iycf_bf.parquet", source = "CMRS_IYCF.dta"),
-  list(output = "cmrs2_iycf_cf.parquet", source = "CMRS_IYCF.dta")
+  list(output = "cmrs2_iycf.parquet", source = "CMRS_IYCF.dta")
 )
 
 source_specs <- list(
@@ -27,7 +26,7 @@ source_specs <- list(
   list(label = "ant", source = "CMRS_ANT.dta", outputs = c("cmrs2_ant.parquet")),
   list(label = "bw", source = "CMRS_BW.dta", outputs = c("cmrs2_bw.parquet")),
   list(label = "iod", source = "CMRS_IOD.dta", outputs = c("cmrs2_iod.parquet")),
-  list(label = "iycf", source = "CMRS_IYCF.dta", outputs = c("cmrs2_iycf_bf.parquet", "cmrs2_iycf_cf.parquet"))
+  list(label = "iycf", source = "CMRS_IYCF.dta", outputs = c("cmrs2_iycf.parquet"))
 )
 
 compare_specs <- list(
