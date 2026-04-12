@@ -57,6 +57,31 @@ Expected keys include:
 
 When path objects are not preloaded, scripts may auto-resolve project and teams paths from user config.
 
+## Recommended Path Setup Approach
+
+This repo now includes a profile script:
+- profile_OSE-DA-NT.R
+
+Recommended approach for OSE-DA-NT:
+- Use one profile script + user_config.yml for path setup.
+- Avoid hostname-based path branching inside pipeline scripts.
+
+Why this is better than hostname blocks in execute scripts:
+- Easier maintenance: users update one config file, not multiple scripts.
+- Better portability: works across laptop changes and OS differences.
+- Cleaner code: build scripts focus on data logic, not machine routing.
+
+Nutrition-team compatibility:
+- The profile defines shared repo roots (projectFolder, cmrsInputDir, githubOutputRoot, analysisDatasetsOutputDir) and each subfolder script derives its local paths from those roots.
+
+Quick start:
+1. Copy _config_template/user_config.yml to %USERPROFILE%/.config/user_config.yml
+2. Replace placeholders with your paths.
+3. In R, run: source("profile_OSE-DA-NT.R")
+4. Then run entry scripts, for example:
+	- analysis_datasets/02_codes/0_execute_conductor.r
+	- further_transformation_system/projections_progress_class/012_codes/1_execute.r
+
 ## Documentation
 
 Start here:

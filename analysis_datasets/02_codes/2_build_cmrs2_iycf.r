@@ -1,4 +1,7 @@
-source("C:/Users/jconkle/Documents/GitHub/OSE-DA-NT/analysis_datasets/02_codes/1_layer2_utils.r")
+if (!exists("analysisCodes", envir = .GlobalEnv)) {
+	source(file.path(getwd(), "profile_OSE-DA-NT.R"))
+}
+source(file.path(analysisCodes, "1_layer2_utils.r"))
 
 disagg_map <- read_disagg_map()
 source_data <- haven::read_dta(file.path(cmrs_input_dir, "CMRS_IYCF.dta"))

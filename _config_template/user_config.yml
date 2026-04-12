@@ -1,0 +1,11 @@
+# Copy this file to: %USERPROFILE%/.config/user_config.yml
+#
+# Preferred structure: a top-level key per username.
+# The profile also supports a flat top-level layout for backwards compatibility.
+
+jdoe:
+  githubFolder: C:/Users/jdoe/Documents/GitHub
+  teamsRoot: C:/Users/jdoe/UNICEF/Data and Analytics Nutrition - Analysis Space
+  # Preferred explicit root for nutrition CMRS inputs/outputs.
+  nutritionRoot: C:/Users/jdoe/UNICEF/Data and Analytics Nutrition - Analysis Space
+  # githubOutputRoot is derived automatically as <nutritionRoot>/github — no need to set it here.

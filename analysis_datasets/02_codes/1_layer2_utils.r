@@ -7,9 +7,15 @@ suppressPackageStartupMessages({
   library(tibble)
 })
 
-cmrs_input_dir <- "C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis Space/Combined Nutrition Databases/Common Minimum Reporting Standard"
-disagg_map_path <- "C:/Users/jconkle/Documents/GitHub/OSE-DA-NT/reference_data_manager/indicators/reference_disaggregations.csv"
-layer2_output_dir <- "C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis Space/github/analysis_datasets"
+if (!exists("projectFolder", envir = .GlobalEnv) ||
+    !exists("cmrsInputDir", envir = .GlobalEnv) ||
+    !exists("analysisDatasetsOutputDir", envir = .GlobalEnv)) {
+  source(file.path(getwd(), "profile_OSE-DA-NT.R"))
+}
+
+cmrs_input_dir <- cmrsInputDir
+disagg_map_path <- file.path(projectFolder, "reference_data_manager", "indicators", "reference_disaggregations.csv")
+layer2_output_dir <- analysisDatasetsOutputDir
 
 if (!dir.exists(layer2_output_dir)) {
   dir.create(layer2_output_dir, recursive = TRUE)
