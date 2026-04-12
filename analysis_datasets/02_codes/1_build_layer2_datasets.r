@@ -1,6 +1,6 @@
 # ------------------------------------------------------------------
 # Project: OSE-DA-NT
-# Script: build_layer2_datasets.r
+# Script: 1_build_layer2_datasets.r
 # Purpose: Build standardized Layer 2 datasets from CMRS Stata files
 # ------------------------------------------------------------------
 
@@ -201,7 +201,7 @@ build_layer2_dataset <- function(
 
 input_cmrs_dir <- "C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis Space/Combined Nutrition Databases/Common Minimum Reporting Standard"
 disagg_map_path <- "C:/Users/jconkle/Documents/GitHub/OSE-DA-NT/reference_data_manager/indicators/reference_disaggregations.csv"
-layer2_output_dir <- "C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis Space/github/analysis_database"
+layer2_output_dir <- "C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis Space/github/analysis_datasets"
 
 if (!dir.exists(layer2_output_dir)) {
   dir.create(layer2_output_dir, recursive = TRUE)

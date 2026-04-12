@@ -4,17 +4,13 @@ suppressPackageStartupMessages({
   library(haven)
 })
 
-out_dir <- "C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis Space/github/analysis_database"
+out_dir <- "C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis Space/github/analysis_datasets"
 source_dir <- "C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis Space/Combined Nutrition Databases/Common Minimum Reporting Standard"
 
 dim_cols <- c("SEX", "AGE", "RESIDENCE", "WEALTH", "EDUCATION")
 
 file_specs <- list(
-  list(output = "cmrs2_series_ane.parquet", source = "CMRS_SERIES_ANE.dta"),
-  list(output = "cmrs2_series_ant.parquet", source = "CMRS_SERIES_ANT.dta"),
-  list(output = "cmrs2_series_dant.parquet", source = "CMRS_SERIES_DANT.dta"),
-  list(output = "cmrs2_series_sant.parquet", source = "CMRS_SERIES_SANT.dta"),
-  list(output = "cmrs2_series_vas.parquet", source = "CMRS_SERIES_VAS.dta"),
+  list(output = "cmrs2_series.parquet", source = "CMRS_SERIES_*.dta"),
   list(output = "cmrs2_ant.parquet", source = "CMRS_ANT.dta"),
   list(output = "cmrs2_bw.parquet", source = "CMRS_BW.dta"),
   list(output = "cmrs2_iod.parquet", source = "CMRS_IOD.dta"),
@@ -23,11 +19,11 @@ file_specs <- list(
 )
 
 source_specs <- list(
-  list(label = "series_ane", source = "CMRS_SERIES_ANE.dta", outputs = c("cmrs2_series_ane.parquet")),
-  list(label = "series_ant", source = "CMRS_SERIES_ANT.dta", outputs = c("cmrs2_series_ant.parquet")),
-  list(label = "series_dant", source = "CMRS_SERIES_DANT.dta", outputs = c("cmrs2_series_dant.parquet")),
-  list(label = "series_sant", source = "CMRS_SERIES_SANT.dta", outputs = c("cmrs2_series_sant.parquet")),
-  list(label = "series_vas", source = "CMRS_SERIES_VAS.dta", outputs = c("cmrs2_series_vas.parquet")),
+  list(
+    label = "series_all",
+    sources = c("CMRS_SERIES_ANE.dta", "CMRS_SERIES_ANT.dta", "CMRS_SERIES_DANT.dta", "CMRS_SERIES_SANT.dta", "CMRS_SERIES_VAS.dta"),
+    outputs = c("cmrs2_series.parquet")
+  ),
   list(label = "ant", source = "CMRS_ANT.dta", outputs = c("cmrs2_ant.parquet")),
   list(label = "bw", source = "CMRS_BW.dta", outputs = c("cmrs2_bw.parquet")),
   list(label = "iod", source = "CMRS_IOD.dta", outputs = c("cmrs2_iod.parquet")),
@@ -181,14 +177,17 @@ for (spec in file_specs) {
 }
 
 for (spec in source_specs) {
-  src_path <- file.path(source_dir, spec$source)
+  src_files <- if (!is.null(spec$sources)) spec$sources else c(spec$source)
+  src_paths <- file.path(source_dir, src_files)
   out_paths <- file.path(out_dir, spec$outputs)
 
   cat("\n========================================\n")
-  cat("SOURCE CHECK:", spec$source, " -> ", paste(spec$outputs, collapse = " + "), "\n")
+  cat("SOURCE CHECK:", paste(src_files, collapse = " + "), " -> ", paste(spec$outputs, collapse = " + "), "\n")
 
-  if (!file.exists(src_path)) {
+  if (any(!file.exists(src_paths))) {
+    missing_sources <- src_files[!file.exists(src_paths)]
     cat("  *** SOURCE FILE NOT FOUND ***\n")
+    cat("  Missing source(s):", paste(missing_sources, collapse = ", "), "\n")
     all_pass <- FALSE
     next
   }
@@ -200,7 +199,7 @@ for (spec in source_specs) {
     next
   }
 
-  src_schema <- names(read_dta(src_path, n_max = 0))
+  src_schema <- names(read_dta(src_paths[1], n_max = 0))
   out_schema <- unique(unlist(lapply(out_paths, function(p) names(read_output_subset(p, n_max = 0)))))
 
   missing_from_output <- setdiff(src_schema, out_schema)
@@ -220,7 +219,9 @@ for (spec in source_specs) {
   if (length(src_select) == 0) src_select <- src_schema[1]
   if (length(out_select) == 0) out_select <- out_schema[1]
 
-  src_df <- read_dta(src_path, col_select = any_of(src_select)) %>% mutate(across(everything(), as.character))
+  src_df <- bind_rows(lapply(src_paths, function(p) {
+    read_dta(p, col_select = any_of(src_select)) %>% mutate(across(everything(), as.character))
+  }))
   out_df <- bind_rows(lapply(out_paths, function(p) read_output_subset(p, select_cols = out_select)))
 
   row_pass <- nrow(src_df) == nrow(out_df)

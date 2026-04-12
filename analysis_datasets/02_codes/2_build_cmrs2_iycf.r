@@ -1,4 +1,4 @@
-source("C:/Users/jconkle/Documents/GitHub/OSE-DA-NT/analytical_database/per_dataset/layer2_utils.r")
+source("C:/Users/jconkle/Documents/GitHub/OSE-DA-NT/analysis_datasets/02_codes/1_layer2_utils.r")
 
 disagg_map <- read_disagg_map()
 source_data <- haven::read_dta(file.path(cmrs_input_dir, "CMRS_IYCF.dta"))

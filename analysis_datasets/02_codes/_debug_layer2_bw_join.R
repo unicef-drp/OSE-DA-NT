@@ -4,7 +4,7 @@ suppressPackageStartupMessages({
   library(dplyr)
 })
 
-script_path <- "C:/Users/jconkle/Documents/GitHub/OSE-DA-NT/analytical_database/build_layer2_datasets.r"
+script_path <- "C:/Users/jconkle/Documents/GitHub/OSE-DA-NT/analysis_datasets/02_codes/1_build_layer2_datasets.r"
 script_lines <- readLines(script_path)
 cut_line <- grep("^input_cmrs_dir <-", script_lines)[1] - 1
 

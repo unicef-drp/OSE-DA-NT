@@ -6,7 +6,7 @@ suppressPackageStartupMessages({
   library(tibble)
 })
 
-script_path <- "C:/Users/jconkle/Documents/GitHub/OSE-DA-NT/analytical_database/build_layer2_datasets.r"
+script_path <- "C:/Users/jconkle/Documents/GitHub/OSE-DA-NT/analysis_datasets/02_codes/1_build_layer2_datasets.r"
 script_lines <- readLines(script_path)
 cut_line <- grep("^input_cmrs_dir <-", script_lines)[1] - 1
 
@@ -14,7 +14,7 @@ eval(parse(text = paste(script_lines[1:cut_line], collapse = "\n")))
 
 input_cmrs_dir <- "C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis Space/Combined Nutrition Databases/Common Minimum Reporting Standard"
 disagg_map_path <- "C:/Users/jconkle/Documents/GitHub/OSE-DA-NT/reference_data_manager/indicators/reference_disaggregations.csv"
-layer2_output_dir <- "C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis Space/github/analysis_database"
+layer2_output_dir <- "C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis Space/github/analysis_datasets"
 
 disagg_map <- read_csv(disagg_map_path, show_col_types = FALSE)
 
