@@ -7,81 +7,100 @@ Last updated: 2026-04-12
 This runbook covers the active scripts under:
 - analysis_datasets/02_codes/
 
+See also: [analysis_datasets/02_codes/README.md](../analysis_datasets/02_codes/README.md)
+
 ## Purpose
 
-These scripts build standardized CMRS2-friendly datasets and validation outputs from upstream CMRS Stata files.
+These scripts build standardized CMRS2 analysis datasets from upstream CMRS
+Stata files. Each source DTA is joined to the disaggregation reference mapping,
+has 12 analytical dimension columns assigned, and is written to Parquet format.
 
-This area aligns with the legacy CMRS usage manuals and reference workbooks, which describe how nutrition data move from structured warehouse/CMRS assets into reusable analysis datasets.
+## Entry Points
 
-## Current Entry Points
+### Full build
 
-- analysis_datasets/02_codes/0_execute_conductor.r
-  - Sources the CMRS2 build scripts for series and non-series domain families.
+```r
+source("analysis_datasets/02_codes/0_execute_conductor.r")
+```
 
-- analysis_datasets/02_codes/1_build_layer2_datasets.r
-  - Builds standardized layer-2 datasets from CMRS Stata inputs.
-  - Joins disaggregation mappings from reference_data_manager/indicators/reference_disaggregations.csv.
+Builds all five domain outputs in sequence.
 
-- analysis_datasets/02_codes/_verify_all_outputs.r
-  - Performs structural and distribution-style verification across generated outputs.
+### Single domain
 
-## Current Build Chain
+Any `2_build_cmrs2_*.r` script can be run standalone:
 
-The execute conductor currently sources:
-- 2_build_cmrs2_series.r
-- 2_build_cmrs2_bw.r
-- 2_build_cmrs2_iod.r
-- 2_build_cmrs2_ant.r
-- 2_build_cmrs2_iycf.r
+```r
+source("analysis_datasets/02_codes/2_build_cmrs2_bw.r")
+```
 
-Current CMRS2 non-series output files include:
-- cmrs2_bw.parquet
-- cmrs2_iod.parquet
-- cmrs2_ant.parquet
-- cmrs2_iycf.parquet
+### Post-build validation
 
-The series builder currently depends on shared helpers in:
-- analysis_datasets/02_codes/1_layer2_utils.r
+```r
+source("analysis_datasets/02_codes/3_verify_all_outputs.r")
+```
+
+## File Inventory
+
+| # | Script | Purpose |
+|---|--------|---------|
+| 0 | `0_execute_conductor.r` | Orchestrator — sources all five domain builders. |
+| 1 | `1_layer2_utils.r` | Shared module: reference loader, build function, dimension derivation. |
+| 2a | `2_build_cmrs2_series.r` | Series builder (ANE + ANT + DANT + SANT + VAS → 1 parquet). |
+| 2b | `2_build_cmrs2_bw.r` | Birth weight builder. |
+| 2c | `2_build_cmrs2_iod.r` | Iodine deficiency builder. |
+| 2d | `2_build_cmrs2_ant.r` | Anthropometry builder. |
+| 2e | `2_build_cmrs2_iycf.r` | Infant & young child feeding builder. |
+| QA | `3_verify_all_outputs.r` | Post-build QA: schema, row counts, distributions. |
+
+## Outputs
+
+| File | Source | Compression |
+|------|--------|-------------|
+| `cmrs2_series.parquet` | 5 series DTAs combined | zstd |
+| `cmrs2_bw.parquet` | `CMRS_BW.dta` | zstd |
+| `cmrs2_iod.parquet` | `CMRS_IOD.dta` | zstd |
+| `cmrs2_ant.parquet` | `CMRS_ANT.dta` | zstd |
+| `cmrs2_iycf.parquet` | `CMRS_IYCF.dta` | zstd |
+
+Output directory is configured by `analysisDatasetsOutputDir` in
+`profile_OSE-DA-NT.R`.
+
+## Output Schema — Analytical Dimensions
+
+Each output carries 12 dimension columns:
+
+| Column | Layer 1 Reference Source | Layer 2 Fallback |
+|--------|--------------------------|------------------|
+| SEX | HELIX_SEX | — |
+| AGE | HELIX_AGE / OSE_AGE | IYCF age-in-months |
+| RESIDENCE | HELIX_RESIDENCE | IOD area-wealth suffix |
+| WEALTH | HELIX_WEALTH_QUINTILE | BW/IOD share/decile/tercile |
+| EDUCATION | HELIX_MATERNAL_EDU_LVL / OSE_EDUCATION | BW/IYCF education |
+| HEAD_OF_HOUSEHOLD | HELIX_HEAD_OF_HOUSE | BW/IOD HH-head sex |
+| MOTHER_AGE | OSE_MOTHER_AGE | BW mother-age |
+| DELIVERY_ASSISTANCE | OSE_DELIVERY_ASSISTANCE | BW/IYCF delivery-assistance |
+| PLACE_OF_DELIVERY | OSE_PLACE_OF_DELIVERY | BW/IYCF place-of-delivery |
+| DELIVERY_MODE | OSE_DELIVERY_MODE | BW c-section/vaginal |
+| MULTIPLE_BIRTH | OSE_MULTIPLE_BIRTH | BW singleton/multiple |
+| REGION | — | Subnational / ethnicity / religion / caste |
 
 ## Reference Dependencies
 
-Current repository reference assets used in this workflow include:
-- reference_data_manager/indicators/directory_indicator.csv
-- reference_data_manager/indicators/reference_disaggregations.csv
+| Asset | Path |
+|-------|------|
+| Disaggregation mapping | `reference_data_manager/indicators/reference_disaggregations.csv` |
+| Indicator directory | `reference_data_manager/indicators/directory_indicator.csv` |
+| User config | `~/.config/user_config.yml` |
+| Path profile | `profile_OSE-DA-NT.R` |
 
-These mirror the role played by legacy assets such as:
-- DIRECTORY_INDICATOR
-- REFERENCE_DISAGGREGATIONS
-- DIRECTORY_SURVEY
-- CMRS field/codebook workbooks
+The disaggregation mapping is also consumed by DW-Production via the GitHub main
+branch raw URL. Adding new columns (e.g. OSE_*) is safe — DW-Production selects
+only its known HELIX columns and ignores anything else.
 
-## Data Model Notes
+## Environment
 
-The active layer-2 build script standardizes core analytical fields such as:
-- REF_AREA
-- TIME_PERIOD
-- INDICATOR
-- SEX
-- AGE
-- RESIDENCE
-- WEALTH
-- EDUCATION
-- VALUE
+All paths are resolved through `profile_OSE-DA-NT.R`, which reads
+`~/.config/user_config.yml`. Required config keys: `githubFolder`, `teamsRoot`,
+`nutritionRoot`.
 
-It also preserves row count across joins and warns on unmapped disaggregation codes, which is consistent with the legacy emphasis on controlled disaggregation mapping.
-
-## Environment Notes
-
-Some current scripts still use entrenched absolute paths for:
-- upstream CMRS input directories
-- local output directories
-
-These should be treated as migration-state behavior, not the long-term target design.
-
-Future refactoring should move this workflow toward profile/config-based path resolution like the further transformation system.
-
-## Recommended Documentation Follow-Up
-
-- Document each `2_build_cmrs2_*` output file and expected schema (including the single-file IYCF output `cmrs2_iycf.parquet`).
-- Document the verification checks in _verify_all_outputs.r as a formal QA checklist.
-- Add a reference-data-manager note describing how indicator and disaggregation reference files are versioned and updated.
+R package dependencies: dplyr, stringr, readr, arrow, haven, tibble.

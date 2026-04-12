@@ -1,3 +1,32 @@
+# ---------------------------------------------------------------------------
+# Script:  1_layer2_utils.r
+# Purpose: Shared utility functions for building CMRS2 analysis datasets.
+#
+# This module provides the core data-processing pipeline:
+#   1. read_disagg_map()        — loads the reference disaggregation mapping
+#   2. build_layer2_dataset()   — joins source CMRS data to the mapping,
+#                                 assigns analytical dimensions, applies
+#                                 dataset-specific fallback derivations
+#   3. run_single_dataset()     — convenience wrapper: read → build → write
+#   4. run_combined_datasets()  — same, but binds multiple source DTAs first
+#
+# Dimension assignment uses a two-layer strategy:
+#   Layer 1: Reference-based lookup via standard_disagg ID from
+#            reference_disaggregations.csv (HELIX_* and OSE_* columns).
+#   Layer 2: Hardcoded fallback derivation functions that parse
+#            BackgroundCharacteristics / ContextualDisaggregationsLabel
+#            for values not yet covered by the reference mapping.
+#
+# Output columns (analytical dimensions):
+#   SEX, AGE, RESIDENCE, WEALTH, EDUCATION, HEAD_OF_HOUSEHOLD,
+#   MOTHER_AGE, DELIVERY_ASSISTANCE, PLACE_OF_DELIVERY,
+#   DELIVERY_MODE, MULTIPLE_BIRTH, REGION
+#
+# Dependencies:
+#   - profile_OSE-DA-NT.R  (provides path variables)
+#   - reference_data_manager/indicators/reference_disaggregations.csv
+# ---------------------------------------------------------------------------
+
 suppressPackageStartupMessages({
   library(dplyr)
   library(stringr)
@@ -21,6 +50,10 @@ if (!dir.exists(layer2_output_dir)) {
   dir.create(layer2_output_dir, recursive = TRUE)
 }
 
+# ---------------------------------------------------------------------------
+# Column helpers
+# ---------------------------------------------------------------------------
+
 get_chr_col <- function(df, col_name) {
   if (col_name %in% names(df)) {
     as.character(df[[col_name]])
@@ -36,6 +69,14 @@ get_num_col <- function(df, col_name) {
     rep(NA_real_, nrow(df))
   }
 }
+
+# ---------------------------------------------------------------------------
+# Fallback dimension derivation functions
+#
+# These parse BackgroundCharacteristics / ContextualDisaggregationsLabel /
+# StandardDisaggregations text fields to derive dimension codes for rows
+# that were not resolved by the reference mapping (Layer 2).
+# ---------------------------------------------------------------------------
 
 derive_region_dim <- function(df) {
   bg <- get_chr_col(df, "BackgroundCharacteristics")
@@ -336,11 +377,11 @@ apply_dataset_fallback_dims <- function(df, dataset_name) {
         mutate(
           WEALTH = if_else(.data$WEALTH == "_T", derive_bw_wealth_dim(.), .data$WEALTH),
           EDUCATION = if_else(.data$EDUCATION == "_T", derive_bw_education_dim(.), .data$EDUCATION),
-          MOTHER_AGE = derive_bw_mother_age_dim(.),
-          DELIVERY_ASSISTANCE = derive_bw_delivery_assistance_dim(.),
-          PLACE_OF_DELIVERY = derive_bw_place_of_delivery_dim(.),
-          DELIVERY_MODE = derive_bw_delivery_mode_dim(.),
-          MULTIPLE_BIRTH = derive_bw_multiple_birth_dim(.),
+          MOTHER_AGE = if_else(.data$MOTHER_AGE == "_T", derive_bw_mother_age_dim(.), .data$MOTHER_AGE),
+          DELIVERY_ASSISTANCE = if_else(.data$DELIVERY_ASSISTANCE == "_T", derive_bw_delivery_assistance_dim(.), .data$DELIVERY_ASSISTANCE),
+          PLACE_OF_DELIVERY = if_else(.data$PLACE_OF_DELIVERY == "_T", derive_bw_place_of_delivery_dim(.), .data$PLACE_OF_DELIVERY),
+          DELIVERY_MODE = if_else(.data$DELIVERY_MODE == "_T", derive_bw_delivery_mode_dim(.), .data$DELIVERY_MODE),
+          MULTIPLE_BIRTH = if_else(.data$MULTIPLE_BIRTH == "_T", derive_bw_multiple_birth_dim(.), .data$MULTIPLE_BIRTH),
           HEAD_OF_HOUSEHOLD = if_else(.data$HEAD_OF_HOUSEHOLD == "_T", derive_bw_head_of_household_dim(.), .data$HEAD_OF_HOUSEHOLD)
         )
     )
@@ -391,9 +432,9 @@ apply_dataset_fallback_dims <- function(df, dataset_name) {
 }
 
 # ---------------------------------------------------------------------------
-# Prepare the disaggregation reference exactly as DW-Production does
-# (mirrors 1a_cmrs_prep_reference_disagg_prep.R)
+# Reference mapping loader
 # ---------------------------------------------------------------------------
+
 read_disagg_map <- function(path = disagg_map_path) {
   raw <- readr::read_csv(path, col_types = cols(.default = col_character()), show_col_types = FALSE) %>%
     as_tibble() %>%
@@ -407,21 +448,32 @@ read_disagg_map <- function(path = disagg_map_path) {
       HELIX_RESIDENCE        = coalesce(.data$HELIX_RESIDENCE, ""),
       HELIX_MATERNAL_EDU_LVL = coalesce(.data$HELIX_MATERNAL_EDU_LVL, ""),
       HELIX_HEAD_OF_HOUSE    = if ("HELIX_HEAD_OF_HOUSE" %in% names(.)) coalesce(.data$HELIX_HEAD_OF_HOUSE, "") else "",
+      OSE_MOTHER_AGE         = if ("OSE_MOTHER_AGE" %in% names(.)) coalesce(.data$OSE_MOTHER_AGE, "") else "",
+      OSE_DELIVERY_ASSISTANCE = if ("OSE_DELIVERY_ASSISTANCE" %in% names(.)) coalesce(.data$OSE_DELIVERY_ASSISTANCE, "") else "",
+      OSE_PLACE_OF_DELIVERY  = if ("OSE_PLACE_OF_DELIVERY" %in% names(.)) coalesce(.data$OSE_PLACE_OF_DELIVERY, "") else "",
+      OSE_DELIVERY_MODE      = if ("OSE_DELIVERY_MODE" %in% names(.)) coalesce(.data$OSE_DELIVERY_MODE, "") else "",
+      OSE_MULTIPLE_BIRTH     = if ("OSE_MULTIPLE_BIRTH" %in% names(.)) coalesce(.data$OSE_MULTIPLE_BIRTH, "") else "",
+      OSE_AGE                = if ("OSE_AGE" %in% names(.)) coalesce(.data$OSE_AGE, "") else "",
+      OSE_EDUCATION          = if ("OSE_EDUCATION" %in% names(.)) coalesce(.data$OSE_EDUCATION, "") else "",
       HELIX_CODE = paste0(
         .data$HELIX_SEX, "|", .data$HELIX_AGE, "|", .data$HELIX_WEALTH_QUINTILE, "|",
         .data$HELIX_RESIDENCE, "|", .data$HELIX_MATERNAL_EDU_LVL, "|", .data$HELIX_HEAD_OF_HOUSE
       ),
+      OSE_CODE = paste0(
+        .data$OSE_MOTHER_AGE, "|", .data$OSE_DELIVERY_ASSISTANCE, "|", .data$OSE_PLACE_OF_DELIVERY, "|",
+        .data$OSE_DELIVERY_MODE, "|", .data$OSE_MULTIPLE_BIRTH, "|", .data$OSE_AGE, "|", .data$OSE_EDUCATION
+      ),
       standard_disagg_key = str_trim(coalesce(.data$ID, ""))
     ) %>%
-    filter(.data$HELIX_CODE != "|||||") %>%
+    filter(.data$HELIX_CODE != "|||||" | .data$OSE_CODE != "||||||") %>%
     filter(!is.na(.data$standard_disagg_key), .data$standard_disagg_key != "") %>%
     distinct()
 }
 
 # ---------------------------------------------------------------------------
-# Build Layer 2 dataset — follows DW-Production join & dimension logic
-# (mirrors 1b–1f import scripts)
+# Core build function
 # ---------------------------------------------------------------------------
+
 build_layer2_dataset <- function(data, disagg_map, dataset_name = NA_character_) {
 
   # Prepare the join-ready reference (keep only needed cols, deduplicate by key)
@@ -433,7 +485,14 @@ build_layer2_dataset <- function(data, disagg_map, dataset_name = NA_character_)
       HELIX_WEALTH_QUINTILE  = .data$HELIX_WEALTH_QUINTILE,
       HELIX_RESIDENCE        = .data$HELIX_RESIDENCE,
       HELIX_MATERNAL_EDU_LVL = .data$HELIX_MATERNAL_EDU_LVL,
-      HELIX_HEAD_OF_HOUSE    = .data$HELIX_HEAD_OF_HOUSE
+      HELIX_HEAD_OF_HOUSE    = .data$HELIX_HEAD_OF_HOUSE,
+      OSE_MOTHER_AGE         = .data$OSE_MOTHER_AGE,
+      OSE_DELIVERY_ASSISTANCE = .data$OSE_DELIVERY_ASSISTANCE,
+      OSE_PLACE_OF_DELIVERY  = .data$OSE_PLACE_OF_DELIVERY,
+      OSE_DELIVERY_MODE      = .data$OSE_DELIVERY_MODE,
+      OSE_MULTIPLE_BIRTH     = .data$OSE_MULTIPLE_BIRTH,
+      OSE_AGE                = .data$OSE_AGE,
+      OSE_EDUCATION          = .data$OSE_EDUCATION
     ) %>%
     distinct(.data$standard_disagg_key, .keep_all = TRUE)
 
@@ -458,10 +517,21 @@ build_layer2_dataset <- function(data, disagg_map, dataset_name = NA_character_)
       HELIX_RESIDENCE        = coalesce(.data$HELIX_RESIDENCE, ""),
       HELIX_MATERNAL_EDU_LVL = coalesce(.data$HELIX_MATERNAL_EDU_LVL, ""),
       HELIX_HEAD_OF_HOUSE    = coalesce(.data$HELIX_HEAD_OF_HOUSE, ""),
+      OSE_MOTHER_AGE         = coalesce(.data$OSE_MOTHER_AGE, ""),
+      OSE_DELIVERY_ASSISTANCE = coalesce(.data$OSE_DELIVERY_ASSISTANCE, ""),
+      OSE_PLACE_OF_DELIVERY  = coalesce(.data$OSE_PLACE_OF_DELIVERY, ""),
+      OSE_DELIVERY_MODE      = coalesce(.data$OSE_DELIVERY_MODE, ""),
+      OSE_MULTIPLE_BIRTH     = coalesce(.data$OSE_MULTIPLE_BIRTH, ""),
+      OSE_AGE                = coalesce(.data$OSE_AGE, ""),
+      OSE_EDUCATION          = coalesce(.data$OSE_EDUCATION, ""),
       disagg_ref_match = (
         .data$HELIX_SEX != "" | .data$HELIX_AGE != "" |
         .data$HELIX_WEALTH_QUINTILE != "" | .data$HELIX_RESIDENCE != "" |
-        .data$HELIX_MATERNAL_EDU_LVL != "" | .data$HELIX_HEAD_OF_HOUSE != ""
+        .data$HELIX_MATERNAL_EDU_LVL != "" | .data$HELIX_HEAD_OF_HOUSE != "" |
+        .data$OSE_MOTHER_AGE != "" | .data$OSE_DELIVERY_ASSISTANCE != "" |
+        .data$OSE_PLACE_OF_DELIVERY != "" | .data$OSE_DELIVERY_MODE != "" |
+        .data$OSE_MULTIPLE_BIRTH != "" | .data$OSE_AGE != "" |
+        .data$OSE_EDUCATION != ""
       )
     )
 
@@ -474,16 +544,16 @@ build_layer2_dataset <- function(data, disagg_map, dataset_name = NA_character_)
   out <- out %>%
     mutate(
       SEX       = if_else(.data$HELIX_SEX != "",              .data$HELIX_SEX, "_T"),
-      AGE       = if_else(.data$HELIX_AGE != "",              .data$HELIX_AGE, "_T"),
+      AGE       = if_else(.data$HELIX_AGE != "", .data$HELIX_AGE, if_else(.data$OSE_AGE != "", .data$OSE_AGE, "_T")),
       RESIDENCE = if_else(.data$HELIX_RESIDENCE != "",        .data$HELIX_RESIDENCE, "_T"),
       WEALTH    = if_else(.data$HELIX_WEALTH_QUINTILE != "",  .data$HELIX_WEALTH_QUINTILE, "_T"),
-      EDUCATION = if_else(.data$HELIX_MATERNAL_EDU_LVL != "", .data$HELIX_MATERNAL_EDU_LVL, "_T"),
+      EDUCATION = if_else(.data$HELIX_MATERNAL_EDU_LVL != "", .data$HELIX_MATERNAL_EDU_LVL, if_else(.data$OSE_EDUCATION != "", .data$OSE_EDUCATION, "_T")),
       HEAD_OF_HOUSEHOLD = if_else(.data$HELIX_HEAD_OF_HOUSE != "", .data$HELIX_HEAD_OF_HOUSE, "_T"),
-      MOTHER_AGE = "_T",
-      DELIVERY_ASSISTANCE = "_T",
-      PLACE_OF_DELIVERY = "_T",
-      DELIVERY_MODE = "_T",
-      MULTIPLE_BIRTH = "_T",
+      MOTHER_AGE = if_else(.data$OSE_MOTHER_AGE != "", .data$OSE_MOTHER_AGE, "_T"),
+      DELIVERY_ASSISTANCE = if_else(.data$OSE_DELIVERY_ASSISTANCE != "", .data$OSE_DELIVERY_ASSISTANCE, "_T"),
+      PLACE_OF_DELIVERY = if_else(.data$OSE_PLACE_OF_DELIVERY != "", .data$OSE_PLACE_OF_DELIVERY, "_T"),
+      DELIVERY_MODE = if_else(.data$OSE_DELIVERY_MODE != "", .data$OSE_DELIVERY_MODE, "_T"),
+      MULTIPLE_BIRTH = if_else(.data$OSE_MULTIPLE_BIRTH != "", .data$OSE_MULTIPLE_BIRTH, "_T"),
       REGION    = derive_region_dim(.),
       REF_AREA    = coalesce(get_chr_col(., "REF_AREA"), get_chr_col(., "ISO3Code"), get_chr_col(., "CND_Country_Code")),
       TIME_PERIOD = coalesce(get_chr_col(., "TIME_PERIOD"), get_chr_col(., "CMRS_year"), get_chr_col(., "warehouse_year"), get_chr_col(., "middle_year")),
@@ -521,11 +591,23 @@ build_layer2_dataset <- function(data, disagg_map, dataset_name = NA_character_)
       "standard_disagg_key", "disagg_ref_match",
       "HELIX_SEX", "HELIX_AGE", "HELIX_WEALTH_QUINTILE",
       "HELIX_RESIDENCE", "HELIX_MATERNAL_EDU_LVL", "HELIX_HEAD_OF_HOUSE",
-      "HELIX_CODE"
+      "HELIX_CODE",
+      "OSE_MOTHER_AGE", "OSE_DELIVERY_ASSISTANCE", "OSE_PLACE_OF_DELIVERY",
+      "OSE_DELIVERY_MODE", "OSE_MULTIPLE_BIRTH", "OSE_AGE", "OSE_EDUCATION",
+      "OSE_CODE"
     ))) %>%
-    relocate(any_of(c("REF_AREA", "TIME_PERIOD", "INDICATOR", "SEX", "AGE", "RESIDENCE", "WEALTH", "EDUCATION", "HEAD_OF_HOUSEHOLD", "MOTHER_AGE", "DELIVERY_ASSISTANCE", "PLACE_OF_DELIVERY", "DELIVERY_MODE", "MULTIPLE_BIRTH", "REGION", "VALUE")), .before = everything()) %>%
+    relocate(any_of(c("REF_AREA", "TIME_PERIOD", "INDICATOR",
+                      "SEX", "AGE", "RESIDENCE", "WEALTH", "EDUCATION",
+                      "HEAD_OF_HOUSEHOLD", "MOTHER_AGE", "DELIVERY_ASSISTANCE",
+                      "PLACE_OF_DELIVERY", "DELIVERY_MODE", "MULTIPLE_BIRTH",
+                      "REGION", "VALUE")),
+             .before = everything()) %>%
     as_tibble()
 }
+
+# ---------------------------------------------------------------------------
+# Convenience runners
+# ---------------------------------------------------------------------------
 
 run_single_dataset <- function(dataset_file, output_file) {
   disagg_map <- read_disagg_map()

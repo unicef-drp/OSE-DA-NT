@@ -1,13 +1,54 @@
+# ---------------------------------------------------------------------------
+# Script:  _verify_all_outputs.r
+# Purpose: Post-build QA verification of all CMRS2 analysis dataset outputs.
+#
+# Checks performed:
+#   1. File existence for all expected parquet outputs
+#   2. Schema validation - all analytical dimension columns present
+#   3. Missing-value audit - NA/blank counts per dimension
+#   4. Value distributions per dimension
+#   5. Indicator inventory per output
+#   6. Row-count preservation (source vs. output)
+#   7. Source column preservation (all original columns carried forward)
+#   8. Distribution matching (indicator, disagg, REF_AREA, TIME_PERIOD)
+#   9. Joint distribution matching (indicator x disaggregation)
+#
+# Usage:   Source from the repo root or run standalone:
+#          Rscript analysis_datasets/02_codes/_verify_all_outputs.r
+#
+# Exit:    Prints PASS or FAIL summary at the end.
+# ---------------------------------------------------------------------------
+
 suppressPackageStartupMessages({
   library(arrow)
   library(dplyr)
   library(haven)
 })
 
-out_dir <- "C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis Space/github/analysis_datasets"
-source_dir <- "C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis Space/Combined Nutrition Databases/Common Minimum Reporting Standard"
+# Use profile-based paths if available; fall back to hardcoded for standalone use
+if (!exists("analysisDatasetsOutputDir", envir = .GlobalEnv) ||
+    !exists("cmrsInputDir", envir = .GlobalEnv)) {
+  tryCatch(
+    source(file.path(getwd(), "profile_OSE-DA-NT.R")),
+    error = function(e) NULL
+  )
+}
 
-dim_cols <- c("SEX", "AGE", "RESIDENCE", "WEALTH", "EDUCATION")
+if (exists("analysisDatasetsOutputDir", envir = .GlobalEnv)) {
+  out_dir <- analysisDatasetsOutputDir
+} else {
+  out_dir <- "C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis Space/github/analysis_datasets"
+}
+
+if (exists("cmrsInputDir", envir = .GlobalEnv)) {
+  source_dir <- cmrsInputDir
+} else {
+  source_dir <- "C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis Space/Combined Nutrition Databases/Common Minimum Reporting Standard"
+}
+
+dim_cols <- c("SEX", "AGE", "RESIDENCE", "WEALTH", "EDUCATION",
+              "HEAD_OF_HOUSEHOLD", "MOTHER_AGE", "DELIVERY_ASSISTANCE",
+              "PLACE_OF_DELIVERY", "DELIVERY_MODE", "MULTIPLE_BIRTH", "REGION")
 
 file_specs <- list(
   list(output = "cmrs2_series.parquet", source = "CMRS_SERIES_*.dta"),

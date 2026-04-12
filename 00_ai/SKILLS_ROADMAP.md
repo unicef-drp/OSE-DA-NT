@@ -28,6 +28,13 @@ Define practical, repository-specific AI skill modules that improve consistency 
 - Inputs: changed scripts, changed outputs, changed order.
 - Outputs: required documentation updates and completion checklist.
 
+5. Dimension Coverage and Reference Disaggregation Extension Skill
+- Purpose: full cycle — audit coverage after a CMRS2 build, diagnose unmapped rows, decide between reference CSV extension vs. hardcoded fallback, and execute safely without breaking DW-Production.
+- Skill file: `00_ai/analysis_datasets/DIMENSION_COVERAGE_SKILL.md`
+- Key constraint: `reference_disaggregations.csv` is fetched directly by DW-Production from GitHub main branch. Adding rows is safe; modifying existing rows changes DW output and requires approval.
+- Key constraint: SDMX codebook values ≠ DW accepted values. Valid HELIX codes must be verified against existing values already in the CSV.
+- Trigger: after any CMRS2 build, or when planning to extend the reference mapping for a new disaggregation type.
+
 ## Definition Of Done For A Skill
 
 - Clear trigger condition.
