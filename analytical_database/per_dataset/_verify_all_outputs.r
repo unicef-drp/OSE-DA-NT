@@ -1,5 +1,5 @@
 suppressPackageStartupMessages({
-  library(readr)
+  library(arrow)
   library(dplyr)
   library(haven)
 })
@@ -10,29 +10,28 @@ source_dir <- "C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis S
 dim_cols <- c("SEX", "AGE", "RESIDENCE", "WEALTH", "EDUCATION")
 
 file_specs <- list(
-  list(output = "layer2_series_ane.csv", source = "CMRS_SERIES_ANE.dta"),
-  list(output = "layer2_series_ant.csv", source = "CMRS_SERIES_ANT.dta"),
-  list(output = "layer2_series_dant.csv", source = "CMRS_SERIES_DANT.dta"),
-  list(output = "layer2_series_sant.csv", source = "CMRS_SERIES_SANT.dta"),
-  list(output = "layer2_series_vas.csv", source = "CMRS_SERIES_VAS.dta"),
-  list(output = "layer2_ant_core.csv", source = "CMRS_ANT.dta"),
-  list(output = "layer2_ant_not_core.csv", source = "CMRS_ANT.dta"),
-  list(output = "layer2_bw.csv", source = "CMRS_BW.dta"),
-  list(output = "layer2_iod.csv", source = "CMRS_IOD.dta"),
-  list(output = "layer2_iycf_bf.csv", source = "CMRS_IYCF.dta"),
-  list(output = "layer2_iycf_cf.csv", source = "CMRS_IYCF.dta")
+  list(output = "cmrs2_series_ane.parquet", source = "CMRS_SERIES_ANE.dta"),
+  list(output = "cmrs2_series_ant.parquet", source = "CMRS_SERIES_ANT.dta"),
+  list(output = "cmrs2_series_dant.parquet", source = "CMRS_SERIES_DANT.dta"),
+  list(output = "cmrs2_series_sant.parquet", source = "CMRS_SERIES_SANT.dta"),
+  list(output = "cmrs2_series_vas.parquet", source = "CMRS_SERIES_VAS.dta"),
+  list(output = "cmrs2_ant.parquet", source = "CMRS_ANT.dta"),
+  list(output = "cmrs2_bw.parquet", source = "CMRS_BW.dta"),
+  list(output = "cmrs2_iod.parquet", source = "CMRS_IOD.dta"),
+  list(output = "cmrs2_iycf_bf.parquet", source = "CMRS_IYCF.dta"),
+  list(output = "cmrs2_iycf_cf.parquet", source = "CMRS_IYCF.dta")
 )
 
 source_specs <- list(
-  list(label = "series_ane", source = "CMRS_SERIES_ANE.dta", outputs = c("layer2_series_ane.csv")),
-  list(label = "series_ant", source = "CMRS_SERIES_ANT.dta", outputs = c("layer2_series_ant.csv")),
-  list(label = "series_dant", source = "CMRS_SERIES_DANT.dta", outputs = c("layer2_series_dant.csv")),
-  list(label = "series_sant", source = "CMRS_SERIES_SANT.dta", outputs = c("layer2_series_sant.csv")),
-  list(label = "series_vas", source = "CMRS_SERIES_VAS.dta", outputs = c("layer2_series_vas.csv")),
-  list(label = "ant", source = "CMRS_ANT.dta", outputs = c("layer2_ant_core.csv", "layer2_ant_not_core.csv")),
-  list(label = "bw", source = "CMRS_BW.dta", outputs = c("layer2_bw.csv")),
-  list(label = "iod", source = "CMRS_IOD.dta", outputs = c("layer2_iod.csv")),
-  list(label = "iycf", source = "CMRS_IYCF.dta", outputs = c("layer2_iycf_bf.csv", "layer2_iycf_cf.csv"))
+  list(label = "series_ane", source = "CMRS_SERIES_ANE.dta", outputs = c("cmrs2_series_ane.parquet")),
+  list(label = "series_ant", source = "CMRS_SERIES_ANT.dta", outputs = c("cmrs2_series_ant.parquet")),
+  list(label = "series_dant", source = "CMRS_SERIES_DANT.dta", outputs = c("cmrs2_series_dant.parquet")),
+  list(label = "series_sant", source = "CMRS_SERIES_SANT.dta", outputs = c("cmrs2_series_sant.parquet")),
+  list(label = "series_vas", source = "CMRS_SERIES_VAS.dta", outputs = c("cmrs2_series_vas.parquet")),
+  list(label = "ant", source = "CMRS_ANT.dta", outputs = c("cmrs2_ant.parquet")),
+  list(label = "bw", source = "CMRS_BW.dta", outputs = c("cmrs2_bw.parquet")),
+  list(label = "iod", source = "CMRS_IOD.dta", outputs = c("cmrs2_iod.parquet")),
+  list(label = "iycf", source = "CMRS_IYCF.dta", outputs = c("cmrs2_iycf_bf.parquet", "cmrs2_iycf_cf.parquet"))
 )
 
 compare_specs <- list(
@@ -49,24 +48,19 @@ pick_first_existing <- function(nms, candidates) {
 }
 
 read_output_subset <- function(path, select_cols = NULL, n_max = Inf) {
-  if (is.null(select_cols)) {
-    read_csv(
-      path,
-      n_max = n_max,
-      show_col_types = FALSE,
-      progress = FALSE,
-      col_types = cols(.default = col_character())
-    )
+  tab <- if (is.null(select_cols)) {
+    arrow::read_parquet(path, as_data_frame = FALSE)
   } else {
-    read_csv(
-      path,
-      n_max = n_max,
-      show_col_types = FALSE,
-      progress = FALSE,
-      col_types = cols(.default = col_character()),
-      col_select = any_of(select_cols)
-    )
+    arrow::read_parquet(path, as_data_frame = FALSE, col_select = any_of(select_cols))
   }
+
+  df <- as_tibble(tab)
+
+  if (is.finite(n_max)) {
+    df <- head(df, n_max)
+  }
+
+  df %>% mutate(across(everything(), as.character))
 }
 
 normalize_values <- function(x) {

@@ -2,7 +2,7 @@ source("C:/Users/jconkle/Documents/GitHub/OSE-DA-NT/analytical_database/per_data
 
 disagg_map <- read_disagg_map()
 source_data <- haven::read_dta(file.path(cmrs_input_dir, "CMRS_IYCF.dta"))
-layer2_iycf <- build_layer2_dataset(source_data, disagg_map)
+layer2_iycf <- build_layer2_dataset(source_data, disagg_map, dataset_name = "CMRS_IYCF.dta")
 
 bf_indicator_pattern <- "BF|EXBF|BREAST"
 
@@ -17,15 +17,17 @@ layer2_iycf_bf <- layer2_iycf %>%
 layer2_iycf_cf <- layer2_iycf %>%
   dplyr::filter(!.data$INDICATOR %in% bf_indicators)
 
-readr::write_csv(
+arrow::write_parquet(
   layer2_iycf_bf,
-  file.path(layer2_output_dir, "layer2_iycf_bf.csv")
+  file.path(layer2_output_dir, "cmrs2_iycf_bf.parquet"),
+  compression = "zstd"
 )
 
-readr::write_csv(
+arrow::write_parquet(
   layer2_iycf_cf,
-  file.path(layer2_output_dir, "layer2_iycf_cf.csv")
+  file.path(layer2_output_dir, "cmrs2_iycf_cf.parquet"),
+  compression = "zstd"
 )
 
-message("Wrote: ", file.path(layer2_output_dir, "layer2_iycf_bf.csv"))
-message("Wrote: ", file.path(layer2_output_dir, "layer2_iycf_cf.csv"))
+message("Wrote: ", file.path(layer2_output_dir, "cmrs2_iycf_bf.parquet"))
+message("Wrote: ", file.path(layer2_output_dir, "cmrs2_iycf_cf.parquet"))
