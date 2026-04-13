@@ -84,7 +84,7 @@ Each output carries 12 dimension columns:
 |--------|--------------------------|------------------|
 | SEX | HELIX_SEX | — |
 | AGE | HELIX_AGE / OSE_AGE | IYCF age-in-months |
-| RESIDENCE | HELIX_RESIDENCE | IOD area-wealth suffix |
+| RESIDENCE | HELIX_RESIDENCE | IOD area-wealth suffix; subnational urban/rural from `StandardDisaggregations` |
 | WEALTH | HELIX_WEALTH_QUINTILE | BW/IOD share/decile/tercile |
 | EDUCATION | HELIX_MATERNAL_EDU_LVL / OSE_EDUCATION | BW/IYCF education |
 | HEAD_OF_HOUSEHOLD | HELIX_HEAD_OF_HOUSE | BW/IOD HH-head sex |
@@ -93,7 +93,18 @@ Each output carries 12 dimension columns:
 | PLACE_OF_DELIVERY | OSE_PLACE_OF_DELIVERY | BW/IYCF place-of-delivery |
 | DELIVERY_MODE | OSE_DELIVERY_MODE | BW c-section/vaginal |
 | MULTIPLE_BIRTH | OSE_MULTIPLE_BIRTH | BW singleton/multiple |
-| REGION | — | Subnational / ethnicity / religion / caste |
+| REGION | — | Subnational Region uses canonical `REGION_N` from `StandardDisaggregations`; other groups use fallback parsers |
+
+## Duplicate-Key Troubleshooting Notes
+
+When `Duplicate analytical key rows` fails in accepted outputs, use this order:
+
+1. Confirm whether duplicates are only in all-estimates (can be expected) or also in accepted (must be fixed).
+2. For Subnational Region rows, derive both REGION and residence signals from `StandardDisaggregations`, not free-text contextual labels.
+3. Keep REGION as canonical `REGION_N` IDs for subnational rows. Do not normalize region label strings from contextual text because embedded `Urban/Rural` tokens can collapse distinct regions.
+4. Rebuild target dataset and re-run `0_verify_all_outputs.r` for that target before broader reruns.
+
+This rule resolved the final IOD accepted-key collisions in April 2026.
 
 ## Reference Dependencies
 

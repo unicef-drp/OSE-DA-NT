@@ -10,8 +10,8 @@ if (!exists("analysisCodes", envir = .GlobalEnv)) {
 }
 source(file.path(analysisCodes, "0_layer2_utils.r"))
 
-run_single_dataset("CMRS_IYCF.dta", "cmrs2_iycf.parquet")
-run_single_dataset("CMRS_IYCF.dta", "cmrs2_iycf_accepted.parquet", decision_categories = c("Accepted"))
+all_data <- run_single_dataset("CMRS_IYCF.dta", "cmrs2_iycf.parquet")
+write_accepted_subset(all_data, "cmrs2_iycf_accepted.parquet")
 
 verify_targets <- c("iycf")
 source(file.path(analysisCodes, "0_verify_all_outputs.r"))

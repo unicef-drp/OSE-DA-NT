@@ -20,8 +20,8 @@ series_files <- c(
   "CMRS_SERIES_VAS.dta"
 )
 
-run_combined_datasets(series_files, output_file = "cmrs2_series.parquet")
-run_combined_datasets(series_files, output_file = "cmrs2_series_accepted.parquet", decision_categories = c("Accepted"))
+all_data <- run_combined_datasets(series_files, output_file = "cmrs2_series.parquet")
+write_accepted_subset(all_data, "cmrs2_series_accepted.parquet")
 
 verify_targets <- c("series")
 source(file.path(analysisCodes, "0_verify_all_outputs.r"))

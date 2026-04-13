@@ -145,7 +145,19 @@ These dimensions are OSE-DA-NT only and will always be handled by fallback funct
 | PLACE_OF_DELIVERY | Not in CSV | HOME_OR_OTHER, PUBLIC_SECTOR, PRIVATE_MEDICAL_SECTOR (BW); HEALTH_FACILITY, HOME, OTHER (IYCF) |
 | DELIVERY_MODE | Not in CSV | C_SECTION, VAGINAL |
 | MULTIPLE_BIRTH | Not in CSV | SINGLETON, MULTIPLE |
-| REGION | Not in CSV | Derived from ContextualDisaggregationsLabel or Region N pattern |
+| REGION | Not in CSV | For Subnational Region, derive canonical REGION_N from StandardDisaggregations; contextual labels are secondary only |
+
+---
+
+## Duplicate-Key Safety Rule (Subnational Region)
+
+If accepted outputs show duplicate analytical keys and Subnational Region is involved:
+
+1. Derive REGION from `StandardDisaggregations` Region number (for example `Region 3` -> `REGION_3`).
+2. Derive Subnational urban/rural residence flags from `StandardDisaggregations` tokens.
+3. Do not derive canonical REGION from contextual label text, because labels can contain embedded urban/rural words that collapse distinct regions after normalization.
+
+This pattern was validated on IOD in April 2026 and removed the final accepted-key duplicates.
 
 These should remain as fallback functions unless a new HELIX column is added to the CSV for them — which would require DW-Production coordination.
 

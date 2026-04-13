@@ -35,6 +35,12 @@ Define practical, repository-specific AI skill modules that improve consistency 
 - Key constraint: SDMX codebook values ≠ DW accepted values. Valid HELIX codes must be verified against existing values already in the CSV.
 - Trigger: after any CMRS2 build, or when planning to extend the reference mapping for a new disaggregation type.
 
+6. Analytical Key Duplicate Triage Skill
+- Purpose: fast diagnosis/resolution of duplicate analytical keys, with emphasis on accepted-output failures.
+- Inputs: target dataset, verify output, duplicate key fields, sampled colliding rows.
+- Outputs: root-cause classification (upstream duplicate vs derivation collision), recommended fix path (reference mapping vs fallback logic), and rerun/verification checklist.
+- Trigger: any `Duplicate analytical key rows: FAIL` in `0_verify_all_outputs.r`.
+
 ## Definition Of Done For A Skill
 
 - Clear trigger condition.
