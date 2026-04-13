@@ -627,6 +627,63 @@ build_layer2_dataset <- function(data, disagg_map, dataset_name = NA_character_)
 }
 
 # ---------------------------------------------------------------------------
+# Post-build deduplication
+#
+# Removes exact duplicate analytical-key rows when the value columns are
+# also identical. This handles source-data cataloguing errors where the
+# same observation is entered under multiple standard_disagg IDs that
+# resolve to the same analytical key. A message is emitted for every
+# group of duplicates removed, and the duplicates are returned invisibly
+# for logging/reporting.
+# ---------------------------------------------------------------------------
+
+dedup_analytical_key <- function(df) {
+  dim_cols <- c("SEX", "AGE", "RESIDENCE", "WEALTH", "EDUCATION",
+                "HEAD_OF_HOUSEHOLD", "MOTHER_AGE", "DELIVERY_ASSISTANCE",
+                "PLACE_OF_DELIVERY", "DELIVERY_MODE", "MULTIPLE_BIRTH", "REGION")
+
+  key_cols <- intersect(
+    c("UNICEF_Survey_ID", "REF_AREA", "TIME_PERIOD", "INDICATOR", dim_cols),
+    names(df)
+  )
+
+  value_cols <- intersect(
+    c("VALUE", "r", "se", "ll", "ul", "weighted_N", "unweighted_N"),
+    names(df)
+  )
+
+  compare_cols <- c(key_cols, value_cols)
+  before_n <- nrow(df)
+
+  # Build a composite key string for fast duplicate detection (base R)
+  composite <- do.call(paste, c(df[compare_cols], sep = "\x1F"))
+  is_dup <- duplicated(composite)
+  removed_n <- sum(is_dup)
+
+  if (removed_n == 0L) {
+    message("Dedup: no duplicate analytical-key rows with identical values found.")
+    return(df)
+  }
+
+  # Log details about removed rows
+  removed_idx <- which(is_dup)
+  if (all(c("entryid", "standard_disagg", "REF_AREA", "TIME_PERIOD", "INDICATOR") %in% names(df))) {
+    for (idx in removed_idx) {
+      message(
+        "Dedup: removing duplicate row for ",
+        df$REF_AREA[idx], " ", df$TIME_PERIOD[idx], " ", df$INDICATOR[idx],
+        " [entryid: ", df$entryid[idx],
+        ", standard_disagg: ", df$standard_disagg[idx], "]"
+      )
+    }
+  }
+
+  deduped <- df[!is_dup, ]
+  message("Dedup: removed ", removed_n, " duplicate row(s), ", nrow(deduped), " rows remain.")
+  deduped
+}
+
+# ---------------------------------------------------------------------------
 # Convenience runners
 # ---------------------------------------------------------------------------
 
@@ -657,6 +714,7 @@ run_single_dataset <- function(dataset_file, output_file, decision_categories = 
   }
 
   layer2 <- build_layer2_dataset(source_data, disagg_map, dataset_name = dataset_file)
+  layer2 <- dedup_analytical_key(layer2)
   output_path <- file.path(layer2_output_dir, output_file)
   arrow::write_parquet(layer2, output_path, compression = "zstd")
   message("Wrote: ", output_path)
@@ -695,6 +753,7 @@ run_combined_datasets <- function(dataset_files, output_file, decision_categorie
   })
 
   layer2 <- dplyr::bind_rows(layer2_list)
+  layer2 <- dedup_analytical_key(layer2)
   output_path <- file.path(layer2_output_dir, output_file)
   arrow::write_parquet(layer2, output_path, compression = "zstd")
 

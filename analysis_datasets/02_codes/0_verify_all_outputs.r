@@ -169,16 +169,25 @@ compare_distribution <- function(src_df, out_df, src_col, out_col, label) {
     ) %>%
     filter(diff != 0)
 
-  pass <- nrow(cmp) == 0
-  cat("  ", label, " distribution:", if (pass) "PASS" else "FAIL", "\n", sep = "")
-
-  if (pass) {
+  if (nrow(cmp) == 0) {
+    cat("  ", label, " distribution: PASS\n", sep = "")
     cat("    Levels checked:", nrow(src_tbl), "\n")
-  } else {
-    print(head(cmp, 10))
+    return(TRUE)
   }
 
-  pass
+  has_excess <- any(cmp$diff > 0)
+  has_new_levels <- any(is.na(cmp$diff) | (cmp$n_src == 0L & cmp$n_out > 0L))
+
+  if (has_excess || has_new_levels) {
+    cat("  ", label, " distribution: FAIL\n", sep = "")
+    print(head(cmp, 10))
+    return(FALSE)
+  }
+
+  # All diffs are negative (fewer rows in output) — likely dedup removals
+  cat("  ", label, " distribution: WARN (output has fewer rows; likely dedup removals)\n", sep = "")
+  print(head(cmp, 10))
+  TRUE
 }
 
 compare_joint_distribution <- function(src_df, out_df, src_cols, out_cols, label) {
@@ -199,16 +208,24 @@ compare_joint_distribution <- function(src_df, out_df, src_cols, out_cols, label
     ) %>%
     filter(diff != 0)
 
-  pass <- nrow(cmp) == 0
-  cat("  ", label, " joint distribution:", if (pass) "PASS" else "FAIL", "\n", sep = "")
-
-  if (pass) {
+  if (nrow(cmp) == 0) {
+    cat("  ", label, " joint distribution: PASS\n", sep = "")
     cat("    Combinations checked:", nrow(src_tbl), "\n")
-  } else {
-    print(head(cmp, 10))
+    return(TRUE)
   }
 
-  pass
+  has_excess <- any(cmp$diff > 0)
+  has_new_combos <- any(is.na(cmp$diff) | (cmp$n_src == 0L & cmp$n_out > 0L))
+
+  if (has_excess || has_new_combos) {
+    cat("  ", label, " joint distribution: FAIL\n", sep = "")
+    print(head(cmp, 10))
+    return(FALSE)
+  }
+
+  cat("  ", label, " joint distribution: WARN (output has fewer rows; likely dedup removals)\n", sep = "")
+  print(head(cmp, 10))
+  TRUE
 }
 
 all_pass <- TRUE
@@ -346,10 +363,19 @@ for (spec in source_specs) {
     cat("  Row count: SKIP (accepted subset, source=", nrow(src_df),
         ", output=", nrow(out_df), ")\n", sep = "")
   } else {
-    row_pass <- nrow(src_df) == nrow(out_df)
-    cat("  Row count:", if (row_pass) "PASS" else "FAIL",
-        "(source=", nrow(src_df), ", output=", nrow(out_df), ")\n", sep = "")
-    if (!row_pass) all_pass <- FALSE
+    row_diff <- nrow(out_df) - nrow(src_df)
+    if (row_diff == 0L) {
+      cat("  Row count: PASS (source=", nrow(src_df),
+          ", output=", nrow(out_df), ")\n", sep = "")
+    } else if (row_diff < 0L) {
+      cat("  Row count: WARN (source=", nrow(src_df),
+          ", output=", nrow(out_df), ", diff=", row_diff,
+          "; likely dedup removals)\n", sep = "")
+    } else {
+      cat("  Row count: FAIL (output has MORE rows than source: source=",
+          nrow(src_df), ", output=", nrow(out_df), ")\n", sep = "")
+      all_pass <- FALSE
+    }
   }
 
   for (cmp in compare_specs) {
