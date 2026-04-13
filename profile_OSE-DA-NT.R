@@ -100,7 +100,7 @@ if (!dir.exists(analysisDatasetsOutputDir)) dir.create(analysisDatasetsOutputDir
 
 # OSE-DA-NT repo-centric path objects.
 analysisCodes <- file.path(projectFolder, "analysis_datasets", "02_codes")
-analysisConductor <- file.path(analysisCodes, "0_execute_conductor.r")
+analysisConductor <- file.path(analysisCodes, "1_execute_conductor.r")
 projectionCodes <- file.path(projectFolder, "further_transformation_system", "projections_progress_class", "012_codes")
 projectionExecute <- file.path(projectionCodes, "1_execute.r")
 

@@ -8,7 +8,7 @@ files into standardised Parquet analysis datasets.
 Set your working directory to the repository root and run the conductor:
 
 ```r
-source("analysis_datasets/02_codes/0_execute_conductor.r")
+source("analysis_datasets/02_codes/1_execute_conductor.r")
 ```
 
 Or build a single domain:
@@ -21,18 +21,18 @@ source("analysis_datasets/02_codes/2_build_cmrs2_bw.r")
 
 | File | Purpose |
 |------|---------|
-| `0_execute_conductor.r` | Orchestrator — runs all five domain builders in sequence. |
-| `1_layer2_utils.r` | Shared utility module (mapping loader, build function, dimension derivation). |
-| `2_build_cmrs2_series.r` | Builds the combined series dataset (ANE + ANT + DANT + SANT + VAS). |
-| `2_build_cmrs2_bw.r` | Builds the birth-weight (BW) dataset. |
-| `2_build_cmrs2_iod.r` | Builds the iodine-deficiency (IOD) dataset. |
-| `2_build_cmrs2_ant.r` | Builds the anthropometry (ANT) dataset. |
-| `2_build_cmrs2_iycf.r` | Builds the infant & young child feeding (IYCF) dataset. |
-| `3_verify_all_outputs.r` | Post-build QA — checks file existence, schema, row counts, and value distributions. |
+| `0_layer2_utils.r` | Shared utility module (mapping loader, build function, dimension derivation). |
+| `0_verify_all_outputs.r` | Post-build QA — checks file existence, schema, row counts, and value distributions. |
+| `1_execute_conductor.r` | Orchestrator — sources all five `2_build_*` scripts in sequence. |
+| `2_build_cmrs2_series.r` | Builds the combined series dataset (ANE + ANT + DANT + SANT + VAS) — all-estimates + accepted. |
+| `2_build_cmrs2_bw.r` | Builds the birth-weight (BW) dataset — all-estimates + accepted. |
+| `2_build_cmrs2_iod.r` | Builds the iodine-deficiency (IOD) dataset — all-estimates + accepted. |
+| `2_build_cmrs2_ant.r` | Builds the anthropometry (ANT) dataset — all-estimates + accepted. |
+| `2_build_cmrs2_iycf.r` | Builds the infant & young child feeding (IYCF) dataset — all-estimates + accepted. |
 
 ## Execution Order
 
-The conductor sources files in this order:
+The conductor runs in this order:
 
 1. `2_build_cmrs2_series.r`
 2. `2_build_cmrs2_bw.r`
@@ -40,24 +40,47 @@ The conductor sources files in this order:
 4. `2_build_cmrs2_ant.r`
 5. `2_build_cmrs2_iycf.r`
 
-Each `2_build_*` script sources `1_layer2_utils.r`, which loads
-`profile_OSE-DA-NT.R` for path configuration if it is not already loaded.
+Each `2_build_*` script produces both the all-estimates and accepted-only
+outputs, so any script can be run individually to rebuild a single domain.
 
-After a full conductor run, execute `3_verify_all_outputs.r` to validate
-outputs.
+After a full conductor run, execute `0_verify_all_outputs.r` to validate
+outputs. You can verify a single dataset after rebuilding it:
+
+```powershell
+# Verify all datasets
+Rscript analysis_datasets/02_codes/0_verify_all_outputs.r
+
+# Verify one dataset (ant, bw, iod, iycf, series)
+Rscript analysis_datasets/02_codes/0_verify_all_outputs.r ant
+
+# Verify multiple datasets
+Rscript analysis_datasets/02_codes/0_verify_all_outputs.r ant bw
+```
+
+When sourced from R, set `verify_targets` before sourcing:
+
+```r
+verify_targets <- c("ant")
+source("analysis_datasets/02_codes/0_verify_all_outputs.r")
+```
 
 ## Outputs
 
 All output files are written to the directory configured by
 `analysisDatasetsOutputDir` in `profile_OSE-DA-NT.R`:
 
-| Output file | Source DTA(s) | Compression |
-|-------------|---------------|-------------|
-| `cmrs2_series.parquet` | `CMRS_SERIES_ANE/ANT/DANT/SANT/VAS.dta` | zstd |
-| `cmrs2_bw.parquet` | `CMRS_BW.dta` | zstd |
-| `cmrs2_iod.parquet` | `CMRS_IOD.dta` | zstd |
-| `cmrs2_ant.parquet` | `CMRS_ANT.dta` | zstd |
-| `cmrs2_iycf.parquet` | `CMRS_IYCF.dta` | zstd |
+| Output file | Source DTA(s) | Filter | Compression |
+|-------------|---------------|--------|-------------|
+| `cmrs2_series.parquet` | `CMRS_SERIES_ANE/ANT/DANT/SANT/VAS.dta` | all estimates | zstd |
+| `cmrs2_bw.parquet` | `CMRS_BW.dta` | all estimates | zstd |
+| `cmrs2_iod.parquet` | `CMRS_IOD.dta` | all estimates | zstd |
+| `cmrs2_ant.parquet` | `CMRS_ANT.dta` | all estimates | zstd |
+| `cmrs2_iycf.parquet` | `CMRS_IYCF.dta` | all estimates | zstd |
+| `cmrs2_series_accepted.parquet` | `CMRS_SERIES_ANE/ANT/DANT/SANT/VAS.dta` | `DataSourceDecisionCategory == "Accepted"` | zstd |
+| `cmrs2_bw_accepted.parquet` | `CMRS_BW.dta` | `DataSourceDecisionCategory == "Accepted"` | zstd |
+| `cmrs2_iod_accepted.parquet` | `CMRS_IOD.dta` | `DataSourceDecisionCategory == "Accepted"` | zstd |
+| `cmrs2_ant_accepted.parquet` | `CMRS_ANT.dta` | `DataSourceDecisionCategory == "Accepted"` | zstd |
+| `cmrs2_iycf_accepted.parquet` | `CMRS_IYCF.dta` | `DataSourceDecisionCategory == "Accepted"` | zstd |
 
 ## Analytical Dimensions
 
@@ -70,7 +93,7 @@ two-layer strategy:
   nutrition-specific dimensions.
 
 - **Layer 2 (fallback derivation):** For rows where the reference does not
-  resolve a dimension, hardcoded parsing functions in `1_layer2_utils.r` derive
+  resolve a dimension, hardcoded parsing functions in `0_layer2_utils.r` derive
   codes from `BackgroundCharacteristics` and `ContextualDisaggregationsLabel`.
 
 | Dimension | Source (Layer 1) | Fallback (Layer 2) |

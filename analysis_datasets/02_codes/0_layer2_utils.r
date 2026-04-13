@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Script:  1_layer2_utils.r
+# Script:  0_layer2_utils.r
 # Purpose: Shared utility functions for building CMRS2 analysis datasets.
 #
 # This module provides the core data-processing pipeline:
@@ -105,6 +105,23 @@ derive_region_dim <- function(df) {
   out
 }
 
+derive_residence_from_region_context <- function(df) {
+  bg  <- get_chr_col(df, "BackgroundCharacteristics")
+  lbl <- get_chr_col(df, "ContextualDisaggregationsLabel")
+
+  has_subnational_region <- str_detect(coalesce(bg, ""),
+                                       regex("Subnational Region", ignore_case = TRUE))
+
+  lbl_lower <- str_to_lower(coalesce(lbl, ""))
+  is_urban  <- str_detect(lbl_lower, "\\b(urban|urbaine|urbain)\\b")
+  is_rural  <- str_detect(lbl_lower, "\\b(rural|rurale)\\b")
+
+  out <- rep("_T", nrow(df))
+  out[has_subnational_region & is_urban & !is_rural] <- "URBAN"
+  out[has_subnational_region & is_rural & !is_urban] <- "RURAL"
+  out
+}
+
 derive_bw_wealth_dim <- function(df) {
   bg <- get_chr_col(df, "BackgroundCharacteristics")
   lbl <- str_squish(get_chr_col(df, "ContextualDisaggregationsLabel"))
@@ -122,11 +139,16 @@ derive_bw_wealth_dim <- function(df) {
   out[wealth_share_idx & lbl == "Top 80%"] <- "R80"
 
   wealth_decile_idx <- bg == "Household Wealth Decile"
-  out[wealth_decile_idx & lbl %in% c("D1", "D2")] <- "Q1"
-  out[wealth_decile_idx & lbl %in% c("D3", "D4")] <- "Q2"
-  out[wealth_decile_idx & lbl %in% c("D5", "D6")] <- "Q3"
-  out[wealth_decile_idx & lbl %in% c("D7", "D8")] <- "Q4"
-  out[wealth_decile_idx & lbl %in% c("D9", "D10")] <- "Q5"
+  out[wealth_decile_idx & lbl == "D1"]  <- "D01"
+  out[wealth_decile_idx & lbl == "D2"]  <- "D02"
+  out[wealth_decile_idx & lbl == "D3"]  <- "D03"
+  out[wealth_decile_idx & lbl == "D4"]  <- "D04"
+  out[wealth_decile_idx & lbl == "D5"]  <- "D05"
+  out[wealth_decile_idx & lbl == "D6"]  <- "D06"
+  out[wealth_decile_idx & lbl == "D7"]  <- "D07"
+  out[wealth_decile_idx & lbl == "D8"]  <- "D08"
+  out[wealth_decile_idx & lbl == "D9"]  <- "D09"
+  out[wealth_decile_idx & lbl == "D10"] <- "D10"
 
   out
 }
@@ -250,11 +272,7 @@ derive_iod_wealth_dim <- function(df) {
   decile_idx <- bg %in% c("Household Wealth Decile", "Area Household Wealth Decile")
   d <- str_match(std, regex("^D\\s*([0-9]{1,2})(?:\\s+(urban|rural))?$", ignore_case = TRUE))[, 2]
   d_num <- suppressWarnings(as.integer(d))
-  out[decile_idx & !is.na(d_num) & d_num %in% c(1L, 2L)] <- "Q1"
-  out[decile_idx & !is.na(d_num) & d_num %in% c(3L, 4L)] <- "Q2"
-  out[decile_idx & !is.na(d_num) & d_num %in% c(5L, 6L)] <- "Q3"
-  out[decile_idx & !is.na(d_num) & d_num %in% c(7L, 8L)] <- "Q4"
-  out[decile_idx & !is.na(d_num) & d_num %in% c(9L, 10L)] <- "Q5"
+  out[decile_idx & !is.na(d_num)] <- sprintf("D%02d", d_num[decile_idx & !is.na(d_num)])
 
   tercile_idx <- bg %in% c("Household Wealth Tercile", "Area Household Wealth Tercile")
   t <- str_match(std, regex("^T\\s*([123])(?:\\s+(urban|rural))?$", ignore_case = TRUE))[, 2]
@@ -555,6 +573,9 @@ build_layer2_dataset <- function(data, disagg_map, dataset_name = NA_character_)
       DELIVERY_MODE = if_else(.data$OSE_DELIVERY_MODE != "", .data$OSE_DELIVERY_MODE, "_T"),
       MULTIPLE_BIRTH = if_else(.data$OSE_MULTIPLE_BIRTH != "", .data$OSE_MULTIPLE_BIRTH, "_T"),
       REGION    = derive_region_dim(.),
+      RESIDENCE = if_else(.data$RESIDENCE == "_T",
+                          derive_residence_from_region_context(.),
+                          .data$RESIDENCE),
       REF_AREA    = coalesce(get_chr_col(., "REF_AREA"), get_chr_col(., "ISO3Code"), get_chr_col(., "CND_Country_Code")),
       TIME_PERIOD = coalesce(get_chr_col(., "TIME_PERIOD"), get_chr_col(., "CMRS_year"), get_chr_col(., "warehouse_year"), get_chr_col(., "middle_year")),
       INDICATOR   = coalesce(get_chr_col(., "INDICATOR"), get_chr_col(., "IndicatorCode"), get_chr_col(., "Indicator")),
@@ -609,9 +630,32 @@ build_layer2_dataset <- function(data, disagg_map, dataset_name = NA_character_)
 # Convenience runners
 # ---------------------------------------------------------------------------
 
-run_single_dataset <- function(dataset_file, output_file) {
+run_single_dataset <- function(dataset_file, output_file, decision_categories = NULL) {
   disagg_map <- read_disagg_map()
   source_data <- haven::read_dta(file.path(cmrs_input_dir, dataset_file))
+
+  if (!is.null(decision_categories)) {
+    if (!("DataSourceDecisionCategory" %in% names(source_data))) {
+      stop(
+        "Requested decision-category filter, but DataSourceDecisionCategory is missing in ",
+        dataset_file,
+        "."
+      )
+    }
+
+    allowed <- as.character(decision_categories)
+    before_n <- nrow(source_data)
+    source_data <- source_data %>%
+      mutate(DataSourceDecisionCategory = as.character(.data$DataSourceDecisionCategory)) %>%
+      filter(coalesce(.data$DataSourceDecisionCategory, "") %in% allowed)
+
+    message(
+      "Applied decision-category filter [",
+      paste(allowed, collapse = ", "),
+      "] on ", dataset_file, ": kept ", nrow(source_data), " of ", before_n, " rows"
+    )
+  }
+
   layer2 <- build_layer2_dataset(source_data, disagg_map, dataset_name = dataset_file)
   output_path <- file.path(layer2_output_dir, output_file)
   arrow::write_parquet(layer2, output_path, compression = "zstd")
@@ -619,11 +663,34 @@ run_single_dataset <- function(dataset_file, output_file) {
   invisible(layer2)
 }
 
-run_combined_datasets <- function(dataset_files, output_file) {
+run_combined_datasets <- function(dataset_files, output_file, decision_categories = NULL) {
   disagg_map <- read_disagg_map()
 
   layer2_list <- lapply(dataset_files, function(dataset_file) {
     source_data <- haven::read_dta(file.path(cmrs_input_dir, dataset_file))
+
+    if (!is.null(decision_categories)) {
+      if (!("DataSourceDecisionCategory" %in% names(source_data))) {
+        stop(
+          "Requested decision-category filter, but DataSourceDecisionCategory is missing in ",
+          dataset_file,
+          "."
+        )
+      }
+
+      allowed <- as.character(decision_categories)
+      before_n <- nrow(source_data)
+      source_data <- source_data %>%
+        mutate(DataSourceDecisionCategory = as.character(.data$DataSourceDecisionCategory)) %>%
+        filter(coalesce(.data$DataSourceDecisionCategory, "") %in% allowed)
+
+      message(
+        "Applied decision-category filter [",
+        paste(allowed, collapse = ", "),
+        "] on ", dataset_file, ": kept ", nrow(source_data), " of ", before_n, " rows"
+      )
+    }
+
     build_layer2_dataset(source_data, disagg_map, dataset_name = dataset_file)
   })
 

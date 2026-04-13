@@ -22,7 +22,7 @@ This populates HELIX_SEX, HELIX_AGE, HELIX_WEALTH_QUINTILE, HELIX_RESIDENCE, HEL
 Rows that don't match a reference ID get all HELIX fields empty → dimensions default to `_T`.
 
 **Layer 2 — Fallback derivation (secondary)**
-`apply_dataset_fallback_dims()` in `1_layer2_utils.r` catches rows still at `_T` after the reference join.
+`apply_dataset_fallback_dims()` in `0_layer2_utils.r` catches rows still at `_T` after the reference join.
 Each dataset has its own fallback derive functions that inspect `BackgroundCharacteristics`, `StandardDisaggregations`, and `ContextualDisaggregationsLabel`.
 This is the current fix for dimensions not yet in the reference CSV.
 
@@ -80,7 +80,7 @@ Extend the CSV when the disaggregation maps cleanly to an existing DW dimension 
 
 ### When to use hardcoded fallback
 
-Use fallback functions in `1_layer2_utils.r` when:
+Use fallback functions in `0_layer2_utils.r` when:
 - The dimension doesn't exist as a HELIX column (MOTHER_AGE, DELIVERY_ASSISTANCE, PLACE_OF_DELIVERY, DELIVERY_MODE, MULTIPLE_BIRTH, REGION)
 - The required value code is OSE-specific and not a valid DW HELIX value
 - The mapping logic requires string parsing that can't be expressed as a row-level ID lookup
@@ -130,7 +130,7 @@ If a value doesn't exist yet, treat it as an OSE-specific extension and use a fa
 4. Propose new rows to add (new IDs get new sequential `ID` values; do not reuse or renumber)
 5. Confirm with user before writing — this file affects DW-Production on merge to main
 6. After adding rows: re-run the build, re-run coverage audit, confirm non-National fully_T = 0
-7. Remove the corresponding hardcoded fallback logic from `1_layer2_utils.r` if it is now redundant
+7. Remove the corresponding hardcoded fallback logic from `0_layer2_utils.r` if it is now redundant
 
 ---
 
@@ -156,6 +156,6 @@ These should remain as fallback functions unless a new HELIX column is added to 
 | File | Role |
 |---|---|
 | `reference_data_manager/indicators/reference_disaggregations.csv` | Primary mapping reference; consumed by DW-Production via GitHub raw URL |
-| `analysis_datasets/02_codes/1_layer2_utils.r` | Fallback dimension functions and `apply_dataset_fallback_dims()` |
+| `analysis_datasets/02_codes/0_layer2_utils.r` | Fallback dimension functions and `apply_dataset_fallback_dims()` |
 | `analysis_datasets/02_codes/2_build_cmrs2_*.r` | Per-dataset build scripts |
 | `C:/.../nt_sdmx_codebooks.xlsx` | SDMX standard reference — use for context only; does NOT define DW accepted codes |

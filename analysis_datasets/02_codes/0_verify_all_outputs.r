@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Script:  3_verify_all_outputs.r
+# Script:  0_verify_all_outputs.r
 # Purpose: Post-build QA verification of CMRS2 analysis dataset outputs.
 #
 # Checks performed:
@@ -15,17 +15,17 @@
 #
 # Usage:
 #   Verify all datasets:
-#     Rscript analysis_datasets/02_codes/3_verify_all_outputs.r
+#     Rscript analysis_datasets/02_codes/0_verify_all_outputs.r
 #
 #   Verify a single dataset (ant, bw, iod, iycf, series):
-#     Rscript analysis_datasets/02_codes/3_verify_all_outputs.r ant
+#     Rscript analysis_datasets/02_codes/0_verify_all_outputs.r ant
 #
 #   Verify multiple datasets:
-#     Rscript analysis_datasets/02_codes/3_verify_all_outputs.r ant bw
+#     Rscript analysis_datasets/02_codes/0_verify_all_outputs.r ant bw
 #
 #   When sourced, set verify_targets beforehand to filter:
 #     verify_targets <- c("ant")
-#     source("analysis_datasets/02_codes/3_verify_all_outputs.r")
+#     source("analysis_datasets/02_codes/0_verify_all_outputs.r")
 #
 # Exit:    Prints PASS or FAIL summary at the end.
 # ---------------------------------------------------------------------------

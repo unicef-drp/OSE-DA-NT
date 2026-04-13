@@ -41,7 +41,7 @@ External production repository:
 ## Execution Entry Points (Current)
 
 Primary scripts currently in use:
-- analysis_datasets/02_codes/0_execute_conductor.r
+- analysis_datasets/02_codes/1_execute_conductor.r
 	- Sources CMRS2 build scripts for series and non-series nutrition domains.
 - further_transformation_system/projections_progress_class/012_codes/1_execute.r
 	- Runs the projections/progress pipeline and writes final projection outputs.
@@ -79,7 +79,7 @@ Quick start:
 2. Replace placeholders with your paths.
 3. In R, run: source("profile_OSE-DA-NT.R")
 4. Then run entry scripts, for example:
-	- analysis_datasets/02_codes/0_execute_conductor.r
+	- analysis_datasets/02_codes/1_execute_conductor.r
 	- further_transformation_system/projections_progress_class/012_codes/1_execute.r
 
 ## Documentation
