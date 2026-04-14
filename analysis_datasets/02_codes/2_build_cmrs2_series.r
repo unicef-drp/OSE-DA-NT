@@ -3,7 +3,8 @@
 # Purpose: Build the CMRS2 combined series analysis dataset.
 #          Merges 5 series domains: ANE, ANT, DANT, SANT, VAS.
 # Input:   CMRS_SERIES_ANE.dta, CMRS_SERIES_ANT.dta, CMRS_SERIES_DANT.dta,
-#          CMRS_SERIES_SANT.dta, CMRS_SERIES_VAS.dta
+#          CMRS_SERIES_SANT.dta, CMRS_SERIES_VAS.dta,
+#          cmrs_series_lbw.csv
 # Output:  cmrs2_series.parquet, cmrs2_series_accepted.parquet
 # ---------------------------------------------------------------------------
 
@@ -17,7 +18,8 @@ series_files <- c(
   "CMRS_SERIES_ANT.dta",
   "CMRS_SERIES_DANT.dta",
   "CMRS_SERIES_SANT.dta",
-  "CMRS_SERIES_VAS.dta"
+  "CMRS_SERIES_VAS.dta",
+  "cmrs_series_lbw.csv"
 )
 
 all_data <- run_combined_datasets(series_files, output_file = "cmrs2_series.parquet")
