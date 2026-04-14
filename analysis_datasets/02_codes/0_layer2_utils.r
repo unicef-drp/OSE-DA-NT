@@ -637,6 +637,29 @@ build_layer2_dataset <- function(data, disagg_map, dataset_name = NA_character_)
       INDICATOR   = coalesce(get_chr_col(., "INDICATOR"), get_chr_col(., "IndicatorCode"), get_chr_col(., "Indicator")),
       VALUE       = coalesce(get_num_col(., "VALUE"), get_num_col(., "r"), get_num_col(., "r_raw"))
     ) %>%
+    # --- ZWE Survey 2879 TIME_PERIOD correction ---
+    # TODO(upstream): CMRS source has TIME_PERIOD=2013 and CMRS_year_exact=2013.024
+    # for this survey, but the correct fieldwork midpoint maps to 2012 (decimal
+    # 2012.92213114754).  DW-Production hardcodes this in 1g_country_preferred.R.
+    # Fix the source data in CMRS so this hardcode can be removed.
+    {
+      sid_col <- get_chr_col(., "UNICEF_Survey_ID")
+      ra_col  <- get_chr_col(., "REF_AREA")
+      is_2879 <- !is.na(sid_col) & sid_col == "2879" &
+                 !is.na(ra_col)  & ra_col  == "ZWE"
+      if (any(is_2879)) {
+        message("ZWE Survey 2879: correcting TIME_PERIOD 2013 -> 2012 and ",
+                "CMRS_year_exact -> 2012.92213114754 (", sum(is_2879), " rows)")
+        out <- .
+        out$TIME_PERIOD[is_2879] <- "2012"
+        if ("CMRS_year_exact" %in% names(out)) {
+          out$CMRS_year_exact[is_2879] <- "2012.92213114754"
+        }
+        out
+      } else {
+        .
+      }
+    } %>%
     mutate(
       SEX = if_else(.data$SEX == "_T" & str_detect(.data$INDICATOR, regex("^ANE_WOM", ignore_case = TRUE)), "F", .data$SEX)
     ) %>%

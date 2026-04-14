@@ -48,6 +48,13 @@ Define practical, repository-specific AI skill modules that improve consistency 
 - Outputs: root-cause classification (upstream duplicate vs derivation collision), recommended fix path (reference mapping vs fallback logic), and rerun/verification checklist.
 - Trigger: any `Duplicate analytical key rows: FAIL` in `0_verify_all_outputs.r`.
 
+7. Efficient Parquet Loading Skill
+- Purpose: ensure all parquet reads use column selection, predicate pushdown, and Arrow Table splice for in-place column updates — avoiding full-file materialization into R memory.
+- Skill file: `00_ai/analysis_datasets/EFFICIENT_PARQUET_SKILL.md`
+- Key patterns: (1) read-only with `open_dataset()` + `select(any_of(...))` + `filter()` pushdown; (2) compute-and-splice via slim `col_select` read + `as_data_frame = FALSE` Arrow Table + `$AddColumn()`; (3) schema inspection via `open_dataset(path)$schema` (not `read_schema()`).
+- Key constraint: `arrow::read_schema()` does not work on parquet files — always use `open_dataset()$schema`.
+- Trigger: any new or modified code that calls `read_parquet()` or reads from analysis_datasets parquets.
+
 ## Definition Of Done For A Skill
 
 - Clear trigger condition.
