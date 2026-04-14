@@ -42,6 +42,11 @@ Define practical, repository-specific AI skill modules that improve consistency 
 - Key conventions: 15 countries per chart (optimal for horizontal bar/dot plots); dot plots sorted by latest-year value with legend ordered left-to-right (lowest first); auto-install of officer/rvg/openxlsx.
 - Reference implementation: `adhoc_analysis/stunting_top20_briefing/02_codes/4_create_ppt.r`.
 - Trigger: when creating a new ad-hoc indicator briefing or extending an existing one with additional slides or outputs.
+6. Analytical Key Duplicate Triage Skill
+- Purpose: fast diagnosis/resolution of duplicate analytical keys, with emphasis on accepted-output failures.
+- Inputs: target dataset, verify output, duplicate key fields, sampled colliding rows.
+- Outputs: root-cause classification (upstream duplicate vs derivation collision), recommended fix path (reference mapping vs fallback logic), and rerun/verification checklist.
+- Trigger: any `Duplicate analytical key rows: FAIL` in `0_verify_all_outputs.r`.
 
 ## Definition Of Done For A Skill
 

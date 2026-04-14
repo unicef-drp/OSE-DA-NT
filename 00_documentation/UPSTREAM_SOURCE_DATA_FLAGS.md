@@ -59,4 +59,63 @@ The Savanes region should appear under only one Region slot for this survey.
 
 ---
 
+## Flag 2: NIC — All series estimates set to Confidential
+
+| Field | Value |
+|---|---|
+| **Source file** | CMRS_SERIES_ANT.dta (and other series domains) |
+| **REF_AREA** | NIC |
+| **Indicators affected** | All series indicators for Nicaragua |
+| **Current mitigation** | `analysis_datasets/02_codes/2_build_cmrs2_series.r` sets `DataSourceDecisionCategory` to `"Confidential"`, excluding NIC from `cmrs2_series_accepted.parquet` |
+| **Detected** | 2026-04-14 |
+
+### Description
+
+Nicaragua's series estimates are unreliable and should not be included in
+projections or progress classification outputs. Previously this was handled
+by a hardcoded "Assessment not Possible" override in
+`further_transformation_system/projections_progress_class/012_codes/8_format_output.r`
+for stunting (NT_ANT_HAZ_NE2_MOD) and overweight (NT_ANT_WHZ_PO2_MOD).
+
+The immediate fix sets all NIC series rows to Confidential at the
+analysis-datasets layer so they never reach the accepted subset.
+
+### Recommended upstream fix
+
+Correct or suppress the NIC series estimates in the upstream Combined Nutrition
+Database so that the Confidential override in `2_build_cmrs2_series.r` becomes
+a no-op and the hardcoded "Assessment not Possible" logic in `8_format_output.r`
+can be removed.
+
+---
+
+## Flag 3: BHR — Overweight series estimates set to Confidential
+
+| Field | Value |
+|---|---|
+| **Source file** | CMRS_SERIES_ANT.dta |
+| **REF_AREA** | BHR |
+| **Indicators affected** | Overweight (WHZ > +2 SD pattern, e.g. NT_ANT_WHZ_PO2_MOD) |
+| **Current mitigation** | `analysis_datasets/02_codes/2_build_cmrs2_series.r` sets `DataSourceDecisionCategory` to `"Confidential"`, excluding BHR overweight from `cmrs2_series_accepted.parquet` |
+| **Detected** | 2026-04-14 |
+
+### Description
+
+Bahrain's overweight series estimates should not be included in projections
+outputs. Previously this was handled by a hardcoded exclusion filter in
+`further_transformation_system/projections_progress_class/012_codes/1a_import_inputs.r`
+(line: `filter(!(INDICATOR == "NT_ANT_WHZ_PO2_MOD" & REF_AREA == "BHR"))`).
+
+The immediate fix sets BHR overweight series rows to Confidential at the
+analysis-datasets layer so they never reach the accepted subset.
+
+### Recommended upstream fix
+
+Correct or suppress the BHR overweight series estimates in the upstream
+Combined Nutrition Database so that the Confidential override in
+`2_build_cmrs2_series.r` becomes a no-op and the hardcoded exclusion in
+`1a_import_inputs.r` can be removed.
+
+---
+
 *To add new flags, copy the template above and increment the flag number.*

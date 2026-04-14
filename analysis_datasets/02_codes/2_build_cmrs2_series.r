@@ -22,8 +22,34 @@ series_files <- c(
   "cmrs_series_lbw.csv"
 )
 
-run_combined_datasets(series_files, output_file = "cmrs2_series.parquet")
-run_combined_datasets(series_files, output_file = "cmrs2_series_accepted.parquet", decision_categories = c("Accepted"))
+all_data <- run_combined_datasets(series_files, output_file = "cmrs2_series.parquet")
+
+# ---------------------------------------------------------------------------
+# Confidential overrides — mark specific country × indicator rows so they are
+# excluded from the accepted subset (and therefore from projections).
+# These compensate for upstream data issues that should eventually be fixed
+# in CMRS production (see 00_documentation/UPSTREAM_SOURCE_DATA_FLAGS.md).
+# ---------------------------------------------------------------------------
+conf_idx <- rep(FALSE, nrow(all_data))
+
+# NIC: all series estimates are unreliable — flag entire country
+conf_idx <- conf_idx | (!is.na(all_data$REF_AREA) & all_data$REF_AREA == "NIC")
+
+# BHR: overweight series estimates are unreliable
+conf_idx <- conf_idx | (
+  !is.na(all_data$REF_AREA) & all_data$REF_AREA == "BHR" &
+  !is.na(all_data$INDICATOR) & grepl("WHZ.*PO2", all_data$INDICATOR, ignore.case = TRUE)
+)
+
+if (sum(conf_idx) > 0L) {
+  all_data$DataSourceDecisionCategory[conf_idx] <- "Confidential"
+  message(
+    "Confidential override: flagged ", sum(conf_idx),
+    " series rows (NIC all indicators; BHR overweight)"
+  )
+}
+
+write_accepted_subset(all_data, "cmrs2_series_accepted.parquet")
 
 verify_targets <- c("series")
 source(file.path(analysisCodes, "0_verify_all_outputs.r"))

@@ -284,6 +284,7 @@ for (spec in file_specs) {
   }
 
   # --- Duplicate analytical key check ---
+  is_accepted_file <- grepl("_accepted", f, fixed = TRUE)
   survey_col <- pick_first_existing(names(df), c("UNICEF_Survey_ID", "UNICEF_SURVEY_ID", "SurveyId", "survey_id"))
   if (is.null(survey_col)) {
     cat("  Duplicate analytical key rows: SKIP - survey ID column not found\n")
@@ -295,14 +296,22 @@ for (spec in file_specs) {
       filter(n() > 1) %>%
       ungroup()
     dup_pass <- nrow(dup_groups) == 0
-    cat(
-      "  Duplicate analytical key rows:",
-      if (dup_pass) "PASS" else paste("FAIL -", nrow(dup_groups), "duplicate rows"),
-      "(survey key:", survey_col, ")\n"
-    )
-    if (!dup_pass) {
-      print(head(dup_groups, 5))
-      all_pass <- FALSE
+    if (is_accepted_file) {
+      cat(
+        "  Duplicate analytical key rows:",
+        if (dup_pass) "PASS" else paste("FAIL -", nrow(dup_groups), "duplicate rows"),
+        "(survey key:", survey_col, ")\n"
+      )
+      if (!dup_pass) {
+        print(head(dup_groups, 5))
+        all_pass <- FALSE
+      }
+    } else {
+      cat(
+        "  Duplicate analytical key rows:",
+        if (dup_pass) "PASS" else paste("SKIP -", nrow(dup_groups), "key-dup rows (expected in all-estimates; dedup runs on accepted only)"),
+        "(survey key:", survey_col, ")\n"
+      )
     }
   }
 

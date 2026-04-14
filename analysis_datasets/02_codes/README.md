@@ -100,7 +100,7 @@ two-layer strategy:
 |-----------|------------------|--------------------|
 | SEX | HELIX_SEX | — |
 | AGE | HELIX_AGE → OSE_AGE | IYCF age-in-months parser |
-| RESIDENCE | HELIX_RESIDENCE | IOD area-wealth suffix |
+| RESIDENCE | HELIX_RESIDENCE | IOD area-wealth suffix; subnational urban/rural from StandardDisaggregations |
 | WEALTH | HELIX_WEALTH_QUINTILE | BW/IOD share/decile/tercile mappers |
 | EDUCATION | HELIX_MATERNAL_EDU_LVL → OSE_EDUCATION | BW/IYCF education parser |
 | HEAD_OF_HOUSEHOLD | HELIX_HEAD_OF_HOUSE | BW/IOD HH-head sex parser |
@@ -109,7 +109,7 @@ two-layer strategy:
 | PLACE_OF_DELIVERY | OSE_PLACE_OF_DELIVERY | BW/IYCF place-of-delivery parser |
 | DELIVERY_MODE | OSE_DELIVERY_MODE | BW c-section/vaginal parser |
 | MULTIPLE_BIRTH | OSE_MULTIPLE_BIRTH | BW singleton/multiple parser |
-| REGION | — | Subnational region / ethnicity / religion / caste parser |
+| REGION | — | Subnational region as canonical REGION_N from StandardDisaggregations; ethnicity/religion/caste parser |
 
 ## Dependencies
 
