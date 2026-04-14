@@ -689,7 +689,12 @@ dedup_analytical_key <- function(df) {
 
 run_single_dataset <- function(dataset_file, output_file, decision_categories = NULL) {
   disagg_map <- read_disagg_map()
-  source_data <- haven::read_dta(file.path(cmrs_input_dir, dataset_file))
+  input_path <- file.path(cmrs_input_dir, dataset_file)
+  source_data <- if (grepl("\\.csv$", dataset_file, ignore.case = TRUE)) {
+    readr::read_csv(input_path, show_col_types = FALSE, col_types = readr::cols(.default = readr::col_character()))
+  } else {
+    haven::read_dta(input_path)
+  }
 
   if (!is.null(decision_categories)) {
     if (!("DataSourceDecisionCategory" %in% names(source_data))) {
@@ -725,7 +730,12 @@ run_combined_datasets <- function(dataset_files, output_file, decision_categorie
   disagg_map <- read_disagg_map()
 
   layer2_list <- lapply(dataset_files, function(dataset_file) {
-    source_data <- haven::read_dta(file.path(cmrs_input_dir, dataset_file))
+    input_path <- file.path(cmrs_input_dir, dataset_file)
+    source_data <- if (grepl("\\.csv$", dataset_file, ignore.case = TRUE)) {
+      readr::read_csv(input_path, show_col_types = FALSE, col_types = readr::cols(.default = readr::col_character()))
+    } else {
+      haven::read_dta(input_path)
+    }
 
     if (!is.null(decision_categories)) {
       if (!("DataSourceDecisionCategory" %in% names(source_data))) {
