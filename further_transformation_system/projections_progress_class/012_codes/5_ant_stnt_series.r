@@ -195,7 +195,7 @@ pop_2030_country <- population_data %>%
 
 country_baseline_df <- country_df %>%
   filter(TIME_PERIOD == 2012) %>%
-  transmute(REF_AREA, r_2012_prop = OBS_VALUE / 100) %>%
+  transmute(REF_AREA, r_2012_prop = stata_round(OBS_VALUE, round_digits_prev) / 100) %>%
   left_join(pop_2012_country, by = "REF_AREA") %>%
   left_join(pop_2030_country, by = "REF_AREA") %>%
   mutate(
@@ -204,7 +204,7 @@ country_baseline_df <- country_df %>%
     drop_cov_30 = 0.6,
     target_numb_30 = drop_cov_30 * baseline_numb,
     target_prop_30 = stata_round(100 * target_numb_30 / basepop_value_2030, round_digits_prev),
-    r_2012 = stata_round(r_2012_prop * 100, round_digits_prev),
+    r_2012 = r_2012_prop * 100,
     Classification = NA_character_,
     Region = NA_character_,
     Class = REF_AREA,

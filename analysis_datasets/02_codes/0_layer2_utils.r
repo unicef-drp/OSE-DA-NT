@@ -962,6 +962,7 @@ assign_data_source_priority <- function(df) {
     arrange(
       desc(DATA_SOURCE_PRIORITY), desc(.pref_td),
       desc(suppressWarnings(as.numeric(TIME_PERIOD))),
+      desc(suppressWarnings(as.numeric(UNICEF_Survey_ID))),
       .pref_row_id,
       .by_group = TRUE
     ) %>%

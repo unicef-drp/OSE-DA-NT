@@ -199,7 +199,7 @@ Important:
   - Current AARR is estimated from modeled prevalence over 2012-2024 using the rounded prevalence series.
   - Stunting uses number-based target logic before converting back to prevalence.
   - For regional rows, baseline numbers affected come from the input field `regional_n` in the 2012 regional file.
-  - For country rows, baseline numbers affected are computed as 2012 prevalence times the 2012 under-5 population.
+  - For country rows, baseline numbers affected are computed as the 2012 prevalence (rounded to 1 decimal place) times the 2012 under-5 population. The prevalence is rounded before the number calculation to match the standard method and the precision of legacy Stata CSV inputs.
   - The 2030 target assumes a 40% reduction in numbers affected from the 2012 baseline, implemented as `target_numb_30 = 0.6 * baseline_numb`.
   - That 2030 target number is converted back to a 2030 target prevalence using 2030 population: `target_prop_30 = 100 * target_numb_30 / basepop_value_2030`.
   - Required AARR for 2030 is then calculated on the prevalence scale as the rate needed to move from `r_2012` to `target_prop_30` by 2030.

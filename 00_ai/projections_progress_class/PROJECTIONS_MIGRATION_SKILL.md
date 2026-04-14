@@ -93,10 +93,14 @@ stata_round <- function(x, digits = 0) {
 - The AARR regression input (`prev_for_aarr`) was already correctly rounded.
 - The `projected_value_2030` formula then receives pre-rounded inputs.
 
-**Exception — stunting number-affected calculation:**
-Script 5 computes `baseline_numb = r_2012_prop * basepop_value_2012` using the
-unrounded proportion. The prevalence `r_2012` is rounded separately for AARR
-and display. Do not round `r_2012_prop` — it's for number calculations.
+**Stunting number-affected calculation:**
+Script 5 computes `baseline_numb = r_2012_prop * basepop_value_2012` where
+`r_2012_prop` is the prevalence rounded to 1dp (on the percent scale) then
+divided by 100. This matches the old DW-Production pipeline, which received
+pre-rounded values from Stata CSV exports. Previously the parquet's
+full-precision proportion was used, but this caused `target_prop_30` to differ
+for 18 countries where the population multiply-divide-round chain amplified
+sub-decimal differences past a rounding tipping point.
 
 ### 6. AARR must be rounded to 2dp before use in calculations
 
