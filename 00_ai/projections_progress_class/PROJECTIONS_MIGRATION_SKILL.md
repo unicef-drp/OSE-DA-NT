@@ -198,6 +198,7 @@ for (col in c("fullclassification_2030", "unicef_classification_2030",
 | `analysisDatasetsInputDir` not defined | Error on script start | Variable only set inside config block | Add fallback derivation after config block |
 | LBW data not loading | BW_LBW rows missing from staged input | Old CSV import removed but not added to parquet path | Add `"BW_LBW"` to `series_indicators` |
 | `NOT_NT_BF_EXBF` only in new | 1 extra row in new output | EXBF complement indicator — intentional | Not a bug |
+| 18 stunting `required_aarr_2030` diffs | Country target_prop_30 differs by 0.1 | Parquet full-precision proportion used in number-affected calc; old CSV was pre-rounded to 1dp by Stata | Round `r_2012_prop` to 1dp before number calc: `stata_round(OBS_VALUE, 1) / 100` |
 
 ---
 
@@ -209,7 +210,8 @@ for (col in c("fullclassification_2030", "unicef_classification_2030",
 4. Check if `SEX` or `AGE` need remapping (e.g., anemia `F` → `_T`).
 5. Check if confidential rows exist and need filtering.
 6. Round all prevalence at assignment to 1dp using `stata_round`.
-7. Run pipeline: `Rscript 1_execute.r`
+7. If the indicator uses a number-based target (e.g., stunting), ensure the proportion used in the number calculation is also derived from the rounded prevalence, not the raw parquet value.
+8. Run pipeline: `Rscript 1_execute.r`
 8. Compare with old output using validation recipe above.
 9. Verify 0 country-level value diffs and 0 current_aarr diffs.
 10. Confirm classification mismatches are only at threshold boundaries for regional rows.
