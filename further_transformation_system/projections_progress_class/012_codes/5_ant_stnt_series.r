@@ -81,7 +81,7 @@ message("Using dw_split ant input: ", basename(dw_ant_path))
 dw_ant_raw <- read_csv(dw_ant_path, show_col_types = FALSE) %>%
   filter(
     INDICATOR == "NT_ANT_HAZ_NE2_MOD",
-    AGE       == "Y0T4",
+    AGE       == "_T",
     SEX       == "_T"
   ) %>%
   mutate(

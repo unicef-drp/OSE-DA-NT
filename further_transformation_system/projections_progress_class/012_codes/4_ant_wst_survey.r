@@ -44,7 +44,7 @@ wst_raw <- read_csv(dw_ant_path, show_col_types = FALSE) %>%
   filter(
     INDICATOR == "NT_ANT_WHZ_NE2",
     SEX == "_T",
-    AGE == "Y0T4",
+    AGE == "_T",
     REPORTING_LVL %in% c("C", "R")
   ) %>%
   {

@@ -59,11 +59,11 @@ api_label_lookup <- get_nt_projection_label_lookup(
 )
 
 regional_df <- dw_ane_raw %>%
-  filter(REPORTING_LVL == "R", AGE %in% c("Y15T49", "_T")) %>%
+  filter(REPORTING_LVL == "R", AGE == "_T") %>%
   mutate(data_level = "Regional")
 
 country_df <- dw_ane_raw %>%
-  filter(REPORTING_LVL == "C", AGE == "Y15T49") %>%
+  filter(REPORTING_LVL == "C", AGE == "_T") %>%
   mutate(data_level = "Country")
 
 ane_analysis_df <- bind_rows(

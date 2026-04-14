@@ -3,12 +3,12 @@
 # Purpose: Shared utility functions for building CMRS2 analysis datasets.
 #
 # This module provides the core data-processing pipeline:
-#   1. read_disagg_map()        — loads the reference disaggregation mapping
-#   2. build_layer2_dataset()   — joins source CMRS data to the mapping,
+#   1. read_disagg_map()        â€” loads the reference disaggregation mapping
+#   2. build_layer2_dataset()   â€” joins source CMRS data to the mapping,
 #                                 assigns analytical dimensions, applies
 #                                 dataset-specific fallback derivations
-#   3. run_single_dataset()     — convenience wrapper: read → build → write
-#   4. run_combined_datasets()  — same, but binds multiple source DTAs first
+#   3. run_single_dataset()     â€” convenience wrapper: read â†’ build â†’ write
+#   4. run_combined_datasets()  â€” same, but binds multiple source DTAs first
 #
 # Dimension assignment uses a two-layer strategy:
 #   Layer 1: Reference-based lookup via standard_disagg ID from
@@ -785,16 +785,17 @@ assign_data_source_priority <- function(df) {
   #   2. Deprioritize non-preferred source types (prefer DHS/MICS/SMART)
   #   3. Deprioritize surveillance when surveys exist
   #   4. Keep latest survey by fieldwork midpoint
-  #   5. Tiebreak — keep first preferred row within group
+  #   5. Tiebreak â€” keep first preferred row within group
   #   6. Flag latest preferred source across all years
   #
   # Grouping: REF_AREA x YEAR x INDICATOR x all 12 analytical dimensions.
   # This ensures preferred selection operates at the same granularity as
-  # the analytical key — rows in different disaggregation cells never compete.
+  # the analytical key â€” rows in different disaggregation cells never compete.
 
   has_estimate_type  <- "Estimate_Type" %in% names(df)
   has_source_type    <- "DataSourceTypeGlobal" %in% names(df)
   has_indicator_code <- "IndicatorCode" %in% names(df)
+  has_cmrs_exact     <- "CMRS_year_exact" %in% names(df)
 
   if (!"INDICATOR" %in% names(df))
     stop("INDICATOR column required for assign_data_source_priority()")
@@ -820,7 +821,25 @@ assign_data_source_priority <- function(df) {
       } else {
         as.character(TIME_PERIOD)
       },
-      .pref_td = time_period_to_decimal(.pref_tp),
+      # Use CMRS_year_exact for sub-year precision when available so that
+      # surveys sharing the same calendar year are ranked by fieldwork
+      # midpoint (matching DW-Production behaviour).  Fall back to
+      # TIME_PERIOD when the column is absent or NA.
+      .pref_td = if (has_cmrs_exact) {
+        td_exact <- suppressWarnings(as.numeric(CMRS_year_exact))
+        td_fallback <- time_period_to_decimal(.pref_tp)
+        td <- coalesce(td_exact, td_fallback)
+        if (has_zwe_cols) {
+          if_else(
+            REF_AREA == "ZWE" & as.character(UNICEF_Survey_ID) == "2879",
+            2012.92213114754, td
+          )
+        } else {
+          td
+        }
+      } else {
+        time_period_to_decimal(.pref_tp)
+      },
       .pref_year = as.character(time_period_to_year(.pref_tp)),
       .pref_row_id = row_number(),
       .pref_seed = toupper(trimws(sub("^NT_", "", INDICATOR))),
@@ -847,7 +866,7 @@ assign_data_source_priority <- function(df) {
 
   df$DATA_SOURCE_PRIORITY <- 1L
 
-  # STEP 1 — adjusted vs non-adjusted
+  # STEP 1 â€” adjusted vs non-adjusted
   if (has_estimate_type) {
     df <- df %>%
       group_by(across(all_of(grp))) %>%
@@ -861,7 +880,7 @@ assign_data_source_priority <- function(df) {
       select(-.pref_nadj)
   }
 
-  # STEP 2 — preferred source types
+  # STEP 2 â€” preferred source types
   if (has_source_type) {
     pc <- df %>%
       filter(DATA_SOURCE_PRIORITY == 1L) %>%
@@ -880,7 +899,7 @@ assign_data_source_priority <- function(df) {
       select(-.pref_pn)
   }
 
-  # STEP 3 — survey vs surveillance
+  # STEP 3 â€” survey vs surveillance
   if (has_source_type) {
     sc <- df %>%
       filter(DATA_SOURCE_PRIORITY == 1L) %>%
@@ -900,7 +919,7 @@ assign_data_source_priority <- function(df) {
       select(-.pref_sn)
   }
 
-  # STEP 4 — latest fieldwork midpoint
+  # STEP 4 â€” latest fieldwork midpoint
   lm <- df %>%
     filter(DATA_SOURCE_PRIORITY == 1L) %>%
     group_by(across(all_of(grp))) %>%
@@ -914,7 +933,7 @@ assign_data_source_priority <- function(df) {
     )) %>%
     select(-.pref_mx)
 
-  # STEP 5 — tiebreak: keep first preferred per group
+  # STEP 5 â€” tiebreak: keep first preferred per group
   df <- df %>%
     group_by(across(all_of(grp))) %>%
     arrange(
@@ -934,7 +953,7 @@ assign_data_source_priority <- function(df) {
     ungroup() %>%
     select(-.pref_cnt5, -.pref_rnk5)
 
-  # STEP 6 — flag latest preferred source across years
+  # STEP 6 â€” flag latest preferred source across years
   cy_grp <- setdiff(grp, ".pref_year")
   df <- df %>%
     group_by(across(all_of(cy_grp))) %>%
@@ -967,6 +986,73 @@ assign_data_source_priority <- function(df) {
 }
 
 # ---------------------------------------------------------------------------
+# Slim-column priority assignment (memory-efficient)
+# ---------------------------------------------------------------------------
+# Reads only the columns needed by assign_data_source_priority(), computes
+# priorities on the small frame, then splices the two result columns back
+# into the full parquet via Arrow Table operations — avoiding loading all
+# columns into R memory.
+
+.priority_input_col_names <- c(
+  "INDICATOR", "REF_AREA", "TIME_PERIOD", "UNICEF_Survey_ID",
+  "CMRS_year_exact", "Estimate_Type", "DataSourceTypeGlobal", "IndicatorCode",
+  "SEX", "AGE", "WEALTH", "RESIDENCE", "EDUCATION", "HEAD_OF_HOUSEHOLD",
+  "MOTHER_AGE", "DELIVERY_ASSISTANCE", "PLACE_OF_DELIVERY",
+  "DELIVERY_MODE", "MULTIPLE_BIRTH", "REGION"
+)
+
+assign_priority_to_parquet <- function(parquet_path) {
+  schema    <- arrow::open_dataset(parquet_path)$schema
+  all_names <- schema$names
+  slim_cols <- intersect(.priority_input_col_names, all_names)
+
+  message(
+    "Reading ", length(slim_cols), " of ", length(all_names),
+    " columns for priority computation: ", parquet_path
+  )
+  slim <- arrow::read_parquet(parquet_path, col_select = dplyr::all_of(slim_cols))
+  slim$.orig_row_idx <- seq_len(nrow(slim))
+
+  slim <- assign_data_source_priority(slim)
+
+  # Restore original row order and extract only the result columns
+  slim <- slim[order(slim$.orig_row_idx), ]
+  dsp_vec <- slim$DATA_SOURCE_PRIORITY
+  lps_vec <- slim$LATEST_PRIORITY_SOURCE
+  rm(slim); gc()
+
+
+  # Read full file as Arrow Table (columnar, no R data-frame expansion)
+  tbl <- arrow::read_parquet(parquet_path, as_data_frame = FALSE)
+
+  # Drop old priority columns if present
+  drop_names <- intersect(
+    c("DATA_SOURCE_PRIORITY", "LATEST_PRIORITY_SOURCE"), tbl$schema$names
+  )
+  if (length(drop_names) > 0) {
+    keep_idx <- which(!tbl$schema$names %in% drop_names) - 1L
+    tbl <- tbl$SelectColumns(keep_idx)
+  }
+
+  # Append new priority columns
+  tbl <- tbl$AddColumn(
+    tbl$num_columns,
+    arrow::field("DATA_SOURCE_PRIORITY", arrow::int32()),
+    arrow::chunked_array(arrow::Array$create(dsp_vec, type = arrow::int32()))
+  )
+  tbl <- tbl$AddColumn(
+    tbl$num_columns,
+    arrow::field("LATEST_PRIORITY_SOURCE", arrow::int32()),
+    arrow::chunked_array(arrow::Array$create(lps_vec, type = arrow::int32()))
+  )
+  rm(dsp_vec, lps_vec); gc()
+
+  arrow::write_parquet(tbl, parquet_path, compression = "zstd")
+  message("Wrote: ", parquet_path)
+  invisible(parquet_path)
+}
+
+# ---------------------------------------------------------------------------
 # Convenience runners
 # ---------------------------------------------------------------------------
 
@@ -988,7 +1074,12 @@ write_accepted_subset <- function(all_data, output_file) {
 
 run_single_dataset <- function(dataset_file, output_file, decision_categories = NULL) {
   disagg_map <- read_disagg_map()
-  source_data <- haven::read_dta(file.path(cmrs_input_dir, dataset_file))
+  input_path <- file.path(cmrs_input_dir, dataset_file)
+  source_data <- if (grepl("\\.csv$", dataset_file, ignore.case = TRUE)) {
+    readr::read_csv(input_path, show_col_types = FALSE, col_types = readr::cols(.default = readr::col_character()))
+  } else {
+    haven::read_dta(input_path)
+  }
 
   if (!is.null(decision_categories)) {
     if (!("DataSourceDecisionCategory" %in% names(source_data))) {
@@ -1023,7 +1114,12 @@ run_combined_datasets <- function(dataset_files, output_file, decision_categorie
   disagg_map <- read_disagg_map()
 
   layer2_list <- lapply(dataset_files, function(dataset_file) {
-    source_data <- haven::read_dta(file.path(cmrs_input_dir, dataset_file))
+    input_path <- file.path(cmrs_input_dir, dataset_file)
+    source_data <- if (grepl("\\.csv$", dataset_file, ignore.case = TRUE)) {
+      readr::read_csv(input_path, show_col_types = FALSE, col_types = readr::cols(.default = readr::col_character()))
+    } else {
+      haven::read_dta(input_path)
+    }
 
     if (!is.null(decision_categories)) {
       if (!("DataSourceDecisionCategory" %in% names(source_data))) {

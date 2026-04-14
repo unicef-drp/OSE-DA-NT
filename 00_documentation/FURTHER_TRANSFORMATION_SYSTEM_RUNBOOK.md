@@ -1,6 +1,6 @@
 # Further Transformation System Runbook
 
-Last updated: 2026-04-12
+Last updated: 2026-04-14
 
 ## Scope
 
@@ -44,13 +44,23 @@ Path roots are typically resolved from:
 - %USERPROFILE%/.config/user_config.yml
 
 Key root variables built in execution:
-- inputdir
-- outputdir
-- interdir
-- outputdir_projections
+
+**DW-Production paths (retained for regional estimates, population, crosswalks):**
+- inputdir — population files from DW-Production
+- outputdir — DW-Production NT output root
+- interdir — DW-Production intermediate files (regional aggregates, groups_for_agg.csv)
+
+**Analysis Space paths (country inputs and projection outputs):**
+- analysisDatasetsInputDir — `{nutritionRoot}/github/analysis_datasets` (parquet files)
+- outputdir_projections — `{nutritionRoot}/github/projections_progress_class`
 - outputdir_projections_input
 - outputdir_projections_inter
 - outputdir_projections_final
+
+Country-level inputs (series and non-series) are read from analysis_datasets accepted
+parquet files (`cmrs2_series_accepted.parquet`, `cmrs2_ant_accepted.parquet`,
+`cmrs2_iycf_accepted.parquet`). Regional estimates still come from DW-Production
+regional aggregation outputs in interdir.
 
 ## Final Output Stage
 
@@ -81,6 +91,7 @@ The execute pipeline uses R packages including:
 - readr
 - openxlsx
 - yaml
+- arrow (for reading analysis_datasets parquet files)
 
 Ensure these are installed in the runtime environment before execution.
 

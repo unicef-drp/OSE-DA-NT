@@ -13,8 +13,4 @@ source(file.path(analysisCodes, "0_layer2_utils.r"))
 accepted_file <- "cmrs2_ant_accepted.parquet"
 accepted_path <- file.path(layer2_output_dir, accepted_file)
 
-message("Reading: ", accepted_path)
-df <- arrow::read_parquet(accepted_path)
-df <- assign_data_source_priority(df)
-arrow::write_parquet(df, accepted_path, compression = "zstd")
-message("Wrote: ", accepted_path)
+assign_priority_to_parquet(accepted_path)

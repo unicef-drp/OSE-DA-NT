@@ -48,7 +48,7 @@ exbf_raw <- read_csv(dw_iycf_path, show_col_types = FALSE) %>%
   filter(
     INDICATOR == "NT_BF_EXBF",
     SEX == "_T",
-    AGE == "M0T5",
+    AGE == "_T",
     REPORTING_LVL == "C"
   ) %>%
   {

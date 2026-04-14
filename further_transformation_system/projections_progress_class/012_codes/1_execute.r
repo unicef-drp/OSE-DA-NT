@@ -6,6 +6,7 @@ library(tidyr)
 library(stringr)
 library(readr)
 library(openxlsx)
+library(arrow)
 
 get_script_path <- function() {
 	cmd_args <- commandArgs(trailingOnly = FALSE)
@@ -90,10 +91,28 @@ if (!exists("teamsFolder") || !exists("projectFolder")) {
 	}
 
 	teamsFolder <- file.path(teamsRoot, "060.DW-MASTER")
-	message("Loaded NT projection paths from user_config.yml for `", username, "`.")
+
+	# Resolve nutritionRoot for analysis_datasets inputs and projection outputs
+	nutritionRoot <- config_yaml[[username]]$nutritionRoot
+	if (is.null(nutritionRoot) || !nzchar(nutritionRoot)) {
+		nutrition_candidates <- c(
+			teamsRoot,
+			file.path(dirname(teamsRoot), "Data and Analytics Nutrition - Analysis Space"),
+			file.path("C:/Users", username, "UNICEF", "Data and Analytics Nutrition - Analysis Space")
+		)
+		nutritionRoot <- nutrition_candidates[dir.exists(nutrition_candidates)][1]
+	}
+	if (is.na(nutritionRoot) || !nzchar(nutritionRoot)) {
+		stop("Could not resolve nutritionRoot. Add `nutritionRoot` to user_config.yml.")
+	}
+	githubOutputRoot <- file.path(nutritionRoot, "github")
+	analysisDatasetsInputDir <- file.path(githubOutputRoot, "analysis_datasets")
+
+	message("Loaded NT projection paths from user_config.yml for `", username, "`.")  
 }
 
 # Set input and output directories
+# DW-Production paths retained for regional estimates, population, and crosswalks
 inputdir <- file.path(teamsFolder, "01_dw_prep", "011_rawdata", "nt", "input")
 outputdir <- file.path(teamsFolder, "01_dw_prep", "011_rawdata", "nt", "output")
 interdir <- file.path(outputdir, "inter")
@@ -101,7 +120,8 @@ if (!exists("teamsRawData")) {
 	teamsRawData <- file.path(teamsFolder, "01_dw_prep", "011_rawdata")
 }
 
-outputdir_projections <- file.path(teamsFolder, "01_dw_prep", "011_rawdata", "nt", "output_projections")
+# Projection outputs go to the Analysis Space github folder
+outputdir_projections <- file.path(githubOutputRoot, "projections_progress_class")
 outputdir_projections_input <- file.path(outputdir_projections, "input")
 outputdir_projections_temp <- file.path(outputdir_projections, "temp", "split_progress")
 outputdir_projections_inter <- file.path(outputdir_projections, "inter")

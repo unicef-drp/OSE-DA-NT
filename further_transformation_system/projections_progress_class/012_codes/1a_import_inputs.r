@@ -1,8 +1,11 @@
 #------------------------------------------------------------------------------
-# Build NT projection inputs from the main production pipeline outputs
-# - Country non-series inputs: `2a_agg_prep.R` (`out_dw_nut_country_for_agg.csv`)
-# - Country series inputs: `2a_agg_prep.R` (`out_dw_nut_country_series_for_agg.csv`)
-# - Regional inputs: regional aggregation outputs from `2b`–`2j`
+# Build NT projection inputs
+# - Country series inputs: analysis_datasets `cmrs2_series_accepted.parquet`
+# - Country non-series inputs: analysis_datasets `cmrs2_ant_accepted.parquet`,
+#   `cmrs2_iycf_accepted.parquet`
+# - Country BW_LBW series: DW-Production `cmrs_series_lbw.csv` (modelled LBW
+#   estimates are not part of the CMRS2 parquets)
+# - Regional inputs: DW-Production regional aggregation outputs from `2b`–`2j`
 #------------------------------------------------------------------------------
 
 if (!exists("outputdir_projections")) {
@@ -11,11 +14,14 @@ if (!exists("outputdir_projections")) {
 if (!exists("interdir")) {
   stop("interdir is not defined. Run from 1_execute.r or define paths first.")
 }
+if (!exists("analysisDatasetsInputDir")) {
+  stop("analysisDatasetsInputDir is not defined. Run from 1_execute.r or define paths first.")
+}
 
 outputdir_projections_input <- file.path(outputdir_projections, "input")
 dir.create(outputdir_projections_input, recursive = TRUE, showWarnings = FALSE)
 
-projection_input_dir <- file.path(interdir, "projection_input")
+projection_input_dir <- file.path(outputdir_projections, "projection_input")
 dir.create(projection_input_dir, recursive = TRUE, showWarnings = FALSE)
 
 if (!exists("read_csv_all_char", mode = "function") ||
@@ -60,8 +66,16 @@ if (!exists("assert_file_exists", mode = "function")) {
   }
 }
 
-country_series_path <- file.path(interdir, "out_dw_nut_country_series_for_agg.csv")
-country_non_series_path <- file.path(interdir, "out_dw_nut_country_for_agg.csv")
+# Country-level inputs from analysis_datasets (parquet)
+country_series_path <- file.path(analysisDatasetsInputDir, "cmrs2_series_accepted.parquet")
+country_ant_path <- file.path(analysisDatasetsInputDir, "cmrs2_ant_accepted.parquet")
+country_iycf_path <- file.path(analysisDatasetsInputDir, "cmrs2_iycf_accepted.parquet")
+
+# BW_LBW modelled series is not included in any CMRS2 parquet.
+# It remains sourced from DW-Production.
+country_lbw_series_path <- file.path(inputdir, "cmrs", "cmrs_series_lbw.csv")
+
+# Regional inputs and crosswalks still from DW-Production
 groups_path <- file.path(interdir, "groups_for_agg.csv")
 regional_overweight_path <- file.path(interdir, "agg_indicator", "Regional_Output_NT_ANT_WHZ_PO2_MOD.xlsx")
 regional_anemia_path <- file.path(interdir, "agg_indicator", "Regional_Output_NT_ANE_WOM_15_49_MOD.xlsx")
@@ -71,7 +85,9 @@ regional_wasting_path <- file.path(interdir, "agg_domain", "agg_ant_wasting.csv"
 
 for (path in c(
   country_series_path,
-  country_non_series_path,
+  country_ant_path,
+  country_iycf_path,
+  country_lbw_series_path,
   groups_path,
   regional_overweight_path,
   regional_anemia_path,
@@ -91,13 +107,16 @@ projection_indicator_labels <- c(
   NT_BF_EXBF = "Exclusive breastfeeding (0-5 months)"
 )
 
+# The analysis_datasets parquets standardise AGE to "_T" for the widest
+# applicable age range of each indicator.  All downstream scripts must
+# filter on AGE == "_T" rather than indicator-specific codes.
 projection_indicator_age <- c(
-  NT_ANT_WHZ_PO2_MOD = "Y0T4",
-  NT_ANE_WOM_15_49_MOD = "Y15T49",
-  NT_ANT_WHZ_NE2 = "Y0T4",
-  NT_ANT_HAZ_NE2_MOD = "Y0T4",
+  NT_ANT_WHZ_PO2_MOD = "_T",
+  NT_ANE_WOM_15_49_MOD = "_T",
+  NT_ANT_WHZ_NE2 = "_T",
+  NT_ANT_HAZ_NE2_MOD = "_T",
   NT_BW_LBW = "_T",
-  NT_BF_EXBF = "M0T5"
+  NT_BF_EXBF = "_T"
 )
 
 coalesce_existing_cols <- function(data, candidates, default = NA_character_) {
@@ -123,8 +142,9 @@ coalesce_existing_cols <- function(data, candidates, default = NA_character_) {
 }
 
 standardize_projection_rows <- function(data) {
-  # Upstream series data (country_series_for_agg and regional aggregation outputs)
-  # are already on the percent scale (0-100). No rescaling is needed here.
+  # Parquet values are converted to percent in read_analysis_parquet_as_char().
+  # Regional aggregation outputs and the LBW series CSV are already on the
+  # percent scale (0-100). No rescaling is needed here.
 
   desired_cols <- c(
     "INDICATOR", "Indicator", "REF_AREA", "Geographic area", "REPORTING_LVL",
@@ -157,8 +177,102 @@ standardize_projection_rows <- function(data) {
     select(any_of(desired_cols))
 }
 
-country_series_raw <- read_csv_all_char(country_series_path)
-country_non_series_raw <- read_csv_all_char(country_non_series_path)
+# Read analysis_datasets parquet files, mapping columns to projection format.
+# Parquet indicator codes omit the NT_ prefix used by the downstream pipeline,
+# so we prepend it here. Values are stored as proportions (0-1) and must be
+# converted to percent (0-100) to match the scale the rest of the pipeline expects.
+# When `indicators` is supplied (bare codes without NT_ prefix), arrow filters
+# at the file level via predicate pushdown, avoiding loading the full parquet.
+# Only the columns needed downstream are selected, skipping 60+ unused columns.
+parquet_keep_cols <- c(
+  "INDICATOR", "REF_AREA", "TIME_PERIOD", "SEX", "AGE",
+  "RESIDENCE", "WEALTH", "EDUCATION", "HEAD_OF_HOUSEHOLD",
+  "VALUE", "ll", "ul",
+  "CountryName", "DataSourceDecision", "DATA_SOURCE_PRIORITY",
+  "Subnational_Status"
+)
+
+read_analysis_parquet_as_char <- function(path, indicators = NULL) {
+  ds <- arrow::open_dataset(path)
+
+  if (!is.null(indicators)) {
+    ds <- ds %>% dplyr::filter(INDICATOR %in% indicators)
+  }
+
+  df <- ds %>%
+    dplyr::select(dplyr::any_of(parquet_keep_cols)) %>%
+    dplyr::collect()
+
+  # Keep national-level rows only (Subnational_Status == "0").
+  # Sub-national estimates must be excluded for the projections pipeline.
+  if ("Subnational_Status" %in% names(df)) {
+    df <- df %>% dplyr::filter(as.character(Subnational_Status) == "0")
+  }
+
+  df <- df %>%
+    dplyr::rename_with(
+      ~ dplyr::case_when(
+        . == "VALUE" ~ "OBS_VALUE",
+        . == "WEALTH" ~ "WEALTH_QUINTILE",
+        . == "EDUCATION" ~ "MATERNAL_EDU_LVL",
+        . == "HEAD_OF_HOUSEHOLD" ~ "HEAD_OF_HOUSE",
+        . == "ll" ~ "LOWER_BOUND",
+        . == "ul" ~ "UPPER_BOUND",
+        TRUE ~ .
+      )
+    )
+
+  # Convert proportion columns to percent
+  for (col in c("OBS_VALUE", "LOWER_BOUND", "UPPER_BOUND")) {
+    if (col %in% names(df)) {
+      df[[col]] <- as.numeric(df[[col]]) * 100
+    }
+  }
+
+  df %>%
+    dplyr::mutate(
+      INDICATOR = paste0("NT_", INDICATOR),
+      REPORTING_LVL = "C",
+      dplyr::across(dplyr::everything(), as.character)
+    )
+}
+
+# Series indicators needed (bare codes, without NT_ prefix)
+series_indicators <- c("ANT_WHZ_PO2_MOD", "ANE_WOM_15_49_MOD", "ANT_HAZ_NE2_MOD")
+country_series_raw <- read_analysis_parquet_as_char(country_series_path, indicators = series_indicators)
+
+# BW_LBW modelled series from DW-Production CSV (not in CMRS2 parquets).
+# Map its columns to the same shape used by the parquet reader.
+country_lbw_series_raw <- read_csv_all_char(country_lbw_series_path) %>%
+  dplyr::transmute(
+    REF_AREA = ISO3Code,
+    INDICATOR = paste0("NT_", IndicatorCode),
+    TIME_PERIOD = warehouse_year,
+    OBS_VALUE = as.character(as.numeric(r) * 100),
+    LOWER_BOUND = as.character(as.numeric(ll) * 100),
+    UPPER_BOUND = as.character(as.numeric(ul) * 100),
+    SEX = "_T",
+    AGE = "_T",
+    RESIDENCE = "_T",
+    WEALTH_QUINTILE = "_T",
+    MATERNAL_EDU_LVL = "_T",
+    HEAD_OF_HOUSE = "_T",
+    REPORTING_LVL = "C",
+    DataSourceDecision = DataSourceDecision
+  )
+
+country_series_raw <- dplyr::bind_rows(country_series_raw, country_lbw_series_raw)
+
+# Anemia indicator (ANE_WOM_15_49_MOD) uses SEX = "F" in the parquet because
+# the target population is women 15-49.  Remap to "_T" so downstream filters
+# that check SEX == "_T" retain these rows.
+country_series_raw <- country_series_raw %>%
+  dplyr::mutate(SEX = dplyr::if_else(INDICATOR == "NT_ANE_WOM_15_49_MOD" & SEX == "F", "_T", SEX))
+
+country_non_series_raw <- dplyr::bind_rows(
+  read_analysis_parquet_as_char(country_ant_path, indicators = "ANT_WHZ_NE2"),
+  read_analysis_parquet_as_char(country_iycf_path, indicators = "BF_EXBF")
+)
 groups_for_agg <- read_csv_all_char(groups_path)
 
 # Remove confidential rows that are only intended for aggregation, not public use.
@@ -211,16 +325,10 @@ country_series <- country_series_raw %>%
     RESIDENCE == "_T",
     MATERNAL_EDU_LVL == "_T",
     HEAD_OF_HOUSE == "_T",
-    case_when(
-      INDICATOR == "NT_ANE_WOM_15_49_MOD" ~ AGE %in% c("Y15T49", "_T"),
-      INDICATOR %in% c("NT_ANT_WHZ_PO2_MOD", "NT_ANT_HAZ_NE2_MOD") ~ AGE %in% c("Y0T4", "_T"),
-      INDICATOR == "NT_BW_LBW" ~ AGE == "_T",
-      TRUE ~ TRUE
-    )
+    AGE == "_T"
   ) %>%
   # Hardcoded exclusion: BHR overweight should not be included in projections outputs.
   filter(!(INDICATOR == "NT_ANT_WHZ_PO2_MOD" & REF_AREA == "BHR")) %>%
-  mutate(AGE = unname(projection_indicator_age[INDICATOR])) %>%
   standardize_projection_rows()
 
 country_non_series <- country_non_series_raw %>%
@@ -258,13 +366,8 @@ country_non_series <- country_non_series_raw %>%
     RESIDENCE == "_T",
     MATERNAL_EDU_LVL == "_T",
     HEAD_OF_HOUSE == "_T",
-    case_when(
-      INDICATOR == "NT_ANT_WHZ_NE2" ~ AGE %in% c("Y0T4", "_T"),
-      INDICATOR == "NT_BF_EXBF" ~ AGE == "M0T5",
-      TRUE ~ TRUE
-    )
+    AGE == "_T"
   ) %>%
-  mutate(AGE = unname(projection_indicator_age[INDICATOR])) %>%
   standardize_projection_rows()
 
 read_regional_projection_input <- function(path, indicator_code, source_label) {
