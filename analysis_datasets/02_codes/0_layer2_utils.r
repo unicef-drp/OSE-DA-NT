@@ -1079,13 +1079,14 @@ assign_priority_to_parquet <- function(parquet_path) {
 # Convenience runners
 # ---------------------------------------------------------------------------
 
-write_accepted_subset <- function(all_data, output_file) {
+write_accepted_subset <- function(all_data, output_file,
+                                  include_categories = "Accepted") {
   if (!("DataSourceDecisionCategory" %in% names(all_data))) {
     stop("DataSourceDecisionCategory column not found for accepted-subset filtering.")
   }
   accepted <- all_data[
     !is.na(all_data$DataSourceDecisionCategory) &
-      as.character(all_data$DataSourceDecisionCategory) == "Accepted", ]
+      as.character(all_data$DataSourceDecisionCategory) %in% include_categories, ]
   accepted_path <- file.path(layer2_output_dir, output_file)
   arrow::write_parquet(accepted, accepted_path, compression = "zstd")
   message(

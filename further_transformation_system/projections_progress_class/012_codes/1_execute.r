@@ -111,6 +111,28 @@ if (!exists("teamsFolder") || !exists("projectFolder")) {
 	message("Loaded NT projection paths from user_config.yml for `", username, "`.")  
 }
 
+# Ensure analysisDatasetsInputDir and githubOutputRoot are available even when
+# the config block above was skipped (e.g. profile_OSE-DA-NT.R already sourced).
+if (!exists("githubOutputRoot") || !nzchar(githubOutputRoot)) {
+	if (exists("nutritionRoot") && !is.na(nutritionRoot) && nzchar(nutritionRoot)) {
+		githubOutputRoot <- file.path(nutritionRoot, "github")
+	} else {
+		username_fb <- Sys.getenv("USERNAME")
+		if (username_fb == "" || is.na(username_fb)) username_fb <- Sys.getenv("USER")
+		githubOutputRoot_candidates <- c(
+			file.path("C:/Users", username_fb, "UNICEF",
+			          "Data and Analytics Nutrition - Analysis Space", "github")
+		)
+		githubOutputRoot <- githubOutputRoot_candidates[dir.exists(githubOutputRoot_candidates)][1]
+		if (is.na(githubOutputRoot) || !nzchar(githubOutputRoot)) {
+			stop("Could not resolve githubOutputRoot. Ensure profile or user_config.yml is loaded.")
+		}
+	}
+}
+if (!exists("analysisDatasetsInputDir") || !nzchar(analysisDatasetsInputDir)) {
+	analysisDatasetsInputDir <- file.path(githubOutputRoot, "analysis_datasets")
+}
+
 # Set input and output directories
 # DW-Production paths retained for regional estimates, population, and crosswalks
 inputdir <- file.path(teamsFolder, "01_dw_prep", "011_rawdata", "nt", "input")

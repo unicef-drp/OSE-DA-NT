@@ -166,6 +166,7 @@ baseline_df <- regional_df %>%
     regional_n,
     r_2012 = OBS_VALUE
   ) %>%
+  mutate(r_2012 = stata_round(r_2012, round_digits_prev)) %>%
   left_join(
     pop_2030_regional %>% select(REF_AREA, basepop_value_2030),
     by = "REF_AREA"
@@ -203,7 +204,7 @@ country_baseline_df <- country_df %>%
     drop_cov_30 = 0.6,
     target_numb_30 = drop_cov_30 * baseline_numb,
     target_prop_30 = stata_round(100 * target_numb_30 / basepop_value_2030, round_digits_prev),
-    r_2012 = r_2012_prop * 100,
+    r_2012 = stata_round(r_2012_prop * 100, round_digits_prev),
     Classification = NA_character_,
     Region = NA_character_,
     Class = REF_AREA,
@@ -228,7 +229,7 @@ baseline_df <- bind_rows(baseline_df, country_baseline_df)
 
 endline_df <- stnt_analysis_df %>%
   filter(TIME_PERIOD == 2024) %>%
-  transmute(data_level, REF_AREA, r_2024 = OBS_VALUE)
+  transmute(data_level, REF_AREA, r_2024 = stata_round(OBS_VALUE, round_digits_prev))
 
 # =============================================================================
 # Current AARR (computed on prevalence % because OBS_VALUE is %)

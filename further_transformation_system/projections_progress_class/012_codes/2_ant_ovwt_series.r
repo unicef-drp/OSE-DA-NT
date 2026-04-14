@@ -91,12 +91,12 @@ if (nrow(dup_keys) > 0) {
 # === 2012 baseline prevalence ===
 baseline_df <- ow_analysis_df %>%
   filter(TIME_PERIOD == 2012) %>%
-  transmute(data_level, REF_AREA, r_2012 = OBS_VALUE)
+  transmute(data_level, REF_AREA, r_2012 = stata_round(OBS_VALUE, round_digits_prev))
 
 # === 2024 prevalence ===
 ow_2024_df <- ow_analysis_df %>%
   filter(TIME_PERIOD == 2024) %>%
-  transmute(data_level, REF_AREA, r_2024 = OBS_VALUE)
+  transmute(data_level, REF_AREA, r_2024 = stata_round(OBS_VALUE, round_digits_prev))
 
 # === AARR using modeled data from 2012 to 2024 ===
 aarr_df <- ow_analysis_df %>%

@@ -77,11 +77,11 @@ lbw_analysis_df <- bind_rows(
 # =============================================================================
 baseline_df <- lbw_analysis_df %>%
   filter(TIME_PERIOD == 2012) %>%
-  transmute(data_level, REF_AREA, r_2012 = OBS_VALUE)
+  transmute(data_level, REF_AREA, r_2012 = stata_round(OBS_VALUE, round_digits_prev))
 
 end_2020_df <- lbw_analysis_df %>%
   filter(TIME_PERIOD == 2020) %>%
-  transmute(data_level, REF_AREA, r_2020 = OBS_VALUE)
+  transmute(data_level, REF_AREA, r_2020 = stata_round(OBS_VALUE, round_digits_prev))
 
 # =============================================================================
 # AARR (log-linear) using modeled data from 2012 to 2020

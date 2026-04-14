@@ -25,8 +25,10 @@ series_files <- c(
 all_data <- run_combined_datasets(series_files, output_file = "cmrs2_series.parquet")
 
 # ---------------------------------------------------------------------------
-# Confidential overrides — mark specific country × indicator rows so they are
-# excluded from the accepted subset (and therefore from projections).
+# Confidential overrides — mark specific country × indicator rows as
+# confidential following CMRS convention: DataSourceDecisionCategory stays
+# "Accepted" (so the rows remain in the accepted subset) but
+# DataSourceDecision is set to "Accepted and Confidential".
 # These compensate for upstream data issues that should eventually be fixed
 # in CMRS production (see 00_documentation/UPSTREAM_SOURCE_DATA_FLAGS.md).
 # ---------------------------------------------------------------------------
@@ -42,7 +44,7 @@ conf_idx <- conf_idx | (
 )
 
 if (sum(conf_idx) > 0L) {
-  all_data$DataSourceDecisionCategory[conf_idx] <- "Confidential"
+  all_data$DataSourceDecision[conf_idx] <- "Accepted and Confidential"
   message(
     "Confidential override: flagged ", sum(conf_idx),
     " series rows (NIC all indicators; BHR overweight)"

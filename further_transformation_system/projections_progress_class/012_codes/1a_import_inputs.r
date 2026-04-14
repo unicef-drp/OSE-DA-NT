@@ -1,10 +1,9 @@
 #------------------------------------------------------------------------------
 # Build NT projection inputs
 # - Country series inputs: analysis_datasets `cmrs2_series_accepted.parquet`
+#   (includes BW_LBW modelled series)
 # - Country non-series inputs: analysis_datasets `cmrs2_ant_accepted.parquet`,
 #   `cmrs2_iycf_accepted.parquet`
-# - Country BW_LBW series: DW-Production `cmrs_series_lbw.csv` (modelled LBW
-#   estimates are not part of the CMRS2 parquets)
 # - Regional inputs: DW-Production regional aggregation outputs from `2b`–`2j`
 #------------------------------------------------------------------------------
 
@@ -71,10 +70,6 @@ country_series_path <- file.path(analysisDatasetsInputDir, "cmrs2_series_accepte
 country_ant_path <- file.path(analysisDatasetsInputDir, "cmrs2_ant_accepted.parquet")
 country_iycf_path <- file.path(analysisDatasetsInputDir, "cmrs2_iycf_accepted.parquet")
 
-# BW_LBW modelled series is not included in any CMRS2 parquet.
-# It remains sourced from DW-Production.
-country_lbw_series_path <- file.path(inputdir, "cmrs", "cmrs_series_lbw.csv")
-
 # Regional inputs and crosswalks still from DW-Production
 groups_path <- file.path(interdir, "groups_for_agg.csv")
 regional_overweight_path <- file.path(interdir, "agg_indicator", "Regional_Output_NT_ANT_WHZ_PO2_MOD.xlsx")
@@ -87,7 +82,6 @@ for (path in c(
   country_series_path,
   country_ant_path,
   country_iycf_path,
-  country_lbw_series_path,
   groups_path,
   regional_overweight_path,
   regional_anemia_path,
@@ -203,10 +197,11 @@ read_analysis_parquet_as_char <- function(path, indicators = NULL) {
     dplyr::select(dplyr::any_of(parquet_keep_cols)) %>%
     dplyr::collect()
 
-  # Keep national-level rows only (Subnational_Status == "0").
+  # Keep national-level rows only (Subnational_Status == "0" or NA).
   # Sub-national estimates must be excluded for the projections pipeline.
+  # Series data has Subnational_Status = NA (all national), so NA is kept.
   if ("Subnational_Status" %in% names(df)) {
-    df <- df %>% dplyr::filter(as.character(Subnational_Status) == "0")
+    df <- df %>% dplyr::filter(is.na(Subnational_Status) | as.character(Subnational_Status) == "0")
   }
 
   df <- df %>%
@@ -238,30 +233,8 @@ read_analysis_parquet_as_char <- function(path, indicators = NULL) {
 }
 
 # Series indicators needed (bare codes, without NT_ prefix)
-series_indicators <- c("ANT_WHZ_PO2_MOD", "ANE_WOM_15_49_MOD", "ANT_HAZ_NE2_MOD")
+series_indicators <- c("ANT_WHZ_PO2_MOD", "ANE_WOM_15_49_MOD", "ANT_HAZ_NE2_MOD", "BW_LBW")
 country_series_raw <- read_analysis_parquet_as_char(country_series_path, indicators = series_indicators)
-
-# BW_LBW modelled series from DW-Production CSV (not in CMRS2 parquets).
-# Map its columns to the same shape used by the parquet reader.
-country_lbw_series_raw <- read_csv_all_char(country_lbw_series_path) %>%
-  dplyr::transmute(
-    REF_AREA = ISO3Code,
-    INDICATOR = paste0("NT_", IndicatorCode),
-    TIME_PERIOD = warehouse_year,
-    OBS_VALUE = as.character(as.numeric(r) * 100),
-    LOWER_BOUND = as.character(as.numeric(ll) * 100),
-    UPPER_BOUND = as.character(as.numeric(ul) * 100),
-    SEX = "_T",
-    AGE = "_T",
-    RESIDENCE = "_T",
-    WEALTH_QUINTILE = "_T",
-    MATERNAL_EDU_LVL = "_T",
-    HEAD_OF_HOUSE = "_T",
-    REPORTING_LVL = "C",
-    DataSourceDecision = DataSourceDecision
-  )
-
-country_series_raw <- dplyr::bind_rows(country_series_raw, country_lbw_series_raw)
 
 # Anemia indicator (ANE_WOM_15_49_MOD) uses SEX = "F" in the parquet because
 # the target population is women 15-49.  Remap to "_T" so downstream filters

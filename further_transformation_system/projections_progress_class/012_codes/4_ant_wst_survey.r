@@ -98,11 +98,11 @@ country_surveys <- wst_raw %>%
 # =============================================================================
 regional_baseline <- regional_df %>%
   filter(TIME_PERIOD == 2012) %>%
-  transmute(data_level = "Regional", REF_AREA, year_baseline = 2012L, r_baseline = OBS_VALUE)
+  transmute(data_level = "Regional", REF_AREA, year_baseline = 2012L, r_baseline = stata_round(OBS_VALUE, round_digits_prev))
 
 regional_recent <- regional_df %>%
   filter(TIME_PERIOD == 2024) %>%
-  transmute(data_level = "Regional", REF_AREA, year_recent = 2024L, r_recent = OBS_VALUE)
+  transmute(data_level = "Regional", REF_AREA, year_recent = 2024L, r_recent = stata_round(OBS_VALUE, round_digits_prev))
 
 regional_aarr <- regional_df %>%
   filter(TIME_PERIOD >= 2012, TIME_PERIOD <= 2024) %>%
@@ -160,20 +160,20 @@ country_baseline <- country_surveys %>%
     country_surveys %>%
       group_by(REF_AREA, survey_year) %>%
       arrange(desc(source_priority), time_period_seed, .by_group = TRUE) %>%
-      summarise(r_baseline = first(OBS_VALUE), .groups = "drop") %>%
+      summarise(r_baseline = stata_round(first(OBS_VALUE), round_digits_prev), .groups = "drop") %>%
       transmute(REF_AREA, year_baseline = survey_year, r_baseline),
     by = c("REF_AREA", "year_baseline")
   )
 
 country_recent <- country_surveys %>%
   group_by(REF_AREA) %>%
-  arrange(desc(survey_year)) %>%
+  arrange(desc(survey_year), desc(source_priority)) %>%
   slice_head(n = 1) %>%
   ungroup() %>%
   transmute(
     REF_AREA,
     year_recent = survey_year,
-    r_recent = OBS_VALUE,
+    r_recent = stata_round(OBS_VALUE, round_digits_prev),
     r_2024 = if_else(year_recent > 2016, r_recent, NA_real_)
   )
 
