@@ -27,12 +27,15 @@ For each indicator group, the pipeline generally:
 8. Writes CSV and Excel outputs.
 
 General calculation pattern used in the active scripts:
-- Baseline prevalence is taken from a fixed reference year, usually 2012.
+- Baseline prevalence is taken from a fixed reference year, usually 2012, and rounded to 1 decimal place using Stata-aligned rounding at the point of assignment.
+- Latest/endline prevalence is similarly rounded to 1 decimal place at assignment.
 - Current AARR is estimated with a log-linear model over the modeled series history used by that script: `current_AARR = 100 * (1 - exp(slope))`, where `slope` comes from `lm(log(prev_for_aarr) ~ TIME_PERIOD)`.
 - `prev_for_aarr` is computed from prevalence rounded to 1 decimal place before taking logs.
-- Required AARR is then computed from the baseline prevalence and the indicator-specific 2030 target prevalence.
-- Projected series are anchored at the 2012 baseline and apply current AARR forward each year.
-- Target series are anchored at the 2012 baseline and apply required AARR forward each year.
+- All AARR values are rounded to 2 decimal places.
+- Required AARR is then computed from the rounded baseline prevalence and the indicator-specific 2030 target prevalence.
+- Threshold comparisons (e.g., `r_2024 <= 5`) use the rounded prevalence.
+- Projected series are anchored at the rounded baseline and apply rounded current AARR forward each year.
+- Target series are anchored at the rounded baseline and apply rounded required AARR forward each year.
 - The projection/target trajectory formula used in the scripts is `OBS_VALUE = r_2012 * (1 - (AARR / 100))^(TIME_PERIOD - 2012)`.
 
 ## AARR and Classification Rules
@@ -70,15 +73,25 @@ Simple classification used in outputs:
 ## Current Folder and Path Conventions
 
 The execute script uses these main paths:
-- Input root: teamsFolder/01_dw_prep/011_rawdata/nt/input
-- NT production output root: teamsFolder/01_dw_prep/011_rawdata/nt/output
-- NT reusable intermediates: teamsFolder/01_dw_prep/011_rawdata/nt/output/inter
-- Projection output root: teamsFolder/01_dw_prep/011_rawdata/nt/output_projections
+
+**Analysis Space paths (primary — country inputs and projection outputs):**
+- analysisDatasetsInputDir: `{nutritionRoot}/github/analysis_datasets` (parquet files)
+- Projection output root: `{nutritionRoot}/github/projections_progress_class`
+
+**DW-Production paths (retained for regional estimates, population, crosswalks):**
+- Input root: teamsFolder/01_dw_prep/011_rawdata/nt/input (population files)
+- NT reusable intermediates: teamsFolder/01_dw_prep/011_rawdata/nt/output/inter (regional aggregates, groups_for_agg.csv)
 
 Important:
-- This projections pipeline now reads upstream NT artifacts from `output/inter/`.
-- When available, `1a_import_inputs.r` prefers the compact projections-ready files created by `05_projections/012_codes/nt/4a_projection_input_prep.R` under `output/inter/projection_input/` and only falls back to `dw_split` if those files are missing.
-- Projection products are written to `output_projections`.
+- Country-level inputs (series and non-series) are read from analysis_datasets accepted parquets via `read_analysis_parquet_as_char()` in `1a_import_inputs.r`. Parquet values are proportions (0–1) and are converted to percent (0–100) during import. Indicator codes in parquets omit the `NT_` prefix, which is prepended during import.
+- Regional estimates and crosswalk files are still read from DW-Production `output/inter/`.
+- Projection products are written under the Analysis Space projection output root.
+
+### Key data conventions during import
+- Series parquets have `Subnational_Status = NA` (all national); non-series parquets use `"0"` for national. The filter handles both: `is.na(Subnational_Status) | Subnational_Status == "0"`.
+- Accepted parquets contain both preferred (`DATA_SOURCE_PRIORITY = 1`) and non-preferred (`= 0`) surveys. All surveys are passed to downstream scripts; the AARR regression uses all surveys for non-baseline years.
+- Confidential rows (`DataSourceDecision == "Accepted and Confidential"`) are excluded before projections.
+- Anemia `SEX = "F"` is remapped to `"_T"` during import.
 
 ## Execution Order (Scripts 1-7)
 

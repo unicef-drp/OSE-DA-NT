@@ -55,6 +55,20 @@ Define practical, repository-specific AI skill modules that improve consistency 
 - Key constraint: `arrow::read_schema()` does not work on parquet files — always use `open_dataset()$schema`.
 - Trigger: any new or modified code that calls `read_parquet()` or reads from analysis_datasets parquets.
 
+8. Projections Pipeline Migration and Validation Skill
+- Purpose: guide migration of projections pipeline from DW-Production CSV inputs to analysis_datasets parquet inputs, and validate output parity with old DW output.
+- Skill file: `00_ai/projections_progress_class/PROJECTIONS_MIGRATION_SKILL.md`
+- Key constraints: (1) parquet values are proportions (×100 needed); (2) accepted parquet has ALL surveys, not just preferred — do not filter to priority=1; (3) series parquets have Subnational_Status=NA, filter must handle `is.na() | == "0"`; (4) all prevalence must be `stata_round(x, 1)` before use in any calculation or output; (5) AARR rounded to 2dp; (6) `country_recent` must sort by `desc(source_priority)` to pick preferred survey.
+- Key deliverable: validation recipe comparing `progress_2030_appended.xlsx` new vs old with expected acceptable difference table.
+- Trigger: migrating a new indicator to parquet, changing input staging in `1a_import_inputs.r`, or debugging value differences in projections output.
+
+9. Analysis Datasets Build Conventions Skill
+- Purpose: document the two-field DataSourceDecision/Category system, confidential handling convention, hardcoded business rules (ZWE 2879, BHR overweight, NIC series), `write_accepted_subset()` semantics, Stata rounding, proportion/percent, indicator prefix, and DATA_SOURCE_PRIORITY meaning — all conventions that caused bugs during migration.
+- Skill file: `00_ai/analysis_datasets/BUILD_CONVENTIONS_SKILL.md`
+- Key constraint: `DataSourceDecisionCategory` is the filter field (stays "Accepted" for confidential rows); `DataSourceDecision` is the metadata field (set to "Accepted and Confidential"). Swapping them removes rows from accepted subsets.
+- Key constraint: accepted parquets contain both priority=0 and priority=1 rows. Filtering to priority=1 upstream breaks AARR regression in downstream scripts.
+- Trigger: editing any `2_build_cmrs2_*.r` script, `0_layer2_utils.r`, adding new hardcoded corrections, or debugging missing rows in accepted parquets.
+
 ## Definition Of Done For A Skill
 
 - Clear trigger condition.
