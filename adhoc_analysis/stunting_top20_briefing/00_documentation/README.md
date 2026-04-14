@@ -23,7 +23,7 @@ Run scripts from the **repository root** (so `profile_OSE-DA-NT.R` resolves):
 | `02_codes/1_execute_conductor.r` | **Entrypoint.** Sources all steps below in order. |
 | `02_codes/2_prepare_inputs.r` | Copies stunting modeled estimates (ANT_HAZ_NE2_MOD) from `analysisDatasetsOutputDir` into `01_inputs/`. Filters to national-level totals. |
 | `02_codes/3_stunting_rankings.r` | Computes three top-20 rankings: highest prevalence, biggest 10-year improvers, biggest 20-year improvers. Writes CSV and RDS to `03_outputs/`. |
-| `02_codes/4_create_ppt.r` | Generates a UNICEF-branded PowerPoint (`stunting_top20_briefing.pptx`) that keeps template cover/thank-you slides and adds analysis charts plus narrative. |
+| `02_codes/4_create_ppt.r` | Generates a UNICEF-branded PowerPoint (`stunting_top20_briefing.pptx`) that keeps template cover/thank-you slides and adds analysis charts plus narrative. Also produces an Excel companion workbook (`stunting_top20_briefing_data.xlsx`) with one sheet per figure slide so data can be reviewed or charts recreated in Excel. |
 
 ## Data Source
 
@@ -38,13 +38,16 @@ Run scripts from the **repository root** (so `profile_OSE-DA-NT.R` resolves):
 | `stunting_rankings.csv` | Combined human-readable rankings with baseline/current values and change. |
 | `stunting_rankings.rds` | R list object with three data frames + metadata (for PPT script). |
 | `stunting_top20_briefing.pptx` | PowerPoint with template-based cover and thank-you slides, a branded nutrition divider slide, chart slides, and narrative slides for ED briefing. |
+| `stunting_top20_briefing_data.xlsx` | Excel workbook with one sheet per figure slide (7 sheets when burden data exist). Columns match the chart data so figures can be recreated in Excel. |
 
 ## Dependencies
 
-R packages: `arrow`, `dplyr`, `tidyr`, `readr`, `ggplot2`, `countrycode`, `officer`, `rvg`.
+R packages: `arrow`, `dplyr`, `tidyr`, `readr`, `ggplot2`, `countrycode`, `officer`, `rvg`, `openxlsx`.
 
 ## Notes
 
 - "Improvement" is measured as absolute reduction in stunting prevalence (percentage points).
 - The latest year and baseline years are derived automatically from the data.
 - Charts use UNICEF colour and typography settings for presentation readability.
+- All figure slides show 15 countries (optimal for horizontal bar/dot charts on widescreen slides).
+- The before/after dot plot (slide 7) is sorted by the latest-year value (lowest at top) with a legend ordered to match left-to-right positioning (latest year first, then baseline year).

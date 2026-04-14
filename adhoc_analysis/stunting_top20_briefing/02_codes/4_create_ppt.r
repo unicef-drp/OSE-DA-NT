@@ -90,6 +90,7 @@ theme_unicef <- theme_minimal(base_size = 16, base_family = brand_font) +
 
 # --- Chart 1: Highest prevalence (horizontal bar) ------------------------
 p_highest <- results$highest %>%
+  head(15) %>%
   mutate(label = paste0(country_name, " (", REF_AREA, ")")) %>%
   mutate(label = factor(label, levels = rev(label))) %>%
   ggplot(aes(x = label, y = prevalence)) +
@@ -107,6 +108,7 @@ p_highest <- results$highest %>%
 
 # --- Chart 2: 10-year improvers ------------------------------------------
 p_improve_10 <- results$improve_10yr %>%
+  head(15) %>%
   mutate(label = paste0(country_name, " (", REF_AREA, ")")) %>%
   mutate(label = factor(label, levels = rev(label))) %>%
   ggplot(aes(x = label, y = abs(change_pp))) +
@@ -123,6 +125,7 @@ p_improve_10 <- results$improve_10yr %>%
 
 # --- Chart 3: 20-year improvers ------------------------------------------
 p_improve_20 <- results$improve_20yr %>%
+  head(15) %>%
   mutate(label = paste0(country_name, " (", REF_AREA, ")")) %>%
   mutate(label = factor(label, levels = rev(label))) %>%
   ggplot(aes(x = label, y = abs(change_pp))) +
@@ -139,21 +142,30 @@ p_improve_20 <- results$improve_20yr %>%
 
 # --- Chart 4: Before/after dot plot for 10-year improvers -----------------
 p_dot_10 <- results$improve_10yr %>%
+  head(15) %>%
+  arrange(current_value) %>%
   mutate(label = paste0(country_name, " (", REF_AREA, ")")) %>%
   mutate(label = factor(label, levels = rev(label))) %>%
   ggplot(aes(y = label)) +
   geom_segment(aes(x = current_value, xend = baseline_value, yend = label),
                colour = unicef_coolgrey, linewidth = 0.6) +
-  geom_point(aes(x = baseline_value), colour = unicef_orange, size = 2.5) +
-  geom_point(aes(x = current_value),  colour = unicef_green,  size = 2.5) +
+  geom_point(aes(x = current_value,  colour = "current"),  size = 2.5) +
+  geom_point(aes(x = baseline_value, colour = "baseline"), size = 2.5) +
+  scale_colour_manual(
+    values = c("current" = unicef_green, "baseline" = unicef_orange),
+    labels = setNames(c(as.character(latest_year), as.character(yr_10_ago)),
+                      c("current", "baseline")),
+    breaks = c("current", "baseline")
+  ) +
   labs(
     title = NULL,
-    subtitle = paste0("Orange = ", yr_10_ago, "  |  Green = ", latest_year),
+    subtitle = NULL,
     caption  = "Source: UNICEF/WHO/World Bank Joint Malnutrition Estimates",
-    x = "Prevalence (%)", y = NULL
+    x = "Prevalence (%)", y = NULL, colour = NULL
   ) +
   scale_x_continuous(labels = label_percent(scale = 1)) +
-  theme_unicef
+  theme_unicef +
+  theme(legend.position = "top", legend.text = element_text(size = 13))
 
 # --- Build PowerPoint using UNICEF branded template -----------------------
 # Keep key template slides so title and thank-you slides stay brand-authentic.
@@ -309,6 +321,7 @@ if (has_numbers) {
   fmt_millions <- function(x) sprintf("%.1f M", x / 1000)
 
   p_highest_num <- results$highest_number %>%
+    head(15) %>%
     mutate(label = paste0(country_name, " (", REF_AREA, ")")) %>%
     mutate(label = factor(label, levels = rev(label))) %>%
     ggplot(aes(x = label, y = number_thousands)) +
@@ -317,7 +330,7 @@ if (has_numbers) {
               hjust = -0.1, size = 4.4, colour = unicef_warmgrey, family = brand_font) +
     coord_flip(ylim = c(0, max(results$highest_number$number_thousands, na.rm = TRUE) * 1.15)) +
     labs(
-      title    = paste0("Top 20 countries: highest number of stunted children (", latest_year, ")"),
+      title    = paste0("Top 15 countries: highest number of stunted children (", latest_year, ")"),
       subtitle = "Children under 5 years, modelled estimates (millions)",
       caption  = "Source: UNICEF/WHO/World Bank Joint Malnutrition Estimates",
       x = NULL, y = "Stunted children (millions)"
@@ -326,6 +339,7 @@ if (has_numbers) {
     theme_unicef
 
   p_improve_10_num <- results$improve_10yr_number %>%
+    head(15) %>%
     mutate(label = paste0(country_name, " (", REF_AREA, ")")) %>%
     mutate(label = factor(label, levels = rev(label))) %>%
     ggplot(aes(x = label, y = abs(change_th))) +
@@ -343,6 +357,7 @@ if (has_numbers) {
     theme_unicef
 
   p_improve_20_num <- results$improve_20yr_number %>%
+    head(15) %>%
     mutate(label = paste0(country_name, " (", REF_AREA, ")")) %>%
     mutate(label = factor(label, levels = rev(label))) %>%
     ggplot(aes(x = label, y = abs(change_th))) +
@@ -471,3 +486,58 @@ pptx <- move_slide(pptx, index = 3, to = length(pptx))
 pptx_path <- file.path(output_dir, "stunting_top20_briefing.pptx")
 print(pptx, target = pptx_path)
 message("PowerPoint saved: ", pptx_path)
+
+# --- Excel workbook with one sheet per figure slide -----------------------
+if (!requireNamespace("openxlsx", quietly = TRUE)) install.packages("openxlsx")
+library(openxlsx)
+
+wb <- createWorkbook()
+
+# Sheet 1: Highest prevalence (slide 5)
+s1 <- results$highest %>% head(15) %>%
+  select(rank, REF_AREA, country_name, year, prevalence)
+addWorksheet(wb, "Highest prevalence")
+writeData(wb, "Highest prevalence", s1)
+
+# Sheet 2: 10-year improvement (slide 6)
+s2 <- results$improve_10yr %>% head(15) %>%
+  select(rank, REF_AREA, country_name, baseline_value, current_value, change_pp, pct_change)
+addWorksheet(wb, "10yr improvement")
+writeData(wb, "10yr improvement", s2)
+
+# Sheet 3: Before-after dot plot (slide 7)
+s3 <- results$improve_10yr %>% head(15) %>%
+  arrange(current_value) %>%
+  select(rank, REF_AREA, country_name, baseline_value, current_value, change_pp)
+addWorksheet(wb, "10yr before-after")
+writeData(wb, "10yr before-after", s3)
+
+# Sheet 4: 20-year improvement (slide 8)
+s4 <- results$improve_20yr %>% head(15) %>%
+  select(rank, REF_AREA, country_name, baseline_value, current_value, change_pp, pct_change)
+addWorksheet(wb, "20yr improvement")
+writeData(wb, "20yr improvement", s4)
+
+if (has_numbers) {
+  # Sheet 5: Highest number (slide 10)
+  s5 <- results$highest_number %>% head(15) %>%
+    select(rank, REF_AREA, country_name, year, number_thousands)
+  addWorksheet(wb, "Highest number")
+  writeData(wb, "Highest number", s5)
+
+  # Sheet 6: 10-year reduction in number (slide 11)
+  s6 <- results$improve_10yr_number %>% head(15) %>%
+    select(rank, REF_AREA, country_name, baseline_value, current_value, change_th, pct_change)
+  addWorksheet(wb, "10yr number reduction")
+  writeData(wb, "10yr number reduction", s6)
+
+  # Sheet 7: 20-year reduction in number (slide 12)
+  s7 <- results$improve_20yr_number %>% head(15) %>%
+    select(rank, REF_AREA, country_name, baseline_value, current_value, change_th, pct_change)
+  addWorksheet(wb, "20yr number reduction")
+  writeData(wb, "20yr number reduction", s7)
+}
+
+xlsx_path <- file.path(output_dir, "stunting_top20_briefing_data.xlsx")
+saveWorkbook(wb, xlsx_path, overwrite = TRUE)
+message("Excel data saved: ", xlsx_path)

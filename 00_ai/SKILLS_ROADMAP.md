@@ -1,6 +1,6 @@
 # OSE-DA-NT AI Skills Roadmap
 
-Last updated: 2026-04-12
+Last updated: 2026-04-14
 
 ## Goal
 
@@ -34,6 +34,14 @@ Define practical, repository-specific AI skill modules that improve consistency 
 - Key constraint: `reference_disaggregations.csv` is fetched directly by DW-Production from GitHub main branch. Adding rows is safe; modifying existing rows changes DW output and requires approval.
 - Key constraint: SDMX codebook values ≠ DW accepted values. Valid HELIX codes must be verified against existing values already in the CSV.
 - Trigger: after any CMRS2 build, or when planning to extend the reference mapping for a new disaggregation type.
+
+6. Ad-Hoc Briefing Generation Skill
+- Purpose: generate UNICEF-branded PowerPoint briefings with companion Excel data workbooks from ranking/analysis results.
+- Inputs: RDS results object (rankings + metadata), UNICEF brand template, indicator family.
+- Outputs: branded PowerPoint (template cover/thank-you + chart slides + narrative), Excel workbook with one sheet per figure slide.
+- Key conventions: 15 countries per chart (optimal for horizontal bar/dot plots); dot plots sorted by latest-year value with legend ordered left-to-right (lowest first); auto-install of officer/rvg/openxlsx.
+- Reference implementation: `adhoc_analysis/stunting_top20_briefing/02_codes/4_create_ppt.r`.
+- Trigger: when creating a new ad-hoc indicator briefing or extending an existing one with additional slides or outputs.
 
 ## Definition Of Done For A Skill
 
