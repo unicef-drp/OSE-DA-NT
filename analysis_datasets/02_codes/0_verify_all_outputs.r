@@ -23,7 +23,7 @@
 #  14. Joint distribution subset (indicator x disagg combinations)
 #
 # Usage:
-#   Verify all datasets:
+#   Verify all datasets (standalone):
 #     Rscript analysis_datasets/02_codes/0_verify_all_outputs.r
 #
 #   Verify a single dataset (ant, bw, iod, iycf, series):
@@ -32,7 +32,12 @@
 #   Verify multiple datasets:
 #     Rscript analysis_datasets/02_codes/0_verify_all_outputs.r ant bw
 #
-#   When sourced, set verify_targets beforehand to filter:
+#   From conductor (opt-in):
+#     run_verify     <- TRUE
+#     verify_targets <- c("ant")
+#     source("analysis_datasets/02_codes/1_execute_conductor.r")
+#
+#   When sourced directly, set verify_targets beforehand to filter:
 #     verify_targets <- c("ant")
 #     source("analysis_datasets/02_codes/0_verify_all_outputs.r")
 #
