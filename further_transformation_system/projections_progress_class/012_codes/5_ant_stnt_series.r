@@ -80,7 +80,7 @@ message("Using dw_split ant input: ", basename(dw_ant_path))
 
 dw_ant_raw <- read_csv(dw_ant_path, show_col_types = FALSE) %>%
   filter(
-    INDICATOR == "NT_ANT_HAZ_NE2_MOD",
+    IndicatorCode == "NT_ANT_HAZ_NE2_MOD",
     AGE       == "_T",
     SEX       == "_T"
   ) %>%
@@ -303,7 +303,7 @@ final_df <- baseline_df %>%
 # === Export summary (classification + target_prop_30 etc.) ===
 progress_st <- final_df %>%
   transmute(
-    INDICATOR = "NT_ANT_HAZ_NE2_MOD",
+    IndicatorCode = "NT_ANT_HAZ_NE2_MOD",
     reporting_level = data_level,
     REF_AREA,
     baseline_year = 2012L,
@@ -335,12 +335,12 @@ write_csv(progress_st, file.path(outputdir_projections_inter, "st_progress_2030.
 progress_append_path <- file.path(outputdir_projections_final, "progress_2030_appended.csv")
 if (file.exists(progress_append_path)) {
   progress_appended <- read_nt_projection_progress_file(progress_append_path)
-  if (!("INDICATOR" %in% names(progress_appended))) {
+  if (!("IndicatorCode" %in% names(progress_appended))) {
     progress_appended <- progress_appended %>%
-      mutate(INDICATOR = if ("indicator_code" %in% names(progress_appended)) as.character(indicator_code) else NA_character_)
+      mutate(IndicatorCode = if ("indicator_code" %in% names(progress_appended)) as.character(indicator_code) else NA_character_)
   }
   progress_appended <- progress_appended %>%
-    filter(INDICATOR != "NT_ANT_HAZ_NE2_MOD") %>%
+    filter(IndicatorCode != "NT_ANT_HAZ_NE2_MOD") %>%
     bind_rows(progress_st)
 } else {
   progress_appended <- progress_st
@@ -396,7 +396,7 @@ trgt_2030_nt_ant_haz_ne2_mod <- bind_rows(
 ) %>%
   transmute(
     REF_AREA = REF_AREA,
-    INDICATOR = "TRGT_2030_NT_ANT_HAZ_NE2_MOD",
+    IndicatorCode = "TRGT_2030_NT_ANT_HAZ_NE2_MOD",
     SEX = SEX,
     AGE = "_T",
     TIME_PERIOD = TIME_PERIOD,
@@ -431,18 +431,18 @@ combined_df <- bind_rows(
 # =============================================================================
 export_df <- combined_df %>%
   mutate(
-    INDICATOR = "NT_ANT_HAZ_NE2_MOD"
+    IndicatorCode = "NT_ANT_HAZ_NE2_MOD"
   )
 if ("SEX" %in% names(export_df)) {
   export_df <- export_df %>%
     filter(is.na(SEX) | SEX == "_T")
 }
 export_df <- add_nt_population_columns(export_df, "NT_ANT_HAZ_NE2_MOD") %>%
-  select(any_of(c("INDICATOR", "data_level", "REF_AREA", "TIME_PERIOD", "population", "OBS_VALUE", "number_affected", "TYPE")))
+  select(any_of(c("IndicatorCode", "data_level", "REF_AREA", "TIME_PERIOD", "population", "OBS_VALUE", "number_affected", "TYPE")))
 
 codebook <- tribble(
   ~Column, ~Description,
-  "INDICATOR", "Indicator code",
+  "IndicatorCode", "Indicator code",
   "data_level", "Country or Regional reporting level included in the output",
   "REF_AREA", "Country/Region code",
   "TIME_PERIOD", "Year",

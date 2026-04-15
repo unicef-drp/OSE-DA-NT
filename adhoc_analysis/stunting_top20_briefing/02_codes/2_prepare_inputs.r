@@ -41,15 +41,15 @@ message("Reading: ", source_parquet)
 series_all <- read_parquet(source_parquet)
 
 # Identify stunting modeled indicator (with or without NT_ prefix)
-stnt_indicators <- unique(series_all$INDICATOR[
-  grepl("HAZ_NE2_MOD$", series_all$INDICATOR, ignore.case = TRUE) &
-  !grepl("NUMTH|NE3", series_all$INDICATOR, ignore.case = TRUE)
+stnt_indicators <- unique(series_all$IndicatorCode[
+  grepl("HAZ_NE2_MOD$", series_all$IndicatorCode, ignore.case = TRUE) &
+  !grepl("NUMTH|NE3", series_all$IndicatorCode, ignore.case = TRUE)
 ])
 
 if (length(stnt_indicators) == 0) {
   stop(
     "No modeled stunting indicator found in the data. ",
-    "Available indicators: ", paste(head(unique(series_all$INDICATOR), 20), collapse = ", ")
+    "Available indicators: ", paste(head(unique(series_all$IndicatorCode), 20), collapse = ", ")
   )
 }
 message("Using stunting indicator(s): ", paste(stnt_indicators, collapse = ", "))
@@ -65,7 +65,7 @@ if ("DataSourceDecision" %in% names(series_all)) {
 # Filter: modeled stunting, national total (all dimension columns == "_T")
 stunting_df <- series_all %>%
   filter(
-    INDICATOR %in% stnt_indicators,
+    IndicatorCode %in% stnt_indicators,
     SEX       == "_T",
     RESIDENCE == "_T",
     WEALTH    == "_T",
@@ -84,8 +84,8 @@ write_parquet(stunting_df, out_path, compression = "zstd")
 message("Wrote: ", out_path, " (", nrow(stunting_df), " rows)")
 
 # --- Also extract stunting numbers (NUMTH) indicator ----------------------
-numth_indicators <- unique(series_all$INDICATOR[
-  grepl("HAZ_NE2_MOD_NUMTH$", series_all$INDICATOR, ignore.case = TRUE)
+numth_indicators <- unique(series_all$IndicatorCode[
+  grepl("HAZ_NE2_MOD_NUMTH$", series_all$IndicatorCode, ignore.case = TRUE)
 ])
 
 if (length(numth_indicators) == 0) {
@@ -94,7 +94,7 @@ if (length(numth_indicators) == 0) {
   message("Using stunting number indicator(s): ", paste(numth_indicators, collapse = ", "))
   numbers_df <- series_all %>%
     filter(
-      INDICATOR %in% numth_indicators,
+      IndicatorCode %in% numth_indicators,
       SEX       == "_T",
       RESIDENCE == "_T",
       WEALTH    == "_T",

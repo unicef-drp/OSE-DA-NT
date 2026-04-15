@@ -18,7 +18,7 @@ accepted_file <- "cmrs2_series_accepted.parquet"
 accepted_path <- file.path(layer2_output_dir, accepted_file)
 
 # --- Slim-column read: only need grouping cols + TIME_PERIOD ---------------
-grp <- c("REF_AREA", "INDICATOR", "SEX", "AGE", "RESIDENCE", "WEALTH",
+grp <- c("REF_AREA", "IndicatorCode", "SEX", "AGE", "RESIDENCE", "WEALTH",
          "EDUCATION", "HEAD_OF_HOUSEHOLD", "MOTHER_AGE",
          "DELIVERY_ASSISTANCE", "PLACE_OF_DELIVERY", "DELIVERY_MODE",
          "MULTIPLE_BIRTH", "REGION")

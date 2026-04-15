@@ -259,7 +259,7 @@ add_nt_projection_progress_metadata <- function(progress_data, label_lookup) {
         )
       ),
       reporting_level_name = dplyr::coalesce(.data$reporting_level_name, .data$data_level),
-      indicator_name = dplyr::coalesce(.data$indicator_name, as.character(.data$INDICATOR)),
+      indicator_name = dplyr::coalesce(.data$indicator_name, as.character(.data$IndicatorCode)),
       geographic_area_name = dplyr::coalesce(.data$geographic_area_name, as.character(.data$REF_AREA))
     ) |>
     dplyr::select(-"data_level")

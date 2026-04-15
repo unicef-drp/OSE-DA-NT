@@ -141,7 +141,7 @@ standardize_projection_rows <- function(data) {
   # percent scale (0-100). No rescaling is needed here.
 
   desired_cols <- c(
-    "INDICATOR", "Indicator", "REF_AREA", "Geographic area", "REPORTING_LVL",
+    "IndicatorCode", "Indicator", "REF_AREA", "Geographic area", "REPORTING_LVL",
     "SEX", "AGE", "WEALTH_QUINTILE", "RESIDENCE", "MATERNAL_EDU_LVL", "HEAD_OF_HOUSE",
     "TIME_PERIOD", "OBS_VALUE", "DATA_SOURCE", "DATA_SOURCE_PRIORITY", "OBS_STATUS", "OBS_CONF",
     "LOWER_BOUND", "UPPER_BOUND", "OBS_FOOTNOTE", "SERIES_FOOTNOTE", "SOURCE_LINK", "CUSTODIAN",
@@ -179,9 +179,9 @@ standardize_projection_rows <- function(data) {
 # at the file level via predicate pushdown, avoiding loading the full parquet.
 # Only the columns needed downstream are selected, skipping 60+ unused columns.
 parquet_keep_cols <- c(
-  "INDICATOR", "REF_AREA", "TIME_PERIOD", "SEX", "AGE",
+  "IndicatorCode", "REF_AREA", "TIME_PERIOD", "SEX", "AGE",
   "RESIDENCE", "WEALTH", "EDUCATION", "HEAD_OF_HOUSEHOLD",
-  "VALUE", "ll", "ul",
+  "r", "ll", "ul",
   "CountryName", "DataSourceDecision", "DATA_SOURCE_PRIORITY",
   "Subnational_Status"
 )
@@ -190,7 +190,7 @@ read_analysis_parquet_as_char <- function(path, indicators = NULL) {
   ds <- arrow::open_dataset(path)
 
   if (!is.null(indicators)) {
-    ds <- ds %>% dplyr::filter(INDICATOR %in% indicators)
+    ds <- ds %>% dplyr::filter(IndicatorCode %in% indicators)
   }
 
   df <- ds %>%
@@ -207,7 +207,7 @@ read_analysis_parquet_as_char <- function(path, indicators = NULL) {
   df <- df %>%
     dplyr::rename_with(
       ~ dplyr::case_when(
-        . == "VALUE" ~ "OBS_VALUE",
+        . == "r" ~ "OBS_VALUE",
         . == "WEALTH" ~ "WEALTH_QUINTILE",
         . == "EDUCATION" ~ "MATERNAL_EDU_LVL",
         . == "HEAD_OF_HOUSEHOLD" ~ "HEAD_OF_HOUSE",
@@ -226,7 +226,7 @@ read_analysis_parquet_as_char <- function(path, indicators = NULL) {
 
   df %>%
     dplyr::mutate(
-      INDICATOR = paste0("NT_", INDICATOR),
+      IndicatorCode = paste0("NT_", IndicatorCode),
       REPORTING_LVL = "C",
       dplyr::across(dplyr::everything(), as.character)
     )
@@ -240,7 +240,7 @@ country_series_raw <- read_analysis_parquet_as_char(country_series_path, indicat
 # the target population is women 15-49.  Remap to "_T" so downstream filters
 # that check SEX == "_T" retain these rows.
 country_series_raw <- country_series_raw %>%
-  dplyr::mutate(SEX = dplyr::if_else(INDICATOR == "NT_ANE_WOM_15_49_MOD" & SEX == "F", "_T", SEX))
+  dplyr::mutate(SEX = dplyr::if_else(IndicatorCode == "NT_ANE_WOM_15_49_MOD" & SEX == "F", "_T", SEX))
 
 country_non_series_raw <- dplyr::bind_rows(
   read_analysis_parquet_as_char(country_ant_path, indicators = "ANT_WHZ_NE2"),
@@ -264,15 +264,15 @@ groups_lookup <- groups_for_agg %>%
   distinct()
 
 country_series <- country_series_raw %>%
-  filter(INDICATOR %in% c("NT_ANT_WHZ_PO2_MOD", "NT_ANE_WOM_15_49_MOD", "NT_ANT_HAZ_NE2_MOD", "NT_BW_LBW")) %>%
+  filter(IndicatorCode %in% c("NT_ANT_WHZ_PO2_MOD", "NT_ANE_WOM_15_49_MOD", "NT_ANT_HAZ_NE2_MOD", "NT_BW_LBW")) %>%
   mutate(
-    INDICATOR = as.character(INDICATOR),
-    Indicator = coalesce_existing_cols(., c("Indicator", "INDICATOR_NAME"), projection_indicator_labels[INDICATOR]),
+    IndicatorCode = as.character(IndicatorCode),
+    Indicator = coalesce_existing_cols(., c("Indicator", "INDICATOR_NAME"), projection_indicator_labels[IndicatorCode]),
     REF_AREA = coalesce_existing_cols(., c("REF_AREA")),
     `Geographic area` = coalesce_existing_cols(., c("Geographic area", "GEOGRAPHIC_AREA", "COUNTRY_NAME", "CountryName", "Country"), REF_AREA),
     REPORTING_LVL = coalesce_existing_cols(., c("REPORTING_LVL"), "C"),
     SEX = coalesce_existing_cols(., c("SEX"), "_T"),
-    AGE = coalesce_existing_cols(., c("AGE"), unname(projection_indicator_age[INDICATOR])),
+    AGE = coalesce_existing_cols(., c("AGE"), unname(projection_indicator_age[IndicatorCode])),
     WEALTH_QUINTILE = coalesce_existing_cols(., c("WEALTH_QUINTILE"), "_T"),
     RESIDENCE = coalesce_existing_cols(., c("RESIDENCE"), "_T"),
     MATERNAL_EDU_LVL = coalesce_existing_cols(., c("MATERNAL_EDU_LVL"), "_T"),
@@ -301,19 +301,19 @@ country_series <- country_series_raw %>%
     AGE == "_T"
   ) %>%
   # Hardcoded exclusion: BHR overweight should not be included in projections outputs.
-  filter(!(INDICATOR == "NT_ANT_WHZ_PO2_MOD" & REF_AREA == "BHR")) %>%
+  filter(!(IndicatorCode == "NT_ANT_WHZ_PO2_MOD" & REF_AREA == "BHR")) %>%
   standardize_projection_rows()
 
 country_non_series <- country_non_series_raw %>%
-  filter(INDICATOR %in% c("NT_ANT_WHZ_NE2", "NT_BF_EXBF")) %>%
+  filter(IndicatorCode %in% c("NT_ANT_WHZ_NE2", "NT_BF_EXBF")) %>%
   mutate(
-    INDICATOR = as.character(INDICATOR),
-    Indicator = coalesce_existing_cols(., c("Indicator", "INDICATOR_NAME"), projection_indicator_labels[INDICATOR]),
+    IndicatorCode = as.character(IndicatorCode),
+    Indicator = coalesce_existing_cols(., c("Indicator", "INDICATOR_NAME"), projection_indicator_labels[IndicatorCode]),
     REF_AREA = coalesce_existing_cols(., c("REF_AREA")),
     `Geographic area` = coalesce_existing_cols(., c("Geographic area", "GEOGRAPHIC_AREA", "COUNTRY_NAME", "CountryName", "Country"), REF_AREA),
     REPORTING_LVL = coalesce_existing_cols(., c("REPORTING_LVL"), "C"),
     SEX = coalesce_existing_cols(., c("SEX"), "_T"),
-    AGE = coalesce_existing_cols(., c("AGE"), unname(projection_indicator_age[INDICATOR])),
+    AGE = coalesce_existing_cols(., c("AGE"), unname(projection_indicator_age[IndicatorCode])),
     WEALTH_QUINTILE = coalesce_existing_cols(., c("WEALTH_QUINTILE"), "_T"),
     RESIDENCE = coalesce_existing_cols(., c("RESIDENCE"), "_T"),
     MATERNAL_EDU_LVL = coalesce_existing_cols(., c("MATERNAL_EDU_LVL"), "_T"),
@@ -354,15 +354,16 @@ read_regional_projection_input <- function(path, indicator_code, source_label) {
     mutate(REF_AREA = coalesce_existing_cols(., c("REF_AREA", "Class", "Region_Code"))) %>%
     filter(!is.na(REF_AREA), REF_AREA != "") %>%
     {
-      if ("INDICATOR" %in% names(.)) {
-        filter(., INDICATOR == indicator_code)
+      if (any(c("IndicatorCode", "INDICATOR") %in% names(.))) {
+        ind_col <- intersect(c("IndicatorCode", "INDICATOR"), names(.))[1]
+        filter(., .data[[ind_col]] == indicator_code)
       } else {
         .
       }
     } %>%
     left_join(groups_lookup, by = "REF_AREA") %>%
     mutate(
-      INDICATOR = indicator_code,
+      IndicatorCode = indicator_code,
       Indicator = projection_indicator_labels[[indicator_code]],
       `Geographic area` = coalesce_existing_cols(., c("Geographic area", "Region", "regional_name", "Class"), REF_AREA),
       REPORTING_LVL = if_else(REF_AREA == "UNSDG_REGION_GLOBAL", "G", "R"),
@@ -417,22 +418,22 @@ regional_wasting <- read_regional_projection_input(
 
 projection_outputs <- list(
   ant = bind_rows(
-    country_series %>% filter(INDICATOR %in% c("NT_ANT_WHZ_PO2_MOD", "NT_ANT_HAZ_NE2_MOD")),
-    country_non_series %>% filter(INDICATOR == "NT_ANT_WHZ_NE2"),
+    country_series %>% filter(IndicatorCode %in% c("NT_ANT_WHZ_PO2_MOD", "NT_ANT_HAZ_NE2_MOD")),
+    country_non_series %>% filter(IndicatorCode == "NT_ANT_WHZ_NE2"),
     regional_overweight,
     regional_stunting,
     regional_wasting
   ),
   ane = bind_rows(
-    country_series %>% filter(INDICATOR == "NT_ANE_WOM_15_49_MOD"),
+    country_series %>% filter(IndicatorCode == "NT_ANE_WOM_15_49_MOD"),
     regional_anemia
   ),
   bw = bind_rows(
-    country_series %>% filter(INDICATOR == "NT_BW_LBW"),
+    country_series %>% filter(IndicatorCode == "NT_BW_LBW"),
     regional_lbw
   ),
   iycf = country_non_series %>%
-    filter(INDICATOR == "NT_BF_EXBF")
+    filter(IndicatorCode == "NT_BF_EXBF")
 )
 
 output_files <- c(

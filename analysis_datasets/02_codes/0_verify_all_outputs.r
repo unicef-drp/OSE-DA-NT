@@ -290,7 +290,7 @@ for (spec in file_specs) {
     cat("  Duplicate analytical key rows: SKIP - survey ID column not found\n")
     all_pass <- FALSE
   } else {
-    key_cols <- intersect(c(survey_col, "REF_AREA", "TIME_PERIOD", "INDICATOR", dim_cols), names(df))
+    key_cols <- intersect(c(survey_col, "REF_AREA", "TIME_PERIOD", "IndicatorCode", dim_cols), names(df))
     dup_groups <- df %>%
       group_by(across(all_of(key_cols))) %>%
       filter(n() > 1) %>%

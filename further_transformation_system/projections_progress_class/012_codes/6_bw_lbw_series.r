@@ -44,7 +44,7 @@ message("Using staged NT projection bw input: ", basename(dw_bw_path))
 
 dw_bw_raw <- read_csv(dw_bw_path, show_col_types = FALSE) %>%
   filter(
-    INDICATOR == "NT_BW_LBW",
+    IndicatorCode == "NT_BW_LBW",
     SEX == "_T",
     AGE == "_T"
   ) %>%
@@ -157,7 +157,7 @@ final_lbw <- baseline_df %>%
 # === Export summary ===
 progress_lbw <- final_lbw %>%
   transmute(
-    INDICATOR = "NT_BW_LBW",
+    IndicatorCode = "NT_BW_LBW",
     reporting_level = data_level,
     REF_AREA,
     baseline_year = 2012L,
@@ -193,12 +193,12 @@ write_csv(progress_lbw, file.path(outputdir_projections_inter, "lbw_progress_203
 progress_append_path <- file.path(outputdir_projections_final, "progress_2030_appended.csv")
 if (file.exists(progress_append_path)) {
   progress_appended <- read_nt_projection_progress_file(progress_append_path)
-  if (!("INDICATOR" %in% names(progress_appended))) {
+  if (!("IndicatorCode" %in% names(progress_appended))) {
     progress_appended <- progress_appended %>%
-      mutate(INDICATOR = if ("indicator_code" %in% names(progress_appended)) as.character(indicator_code) else NA_character_)
+      mutate(IndicatorCode = if ("indicator_code" %in% names(progress_appended)) as.character(indicator_code) else NA_character_)
   }
   progress_appended <- progress_appended %>%
-    filter(INDICATOR != "NT_BW_LBW") %>%
+    filter(IndicatorCode != "NT_BW_LBW") %>%
     bind_rows(progress_lbw)
 } else {
   progress_appended <- progress_lbw
@@ -253,7 +253,7 @@ trgt_2030_nt_bw_lbw <- bind_rows(
 ) %>%
   transmute(
     REF_AREA = REF_AREA,
-    INDICATOR = "TRGT_2030_NT_BW_LBW",
+    IndicatorCode = "TRGT_2030_NT_BW_LBW",
     SEX = SEX,
     AGE = "_T",
     TIME_PERIOD = TIME_PERIOD,
@@ -289,18 +289,18 @@ combined_df <- bind_rows(
 # =============================================================================
 export_df <- combined_df %>%
   mutate(
-    INDICATOR = "NT_BW_LBW"
+    IndicatorCode = "NT_BW_LBW"
   )
 if ("SEX" %in% names(export_df)) {
   export_df <- export_df %>%
     filter(is.na(SEX) | SEX == "_T")
 }
 export_df <- add_nt_population_columns(export_df, "NT_BW_LBW") %>%
-  select(any_of(c("INDICATOR", "data_level", "REF_AREA", "TIME_PERIOD", "population", "OBS_VALUE", "number_affected", "TYPE")))
+  select(any_of(c("IndicatorCode", "data_level", "REF_AREA", "TIME_PERIOD", "population", "OBS_VALUE", "number_affected", "TYPE")))
 
 codebook <- tribble(
   ~Column, ~Description,
-  "INDICATOR", "Indicator code",
+  "IndicatorCode", "Indicator code",
   "data_level", "Country or Regional reporting level included in the output",
   "REF_AREA", "Country/Region code",
   "TIME_PERIOD", "Year",

@@ -39,14 +39,14 @@ if (!file.exists(parquet_path)) {
 stnt <- read_parquet(parquet_path) %>%
   mutate(
     TIME_PERIOD = as.integer(TIME_PERIOD),
-    VALUE       = as.numeric(VALUE)
+    r           = as.numeric(r)
   ) %>%
-  filter(!is.na(REF_AREA), !is.na(TIME_PERIOD), !is.na(VALUE))
+  filter(!is.na(REF_AREA), !is.na(TIME_PERIOD), !is.na(r))
 
 # Detect scale: if max > 1, values are percentages; otherwise proportions
-if (max(stnt$VALUE, na.rm = TRUE) <= 1) {
-  stnt <- stnt %>% mutate(VALUE = VALUE * 100)
-  message("Converted VALUE from proportion to percentage scale.")
+if (max(stnt$r, na.rm = TRUE) <= 1) {
+  stnt <- stnt %>% mutate(r = r * 100)
+  message("Converted r from proportion to percentage scale.")
 }
 
 # --- Determine reference years --------------------------------------------
@@ -69,11 +69,11 @@ add_country_name <- function(df) {
 # --- 1. Top 20 highest current prevalence ---------------------------------
 top20_highest <- stnt %>%
   filter(TIME_PERIOD == latest_year) %>%
-  arrange(desc(VALUE)) %>%
+  arrange(desc(r)) %>%
   head(20) %>%
   add_country_name() %>%
   mutate(rank = row_number()) %>%
-  select(rank, REF_AREA, country_name, year = TIME_PERIOD, prevalence = VALUE)
+  select(rank, REF_AREA, country_name, year = TIME_PERIOD, prevalence = r)
 
 message("\n=== Top 20 highest stunting prevalence (", latest_year, ") ===")
 print(top20_highest, n = 20)
@@ -82,11 +82,11 @@ print(top20_highest, n = 20)
 compute_improvement <- function(data, baseline_year, latest_yr) {
   baseline <- data %>%
     filter(TIME_PERIOD == baseline_year) %>%
-    select(REF_AREA, baseline_value = VALUE)
+    select(REF_AREA, baseline_value = r)
 
   current <- data %>%
     filter(TIME_PERIOD == latest_yr) %>%
-    select(REF_AREA, current_value = VALUE)
+    select(REF_AREA, current_value = r)
 
   inner_join(baseline, current, by = "REF_AREA") %>%
     mutate(
@@ -125,19 +125,19 @@ if (has_numbers) {
   stnt_num <- read_parquet(num_parquet_path) %>%
     mutate(
       TIME_PERIOD = as.integer(TIME_PERIOD),
-      VALUE       = as.numeric(VALUE)
+      r           = as.numeric(r)
     ) %>%
-    filter(!is.na(REF_AREA), !is.na(TIME_PERIOD), !is.na(VALUE))
+    filter(!is.na(REF_AREA), !is.na(TIME_PERIOD), !is.na(r))
   message("\nNumber data: ", nrow(stnt_num), " rows")
 
-  # Top 20 highest number of stunted children (VALUE in thousands)
+  # Top 20 highest number of stunted children (r in thousands)
   top20_highest_num <- stnt_num %>%
     filter(TIME_PERIOD == latest_year) %>%
-    arrange(desc(VALUE)) %>%
+    arrange(desc(r)) %>%
     head(20) %>%
     add_country_name() %>%
     mutate(rank = row_number()) %>%
-    select(rank, REF_AREA, country_name, year = TIME_PERIOD, number_thousands = VALUE)
+    select(rank, REF_AREA, country_name, year = TIME_PERIOD, number_thousands = r)
 
   message("\n=== Top 20 highest number of stunted children (", latest_year, ") ===")
   print(top20_highest_num, n = 20)
@@ -146,10 +146,10 @@ if (has_numbers) {
   compute_improvement_num <- function(data, baseline_year, latest_yr) {
     baseline <- data %>%
       filter(TIME_PERIOD == baseline_year) %>%
-      select(REF_AREA, baseline_value = VALUE)
+      select(REF_AREA, baseline_value = r)
     current <- data %>%
       filter(TIME_PERIOD == latest_yr) %>%
-      select(REF_AREA, current_value = VALUE)
+      select(REF_AREA, current_value = r)
     inner_join(baseline, current, by = "REF_AREA") %>%
       mutate(
         change_th  = current_value - baseline_value,
