@@ -1,6 +1,6 @@
 # Projections Pipeline Migration and Validation Skill
 
-Last updated: 2026-04-14
+Last updated: 2026-04-15
 
 ## Purpose
 
@@ -24,17 +24,21 @@ Apply this skill when:
 
 ### 1. Parquet values are proportions; projections expect percent
 
-Analysis_datasets parquets store `VALUE` on a 0–1 proportion scale.
+Analysis_datasets parquets store estimates in the `r` column on a 0–1 proportion scale.
 The projections pipeline expects 0–100 percent scale.
-`read_analysis_parquet_as_char()` in `1a_import_inputs.r` multiplies by 100.
+`read_analysis_parquet_as_char()` in `1a_import_inputs.r` renames `r` to `OBS_VALUE`
+and multiplies by 100.
 
 **Anti-pattern:** Forgetting the ×100 conversion produces projections with
 baseline values like 0.093 instead of 9.3.
 
 ### 2. Parquet indicator codes lack the NT_ prefix
 
-Parquet stores `ANT_WHZ_NE2`; projections expect `NT_ANT_WHZ_NE2`.
+Parquet stores `IndicatorCode = "ANT_WHZ_NE2"`; projections expect `"NT_ANT_WHZ_NE2"`.
 `read_analysis_parquet_as_char()` prepends `NT_`.
+
+All downstream scripts use the column name `IndicatorCode` (not `INDICATOR`) for
+filtering, output, and codebook entries.
 
 ### 3. Accepted parquet contains ALL surveys, not just preferred
 

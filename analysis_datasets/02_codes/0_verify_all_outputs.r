@@ -2,16 +2,25 @@
 # Script:  0_verify_all_outputs.r
 # Purpose: Post-build QA verification of CMRS2 analysis dataset outputs.
 #
-# Checks performed:
+# Checks performed (per-file):
 #   1. File existence for expected parquet outputs
-#   2. Schema validation - all analytical dimension columns present
+#   2. Schema validation - dimension columns + key columns present
 #   3. Missing-value audit - NA/blank counts per dimension
 #   4. Value distributions per dimension
 #   5. Indicator inventory per output
-#   6. Row-count preservation (source vs. output)
-#   7. Source column preservation (all original columns carried forward)
-#   8. Distribution matching (indicator, disagg, REF_AREA, TIME_PERIOD)
-#   9. Joint distribution matching (indicator x disaggregation)
+#   6. Duplicate analytical key check
+#
+# Source DTA vs all-estimates parquet:
+#   7. Row-count preservation (exact match expected)
+#   8. Source column preservation (all DTA columns carried forward)
+#   9. Distribution matching (indicator, disagg, REF_AREA, TIME_PERIOD)
+#  10. Joint distribution matching (indicator x disaggregation)
+#
+# All-estimates vs accepted parquet:
+#  11. Schema equality (accepted has same columns as all-estimates)
+#  12. Accepted filter count (DataSourceDecisionCategory == "Accepted")
+#  13. Distribution subset (accepted values subset of all-estimates)
+#  14. Joint distribution subset (indicator x disagg combinations)
 #
 # Usage:
 #   Verify all datasets:
@@ -121,7 +130,7 @@ compare_specs <- list(
   list(label = "Indicator", candidates = c("IndicatorCode", "INDICATOR", "indicator")),
   list(label = "standard_disagg", candidates = c("standard_disagg", "StandardDisaggregations")),
   list(label = "REF_AREA/ISO3", candidates = c("ISO3Code", "CND_Country_Code", "REF_AREA")),
-  list(label = "TIME_PERIOD/year", candidates = c("CMRS_year", "warehouse_year", "middle_year", "TIME_PERIOD"))
+  list(label = "TIME_PERIOD/year", candidates = c("CMRS_year", "warehouse_year", "TIME_PERIOD"))
 )
 
 pick_first_existing <- function(nms, candidates) {
@@ -249,7 +258,7 @@ for (spec in file_specs) {
     select_cols = unique(c(
       "UNICEF_Survey_ID", "UNICEF_SURVEY_ID", "SurveyId", "survey_id",
       "REF_AREA", "TIME_PERIOD", dim_cols,
-      "INDICATOR", "indicator", "IndicatorCode"
+      "IndicatorCode"
     ))
   )
 
@@ -260,6 +269,15 @@ for (spec in file_specs) {
   if (length(missing_cols) > 0) {
     cat("  Dim cols NOT present:", paste(missing_cols, collapse = ", "), "\n")
     all_pass <- FALSE
+  }
+
+  key_cols_expected <- c("IndicatorCode", "r", "REF_AREA", "TIME_PERIOD")
+  key_cols_missing <- setdiff(key_cols_expected, schema)
+  if (length(key_cols_missing) > 0) {
+    cat("  Key cols NOT present:", paste(key_cols_missing, collapse = ", "), "\n")
+    all_pass <- FALSE
+  } else {
+    cat("  Key cols present: PASS\n")
   }
 
   cat("  --- NA counts ---\n")
@@ -320,58 +338,183 @@ for (spec in file_specs) {
 }
 
 for (spec in source_specs) {
-  src_files <- if (!is.null(spec$sources)) spec$sources else c(spec$source)
-  src_paths <- file.path(source_dir, src_files)
+  is_accepted <- grepl("_accepted", spec$label, fixed = TRUE)
   out_paths <- file.path(out_dir, spec$outputs)
 
   cat("\n========================================\n")
-  cat("SOURCE CHECK:", paste(src_files, collapse = " + "), " -> ", paste(spec$outputs, collapse = " + "), "\n")
 
-  if (any(!file.exists(src_paths))) {
-    missing_sources <- src_files[!file.exists(src_paths)]
-    cat("  *** SOURCE FILE NOT FOUND ***\n")
-    cat("  Missing source(s):", paste(missing_sources, collapse = ", "), "\n")
-    all_pass <- FALSE
-    next
-  }
-
-  missing_outputs <- spec$outputs[!file.exists(out_paths)]
-  if (length(missing_outputs) > 0) {
-    cat("  *** OUTPUT FILE(S) NOT FOUND: ", paste(missing_outputs, collapse = ", "), " ***\n", sep = "")
-    all_pass <- FALSE
-    next
-  }
-
-  src_schema <- names(read_dta(src_paths[1], n_max = 0))
-  out_schema <- unique(unlist(lapply(out_paths, function(p) names(read_output_subset(p, n_max = 0)))))
-
-  missing_from_output <- setdiff(src_schema, out_schema)
-  schema_pass <- length(missing_from_output) == 0
-  cat("  Original source columns preserved:", if (schema_pass) "PASS" else "FAIL", "\n")
-  if (schema_pass) {
-    cat("    Columns preserved:", length(src_schema), "of", length(src_schema), "\n")
-  } else {
-    cat("    Missing columns:", paste(head(missing_from_output, 15), collapse = ", "), "\n")
-    all_pass <- FALSE
-  }
-
-  select_candidates <- unique(unlist(lapply(compare_specs, function(x) x$candidates)))
-  src_select <- intersect(src_schema, select_candidates)
-  out_select <- intersect(out_schema, select_candidates)
-
-  if (length(src_select) == 0) src_select <- src_schema[1]
-  if (length(out_select) == 0) out_select <- out_schema[1]
-
-  src_df <- bind_rows(lapply(src_paths, function(p) {
-    read_dta(p, col_select = any_of(src_select)) %>% mutate(across(everything(), as.character))
-  }))
-  out_df <- bind_rows(lapply(out_paths, function(p) read_output_subset(p, select_cols = out_select)))
-
-  is_accepted <- grepl("_accepted", spec$label, fixed = TRUE)
   if (is_accepted) {
-    cat("  Row count: SKIP (accepted subset, source=", nrow(src_df),
-        ", output=", nrow(out_df), ")\n", sep = "")
+    # =================================================================
+    # ACCEPTED-VS-ALL-ESTIMATES COMPARISON
+    # The accepted parquet should be a proper subset of the all-estimates
+    # parquet, filtered by DataSourceDecisionCategory == "Accepted" and
+    # then deduped.  Comparing against the source DTA is uninformative
+    # because every distribution will show expected row reduction.
+    # =================================================================
+    all_est_file <- sub("_accepted\\.parquet$", ".parquet", spec$outputs[1])
+    all_est_path <- file.path(out_dir, all_est_file)
+
+    cat("ACCEPTED CHECK:", spec$outputs[1], " vs ", all_est_file, "\n")
+
+    if (!file.exists(all_est_path)) {
+      cat("  *** ALL-ESTIMATES PARQUET NOT FOUND:", all_est_file, "***\n")
+      all_pass <- FALSE
+      next
+    }
+    missing_outputs <- spec$outputs[!file.exists(out_paths)]
+    if (length(missing_outputs) > 0) {
+      cat("  *** ACCEPTED PARQUET NOT FOUND:", paste(missing_outputs, collapse = ", "), "***\n")
+      all_pass <- FALSE
+      next
+    }
+
+    # --- Schema: accepted should have same columns as all-estimates ---
+    all_schema <- names(read_output_subset(all_est_path, n_max = 0))
+    acc_schema <- names(read_output_subset(out_paths[1], n_max = 0))
+    schema_missing <- setdiff(all_schema, acc_schema)
+    schema_extra <- setdiff(acc_schema, all_schema)
+    if (length(schema_missing) == 0 && length(schema_extra) == 0) {
+      cat("  Schema matches all-estimates: PASS\n")
+    } else {
+      if (length(schema_missing) > 0)
+        cat("  Columns in all-estimates but not accepted:", paste(schema_missing, collapse = ", "), "\n")
+      if (length(schema_extra) > 0)
+        cat("  Columns in accepted but not all-estimates:", paste(schema_extra, collapse = ", "), "\n")
+      all_pass <- FALSE
+    }
+
+    # --- Filter count validation ---
+    select_for_filter <- unique(c("DataSourceDecisionCategory",
+                                   unlist(lapply(compare_specs, function(x) x$candidates))))
+    all_df <- read_output_subset(all_est_path, select_cols = select_for_filter)
+    acc_df <- bind_rows(lapply(out_paths, function(p) read_output_subset(p, select_cols = select_for_filter)))
+
+    expected_count <- sum(all_df$DataSourceDecisionCategory == "Accepted", na.rm = TRUE)
+    actual_count <- nrow(acc_df)
+
+    cat("  Row cascade: all-estimates=", nrow(all_df), " -> accepted=", actual_count, "\n", sep = "")
+
+    if (actual_count == expected_count) {
+      cat("  Accepted filter count: PASS (", actual_count,
+          " rows match DataSourceDecisionCategory == 'Accepted')\n", sep = "")
+    } else if (actual_count < expected_count) {
+      cat("  Accepted filter count: INFO (expected=", expected_count,
+          ", actual=", actual_count, "; diff=", expected_count - actual_count,
+          " likely from dedup)\n", sep = "")
+    } else {
+      cat("  Accepted filter count: FAIL (actual=", actual_count,
+          " > expected=", expected_count, ")\n", sep = "")
+      all_pass <- FALSE
+    }
+
+    # --- Distribution subset checks ---
+    all_cmp <- all_df %>% select(-any_of("DataSourceDecisionCategory"))
+    acc_cmp <- acc_df %>% select(-any_of("DataSourceDecisionCategory"))
+
+    for (cmp in compare_specs) {
+      all_col <- pick_first_existing(names(all_cmp), cmp$candidates)
+      acc_col <- pick_first_existing(names(acc_cmp), cmp$candidates)
+      if (!is.null(all_col) && !is.null(acc_col)) {
+        acc_vals <- unique(normalize_values(acc_cmp[[acc_col]]))
+        all_vals <- unique(normalize_values(all_cmp[[all_col]]))
+        new_vals <- setdiff(acc_vals, all_vals)
+        if (length(new_vals) > 0) {
+          cat("  ", cmp$label, " subset: FAIL (", length(new_vals),
+              " values in accepted not in all-estimates)\n", sep = "")
+          cat("    New values:", paste(head(new_vals, 5), collapse = ", "), "\n")
+          all_pass <- FALSE
+        } else {
+          cat("  ", cmp$label, " subset: PASS (", length(acc_vals),
+              " of ", length(all_vals), " levels)\n", sep = "")
+        }
+      }
+    }
+
+    # --- Joint distribution subset check ---
+    ind_all <- pick_first_existing(names(all_cmp), c("IndicatorCode", "INDICATOR", "indicator"))
+    ind_acc <- pick_first_existing(names(acc_cmp), c("IndicatorCode", "INDICATOR", "indicator"))
+    disagg_all <- pick_first_existing(names(all_cmp), c("standard_disagg", "StandardDisaggregations"))
+    disagg_acc <- pick_first_existing(names(acc_cmp), c("standard_disagg", "StandardDisaggregations"))
+
+    if (!is.null(ind_all) && !is.null(ind_acc) && !is.null(disagg_all) && !is.null(disagg_acc)) {
+      acc_combos <- acc_cmp %>%
+        transmute(ind = normalize_values(.data[[ind_acc]]),
+                  disagg = normalize_values(.data[[disagg_acc]])) %>%
+        distinct()
+      all_combos <- all_cmp %>%
+        transmute(ind = normalize_values(.data[[ind_all]]),
+                  disagg = normalize_values(.data[[disagg_all]])) %>%
+        distinct()
+      new_combos <- anti_join(acc_combos, all_combos, by = c("ind", "disagg"))
+      if (nrow(new_combos) > 0) {
+        cat("  Indicator x disagg subset: FAIL (", nrow(new_combos),
+            " combinations in accepted not in all-estimates)\n", sep = "")
+        all_pass <- FALSE
+      } else {
+        cat("  Indicator x disagg subset: PASS (", nrow(acc_combos),
+            " of ", nrow(all_combos), " combinations)\n", sep = "")
+      }
+    }
+
+    rm(all_df, acc_df, all_cmp, acc_cmp)
+    invisible(gc())
+
   } else {
+    # =================================================================
+    # ALL-ESTIMATES-VS-SOURCE DTA COMPARISON
+    # The all-estimates parquet should carry every source row without
+    # filtering, plus new analytical dimension columns.
+    # =================================================================
+    src_files <- if (!is.null(spec$sources)) spec$sources else c(spec$source)
+    src_paths <- file.path(source_dir, src_files)
+
+    cat("SOURCE CHECK:", paste(src_files, collapse = " + "), " -> ", paste(spec$outputs, collapse = " + "), "\n")
+
+    if (any(!file.exists(src_paths))) {
+      missing_sources <- src_files[!file.exists(src_paths)]
+      cat("  *** SOURCE FILE NOT FOUND ***\n")
+      cat("  Missing source(s):", paste(missing_sources, collapse = ", "), "\n")
+      all_pass <- FALSE
+      next
+    }
+
+    missing_outputs <- spec$outputs[!file.exists(out_paths)]
+    if (length(missing_outputs) > 0) {
+      cat("  *** OUTPUT FILE(S) NOT FOUND: ", paste(missing_outputs, collapse = ", "), " ***\n", sep = "")
+      all_pass <- FALSE
+      next
+    }
+
+    src_schema <- names(read_dta(src_paths[1], n_max = 0))
+    out_schema <- unique(unlist(lapply(out_paths, function(p) names(read_output_subset(p, n_max = 0)))))
+
+    missing_from_output <- setdiff(src_schema, out_schema)
+    schema_pass <- length(missing_from_output) == 0
+    cat("  Source columns preserved:", if (schema_pass) "PASS" else "FAIL", "\n")
+    if (schema_pass) {
+      cat("    Columns preserved:", length(src_schema), "of", length(src_schema), "\n")
+    } else {
+      cat("    Missing columns:", paste(head(missing_from_output, 15), collapse = ", "), "\n")
+      all_pass <- FALSE
+    }
+    new_cols <- setdiff(out_schema, src_schema)
+    if (length(new_cols) > 0) {
+      cat("    New columns added (", length(new_cols), "):",
+          paste(head(new_cols, 15), collapse = ", "), "\n")
+    }
+
+    select_candidates <- unique(unlist(lapply(compare_specs, function(x) x$candidates)))
+    src_select <- intersect(src_schema, select_candidates)
+    out_select <- intersect(out_schema, select_candidates)
+
+    if (length(src_select) == 0) src_select <- src_schema[1]
+    if (length(out_select) == 0) out_select <- out_schema[1]
+
+    src_df <- bind_rows(lapply(src_paths, function(p) {
+      read_dta(p, col_select = any_of(src_select)) %>% mutate(across(everything(), as.character))
+    }))
+    out_df <- bind_rows(lapply(out_paths, function(p) read_output_subset(p, select_cols = out_select)))
+
     row_diff <- nrow(out_df) - nrow(src_df)
     if (row_diff == 0L) {
       cat("  Row count: PASS (source=", nrow(src_df),
@@ -379,41 +522,41 @@ for (spec in source_specs) {
     } else if (row_diff < 0L) {
       cat("  Row count: WARN (source=", nrow(src_df),
           ", output=", nrow(out_df), ", diff=", row_diff,
-          "; likely dedup removals)\n", sep = "")
+          "; possible dedup removals)\n", sep = "")
     } else {
-      cat("  Row count: FAIL (output has MORE rows than source: source=",
+      cat("  Row count: FAIL (output has MORE rows: source=",
           nrow(src_df), ", output=", nrow(out_df), ")\n", sep = "")
       all_pass <- FALSE
     }
-  }
 
-  for (cmp in compare_specs) {
-    src_col <- pick_first_existing(names(src_df), cmp$candidates)
-    out_col <- pick_first_existing(names(out_df), cmp$candidates)
+    for (cmp in compare_specs) {
+      src_col <- pick_first_existing(names(src_df), cmp$candidates)
+      out_col <- pick_first_existing(names(out_df), cmp$candidates)
 
-    if (!is.null(src_col) && !is.null(out_col)) {
-      pass <- compare_distribution(src_df, out_df, src_col, out_col, cmp$label)
+      if (!is.null(src_col) && !is.null(out_col)) {
+        pass <- compare_distribution(src_df, out_df, src_col, out_col, cmp$label)
+        if (!pass) all_pass <- FALSE
+      }
+    }
+
+    ind_src <- pick_first_existing(names(src_df), c("IndicatorCode", "INDICATOR", "indicator"))
+    ind_out <- pick_first_existing(names(out_df), c("IndicatorCode", "INDICATOR", "indicator"))
+    disagg_src <- pick_first_existing(names(src_df), c("standard_disagg", "StandardDisaggregations"))
+    disagg_out <- pick_first_existing(names(out_df), c("standard_disagg", "StandardDisaggregations"))
+
+    if (!is.null(ind_src) && !is.null(ind_out) && !is.null(disagg_src) && !is.null(disagg_out)) {
+      pass <- compare_joint_distribution(
+        src_df, out_df,
+        src_cols = c(ind_src, disagg_src),
+        out_cols = c(ind_out, disagg_out),
+        label = "Indicator x standard_disagg"
+      )
       if (!pass) all_pass <- FALSE
     }
+
+    rm(src_df, out_df)
+    invisible(gc())
   }
-
-  ind_src <- pick_first_existing(names(src_df), c("IndicatorCode", "INDICATOR", "indicator"))
-  ind_out <- pick_first_existing(names(out_df), c("IndicatorCode", "INDICATOR", "indicator"))
-  disagg_src <- pick_first_existing(names(src_df), c("standard_disagg", "StandardDisaggregations"))
-  disagg_out <- pick_first_existing(names(out_df), c("standard_disagg", "StandardDisaggregations"))
-
-  if (!is.null(ind_src) && !is.null(ind_out) && !is.null(disagg_src) && !is.null(disagg_out)) {
-    pass <- compare_joint_distribution(
-      src_df, out_df,
-      src_cols = c(ind_src, disagg_src),
-      out_cols = c(ind_out, disagg_out),
-      label = "Indicator x standard_disagg"
-    )
-    if (!pass) all_pass <- FALSE
-  }
-
-  rm(src_df, out_df)
-  invisible(gc())
 }
 
 cat("\n\n========================================\n")

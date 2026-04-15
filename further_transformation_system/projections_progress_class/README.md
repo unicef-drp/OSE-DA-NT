@@ -83,7 +83,7 @@ The execute script uses these main paths:
 - NT reusable intermediates: teamsFolder/01_dw_prep/011_rawdata/nt/output/inter (regional aggregates, groups_for_agg.csv)
 
 Important:
-- Country-level inputs (series and non-series) are read from analysis_datasets accepted parquets via `read_analysis_parquet_as_char()` in `1a_import_inputs.r`. Parquet values are proportions (0–1) and are converted to percent (0–100) during import. Indicator codes in parquets omit the `NT_` prefix, which is prepended during import.
+- Country-level inputs (series and non-series) are read from analysis_datasets accepted parquets via `read_analysis_parquet_as_char()` in `1a_import_inputs.r`. Parquet values are proportions (0–1) and are converted to percent (0–100) during import. The source `r` column is renamed to `OBS_VALUE`. Indicator codes in parquets omit the `NT_` prefix, which is prepended during import. All downstream scripts use the column name `IndicatorCode` (not `INDICATOR`) for filtering and output.
 - Regional estimates and crosswalk files are still read from DW-Production `output/inter/`.
 - Projection products are written under the Analysis Space projection output root.
 
@@ -98,13 +98,12 @@ Important:
 1) 1_execute.r
 - Entrypoint for projections in this folder.
 - Sets input/output/inter paths and projection output folder.
-- Sources scripts 2 through 6 in order.
+- Sources scripts 2 through 8 in order.
 
 2) 2_ant_ovwt_series.r
 - Indicator: NT_ANT_WHZ_PO2_MOD (overweight).
 - Inputs:
-  - inter/agg_indicator/Regional_Output_NT_ANT_WHZ_PO2_MOD.xlsx
-  - inter/cmrs_import/all_cmrs_series_public.csv
+  - Staged CSV: `outputdir_projections_input/dw_nut_ant.csv` (built by `1a_import_inputs.r` from analysis_datasets parquets and DW-Production regional aggregates)
 - Calculation details:
   - Baseline prevalence is `r_2012` from 2012.
   - Latest observed value used for threshold logic is `r_2024`.
@@ -130,8 +129,7 @@ Important:
 3) 3_ane_wra_series.r
 - Indicator: NT_ANE_WOM_15_49_MOD (anemia, women 15-49).
 - Inputs:
-  - inter/agg_indicator/Regional_Output_NT_ANE_WOM_15_49_MOD.xlsx
-  - inter/cmrs_import/all_cmrs_series_public.csv
+  - Staged CSV: `outputdir_projections_input/dw_nut_ane.csv` (built by `1a_import_inputs.r`)
 - Calculation details:
   - Baseline prevalence is `r_2012` from 2012.
   - Latest observed value used for assessment is `r_2023`.
@@ -157,7 +155,7 @@ Important:
 4) 4_ant_wst_survey.r
 - Indicator: NT_ANT_WHZ_NE2 (wasting).
 - Inputs:
-  - inter/agg_domain/agg_ant_wasting.csv
+  - Staged CSV: `outputdir_projections_input/dw_nut_ant.csv` (built by `1a_import_inputs.r`)
 - Calculation details:
   - Regional branch is series-like and uses 2012 as the fixed baseline year.
   - Country branch is non-series and survey-based.
@@ -190,8 +188,7 @@ Important:
 5) 5_ant_stnt_series.r
 - Indicator: NT_ANT_HAZ_NE2_MOD (stunting).
 - Inputs:
-  - inter/agg_indicator/Regional_Output_NT_ANT_HAZ_NE2_MOD.xlsx
-  - inter/cmrs_import/all_cmrs_series_public.csv
+  - Staged CSV: `outputdir_projections_input/dw_nut_ant.csv` (built by `1a_import_inputs.r`)
   - inter/groups_for_agg.csv
   - input/base_population_1990_2030.csv
 - Calculation details:
@@ -223,8 +220,7 @@ Important:
 6) 6_bw_lbw_series.r
 - Indicator: NT_BW_LBW (low birth weight).
 - Inputs:
-  - inter/agg_indicator/Regional_Output_NT_BW_LBW.xlsx
-  - inter/cmrs_import/all_cmrs_series_public.csv
+  - Staged CSV: `outputdir_projections_input/dw_nut_bw.csv` (built by `1a_import_inputs.r`)
 - Calculation details:
   - Baseline prevalence is `r_2012` from 2012.
   - Latest observed value used for assessment is `r_2020`.
@@ -247,17 +243,39 @@ Important:
   - output_projections/aggregate_lbw_modelled_projected.xlsx
   - output_projections/aggregate_lbw_modelled_projected.csv
 
+7) 7_iycf_exbf_survey.r
+- Indicator: NOT_NT_BF_EXBF (not exclusively breastfeeding, 0–5 months).
+- Inputs:
+  - Staged CSV: `outputdir_projections_input/dw_nut_iycf.csv` (built by `1a_import_inputs.r`)
+- Calculation details:
+  - Country data only (no regional series for this indicator).
+  - The indicator is inverted: the pipeline works with 100 minus exclusive breastfeeding to frame the target as a reduction.
+  - Country baseline year selection follows the same rule as wasting: latest survey in 2005–2012, or earliest in 2013+.
+  - Latest observed value is the most recent survey available for the country.
+  - Current AARR is estimated from rounded prevalence values over post-baseline surveys.
+  - The 2030 target is a fixed prevalence of 40% (not exclusively breastfeeding).
+  - Required AARR for 2030 is calculated as the rate needed to move from the baseline prevalence to 40% by 2030.
+  - A country is treated as already across the threshold when the latest prevalence is below 40%.
+- Assessment and classification rules:
+  - Reliability rule: assessment is not possible if the latest survey is before 2005, or if fewer than 2 eligible surveys remain.
+  - AARR ladder buffers: ±0.8 (instead of the standard ±0.5).
+  - Full/UNICEF classification follows the common pattern.
+- Outputs:
+  - output_projections/exbf_progress_2030.csv
+  - output_projections/aggregate_exbf_modelled_projected.xlsx
+  - output_projections/aggregate_exbf_modelled_projected.csv
+
 ## Notes and Current Boundaries
 
-- IYCF and DANT scripts are intentionally not included yet.
+- DANT projection scripts are pending fixes and not included yet.
 - Some scripts include a small fallback that sets interdir from outputdir/inter if interdir is not pre-defined, so script-level execution remains possible.
 
 ## Run Guidance
 
 Recommended:
-1. Run the NT production pipeline first so output/inter is refreshed.
+1. Build analysis datasets first so accepted parquets are available.
 2. Run this projection execute script:
-   - 05_projections/012_codes/nt/1_execute.r
+   - further_transformation_system/projections_progress_class/012_codes/1_execute.r
 3. Check output files under output_projections.
 
-If inputs are missing, verify expected files exist under output/inter as listed above.
+If inputs are missing, verify that analysis_datasets accepted parquets exist and that DW-Production `output/inter/` files (regional aggregates, population) are accessible.
