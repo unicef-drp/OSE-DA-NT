@@ -3,6 +3,308 @@
 # Sourced by 1_execute.r before indicator-specific scripts
 # =============================================================================
 
+# ---------------------------------------------------------------------------
+# Country-name lookup (ISO3 → short display name) from the raw crosswalk CSV
+# ---------------------------------------------------------------------------
+load_country_names <- function() {
+  readr::read_csv(
+    file.path(interdir, "groups_for_agg.csv"),
+    show_col_types = FALSE
+  ) %>%
+    dplyr::filter(!is.na(ISO3Code), !is.na(Country)) %>%
+    dplyr::distinct(ISO3Code, Country) %>%
+    dplyr::rename(REF_AREA = ISO3Code, country_name = Country)
+}
+
+# ---------------------------------------------------------------------------
+# Load country-level series for one indicator (no regional aggregation)
+# Returns one row per country × year with prevalence, pop, pop_affected,
+# and the UNICEF programming-region assignment.
+# ---------------------------------------------------------------------------
+load_country_series <- function(indicator_code, crosswalk, population,
+                                classification = "UNICEF_PROG_REG_GLOBAL") {
+  series_raw <- arrow::open_dataset(
+    file.path(analysisDatasetsInputDir, "cmrs2_series_accepted.parquet")
+  ) %>%
+    dplyr::filter(IndicatorCode == indicator_code, SEX == "_T") %>%
+    dplyr::select(REF_AREA, TIME_PERIOD, r) %>%
+    dplyr::collect() %>%
+    dplyr::mutate(
+      year       = as.integer(TIME_PERIOD),
+      prevalence = as.numeric(r) * 100
+    ) %>%
+    dplyr::filter(!is.na(year), !is.na(prevalence), prevalence > 0)
+
+  cw_region <- crosswalk %>%
+    dplyr::filter(Classification == classification) %>%
+    dplyr::distinct(REF_AREA, Region)
+
+  country_names <- load_country_names()
+
+  series_raw %>%
+    dplyr::inner_join(cw_region, by = "REF_AREA") %>%
+    dplyr::inner_join(population, by = c("REF_AREA", "year")) %>%
+    dplyr::left_join(country_names, by = "REF_AREA") %>%
+    dplyr::mutate(
+      pop_affected = prevalence / 100 * pop,
+      country_name = dplyr::coalesce(country_name, REF_AREA)
+    ) %>%
+    dplyr::arrange(Region, country_name, year)
+}
+
+# ---------------------------------------------------------------------------
+# Build animated country-level scatterplot
+#
+# country_data: data frame from load_country_series (or a region subset)
+# label_top_n : number of countries to label (by latest-year pop_affected)
+#               NULL = label all countries
+# color_by    : "region" (colour bubbles by Region) or "country" (single hue)
+# ---------------------------------------------------------------------------
+build_country_scatterplot <- function(country_data,
+                                      y_axis_label,
+                                      plot_title,
+                                      plot_subtitle = "Modeled estimates \u2014 Year: {round(frame_along)}",
+                                      label_top_n   = NULL,
+                                      color_by      = c("region", "country"),
+                                      y_limits      = NULL,
+                                      plot_width     = 900,
+                                      plot_height    = 600) {
+
+  color_by <- match.arg(color_by)
+
+  # Determine which countries get labels --------------------------------
+  latest_year <- max(country_data$year, na.rm = TRUE)
+  ranked <- country_data %>%
+    dplyr::filter(year == latest_year) %>%
+    dplyr::arrange(dplyr::desc(pop_affected))
+
+  if (!is.null(label_top_n) && label_top_n < nrow(ranked)) {
+    label_isos <- ranked$REF_AREA[seq_len(label_top_n)]
+  } else {
+    label_isos <- ranked$REF_AREA
+  }
+
+  country_data <- country_data %>%
+    dplyr::mutate(show_label = REF_AREA %in% label_isos)
+
+  label_df   <- country_data %>% dplyr::filter(show_label)
+  nolabel_df <- country_data %>% dplyr::filter(!show_label)
+
+  # Colour palette ------------------------------------------------------
+  if (color_by == "region") {
+    regions   <- sort(unique(country_data$Region))
+    n_regions <- length(regions)
+    pal <- RColorBrewer::brewer.pal(max(3, min(8, n_regions)), "Set2")
+    base_cols <- pal[seq_len(n_regions)]
+    names(base_cols) <- regions
+    color_aes   <- ggplot2::aes(color = Region)
+    color_scale <- ggplot2::scale_color_manual(values = base_cols)
+  } else {
+    color_aes   <- NULL
+    color_scale <- ggplot2::scale_color_identity()
+    country_data$color_val <- "#1CABE2"
+    label_df$color_val     <- "#1CABE2"
+    nolabel_df$color_val   <- "#1CABE2"
+  }
+
+  # Build ggplot --------------------------------------------------------
+  p <- ggplot2::ggplot(
+    country_data,
+    ggplot2::aes(x = year, y = prevalence, size = pop_affected,
+                 group = country_name)
+  )
+
+  # Paths + points (unlabelled countries = fainter) ---------------------
+  if (nrow(nolabel_df) > 0) {
+    p <- p +
+      ggplot2::geom_path(
+        data = nolabel_df,
+        mapping = if (color_by == "region") ggplot2::aes(color = Region) else ggplot2::aes(color = color_val),
+        linewidth = 0.3, alpha = 0.25, show.legend = FALSE
+      ) +
+      ggplot2::geom_point(
+        data = nolabel_df,
+        mapping = if (color_by == "region") ggplot2::aes(color = Region) else ggplot2::aes(color = color_val),
+        alpha = 0.35
+      )
+  }
+
+  p <- p +
+    ggplot2::geom_path(
+      data = label_df,
+      mapping = if (color_by == "region") ggplot2::aes(color = Region) else ggplot2::aes(color = color_val),
+      linewidth = 0.5, alpha = 0.6, show.legend = FALSE
+    ) +
+    ggplot2::geom_point(
+      data = label_df,
+      mapping = if (color_by == "region") ggplot2::aes(color = Region) else ggplot2::aes(color = color_val),
+      alpha = 0.85
+    )
+
+  # Labels (ggrepel) ---------------------------------------------------
+  p <- p +
+    ggrepel::geom_text_repel(
+      data          = label_df,
+      ggplot2::aes(label = country_name),
+      size               = 3,
+      fontface           = "plain",
+      color              = "black",
+      point.padding      = 0.15,
+      box.padding        = 0.2,
+      force              = 0.3,
+      force_pull         = 1.5,
+      min.segment.length = 0.1,
+      segment.color      = "grey60",
+      segment.size       = 0.3,
+      max.overlaps       = 20,
+      seed               = 42,
+      show.legend        = FALSE
+    )
+
+  # Scales + theme -----------------------------------------------------
+  p <- p +
+    color_scale +
+    ggplot2::scale_size_continuous(
+      name   = "Children affected (in 1000s)",
+      range  = c(1, 18),
+      labels = scales::label_number(accuracy = 1, big.mark = ",")
+    ) +
+    ggplot2::scale_y_continuous(
+      name   = y_axis_label,
+      limits = y_limits,
+      labels = scales::label_number(accuracy = 0.1)
+    ) +
+    ggplot2::scale_x_continuous(
+      name = "Year", breaks = pretty(country_data$year)
+    ) +
+    ggplot2::labs(
+      title    = plot_title,
+      subtitle = plot_subtitle,
+      caption  = "Source: UNICEF, WHO & World Bank Joint Child Malnutrition Estimates"
+    ) +
+    ggplot2::theme_minimal(base_size = 12) +
+    ggplot2::theme(
+      legend.position  = "right",
+      legend.key.size  = grid::unit(1.1, "lines"),
+      legend.title     = ggplot2::element_text(size = 11, face = "bold"),
+      legend.text      = ggplot2::element_text(size = 10),
+      plot.title       = ggplot2::element_text(face = "bold", size = 14),
+      plot.subtitle    = ggplot2::element_text(size = 11),
+      plot.caption     = ggplot2::element_text(size = 9, hjust = 0, margin = ggplot2::margin(t = 8)),
+      plot.margin      = ggplot2::margin(t = 20, r = 15, b = 20, l = 15)
+    ) +
+    gganimate::transition_reveal(year)
+
+  p
+}
+
+# ---------------------------------------------------------------------------
+# Render country-level scatterplots: one "all countries" + per-region plots
+#
+# country_data     : full data frame from load_country_series
+# indicator_label  : short indicator name for filenames, e.g. "stunting"
+# y_axis_label     : y-axis text
+# all_title        : plot title for the all-countries plot
+# region_title_fn  : function(region_name) → plot title for regional plots
+# output_dir       : destination folder
+# label_top_n_all  : how many countries to label in the all-countries view
+# max_countries_per_plot : if a region has more countries than this, only the
+#                    top N by pop_affected are labelled (all are still plotted)
+# ---------------------------------------------------------------------------
+render_country_scatterplots <- function(country_data,
+                                        indicator_label,
+                                        y_axis_label,
+                                        all_title,
+                                        region_title_fn = function(r) paste0(r, ": country trends"),
+                                        output_dir,
+                                        label_top_n_all = 15,
+                                        max_countries_per_plot = 25,
+                                        y_limits = NULL,
+                                        nframes  = 120,
+                                        fps_gif  = 6,
+                                        fps_mp4  = 10,
+                                        plot_width  = 900,
+                                        plot_height = 600) {
+
+  dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+  out_files <- character(0)
+
+  # --- 1. All countries ------------------------------------------------
+  message("  Building all-countries plot for ", indicator_label)
+  p_all <- build_country_scatterplot(
+    country_data,
+    y_axis_label = y_axis_label,
+    plot_title   = all_title,
+    label_top_n  = label_top_n_all,
+    color_by     = "region",
+    y_limits     = y_limits,
+    plot_width   = plot_width,
+    plot_height  = plot_height
+  )
+
+  prefix_all <- paste0(indicator_label, "_countries_all")
+  gif_all    <- file.path(output_dir, paste0(prefix_all, ".gif"))
+  mp4_all    <- file.path(output_dir, paste0(prefix_all, ".mp4"))
+
+  anim_all <- gganimate::animate(
+    p_all, nframes = nframes, fps = fps_gif,
+    start_pause = 10, end_pause = 10,
+    width = plot_width, height = plot_height,
+    renderer = gifski_renderer(), dev = "ragg_png", bg = "white"
+  )
+  gganimate::anim_save(gif_all, animation = anim_all)
+  gganimate::animate(
+    p_all, nframes = nframes, fps = fps_mp4,
+    width = plot_width, height = plot_height,
+    renderer = av_renderer(mp4_all), dev = "ragg_png", bg = "white"
+  )
+  out_files <- c(out_files, gif_all, mp4_all)
+  message("  Saved: ", gif_all)
+
+  # --- 2. Per-region ---------------------------------------------------
+  regions <- sort(unique(country_data$Region))
+  for (reg in regions) {
+    reg_data <- country_data %>% dplyr::filter(Region == reg)
+    n_countries <- length(unique(reg_data$REF_AREA))
+    message("  Building ", reg, " (", n_countries, " countries)")
+
+    label_n <- if (n_countries > max_countries_per_plot) max_countries_per_plot else NULL
+
+    p_reg <- build_country_scatterplot(
+      reg_data,
+      y_axis_label = y_axis_label,
+      plot_title   = region_title_fn(reg),
+      label_top_n  = label_n,
+      color_by     = "country",
+      y_limits     = y_limits,
+      plot_width   = plot_width,
+      plot_height  = plot_height
+    )
+
+    safe_name  <- tolower(gsub("[^A-Za-z0-9]+", "_", reg))
+    prefix_reg <- paste0(indicator_label, "_countries_", safe_name)
+    gif_reg    <- file.path(output_dir, paste0(prefix_reg, ".gif"))
+    mp4_reg    <- file.path(output_dir, paste0(prefix_reg, ".mp4"))
+
+    anim_reg <- gganimate::animate(
+      p_reg, nframes = nframes, fps = fps_gif,
+      start_pause = 10, end_pause = 10,
+      width = plot_width, height = plot_height,
+      renderer = gifski_renderer(), dev = "ragg_png", bg = "white"
+    )
+    gganimate::anim_save(gif_reg, animation = anim_reg)
+    gganimate::animate(
+      p_reg, nframes = nframes, fps = fps_mp4,
+      width = plot_width, height = plot_height,
+      renderer = av_renderer(mp4_reg), dev = "ragg_png", bg = "white"
+    )
+    out_files <- c(out_files, gif_reg, mp4_reg)
+    message("  Saved: ", gif_reg)
+  }
+
+  invisible(out_files)
+}
+
 # Load crosswalk and population once (cached in calling environment)
 load_crosswalk <- function() {
   readr::read_csv(
