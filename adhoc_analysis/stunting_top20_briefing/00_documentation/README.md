@@ -37,7 +37,7 @@ Run scripts from the **repository root** (so `profile_OSE-DA-NT.R` resolves):
 |------|-------------|
 | `stunting_rankings.csv` | Combined human-readable rankings with baseline/current values and change. |
 | `stunting_rankings.rds` | R list object with three data frames + metadata (for PPT script). |
-| `stunting_top20_briefing.pptx` | PowerPoint with template-based cover and thank-you slides, a branded nutrition divider slide, chart slides, and narrative slides for ED briefing. |
+| `stunting_top20_briefing.pptx` | PowerPoint opening with a full-bleed branded photo cover, followed by a title slide, chart slides, narrative bullet slides, and a thank-you closing slide. |
 | `stunting_top20_briefing_data.xlsx` | Excel workbook with one sheet per figure slide (7 sheets when burden data exist). Columns match the chart data so figures can be recreated in Excel. |
 
 ## Dependencies
@@ -58,6 +58,7 @@ R packages: `arrow`, `dplyr`, `tidyr`, `readr`, `ggplot2`, `countrycode`, `offic
 | `02_codes/00_pptx_design_tokens.r` | UNICEF brand colours, font specs, text-box constraints. All slide modules consume this. |
 | `02_codes/00_pptx_title_slide.r` | Title slide generation: variant selection (excluding slide 9), text replacement with auto-fit and auto-width, multi-line support via `\n`, vertical spacing adjustments. |
 | `02_codes/00_pptx_bullet_slide.r` | Full-width numbered bullet slides using layout "8_Title and Content". Supports sub-bullets (level 2), automatic pagination with "(continued)", continued numbering across slides, and configurable spacing between top-level bullet groups. |
+| `02_codes/00_pptx_section_slide.r` | Overview and section break slides using layouts "Title and Content" / "2_Title and Content" (template slides 30–31 design). Left side: title + body text; right side: empty picture placeholder for the user to insert their own photo in PowerPoint. Used for the presentation overview and as section dividers between content blocks. |
 
 ## Notes
 

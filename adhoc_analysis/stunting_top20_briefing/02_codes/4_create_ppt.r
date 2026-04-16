@@ -26,6 +26,7 @@ codes_dir_ppt <- dirname(sys.frame(1)$ofile %||% ".")
 source(file.path(codes_dir_ppt, "00_pptx_design_tokens.r"))
 source(file.path(codes_dir_ppt, "00_pptx_title_slide.r"))
 source(file.path(codes_dir_ppt, "00_pptx_bullet_slide.r"))
+source(file.path(codes_dir_ppt, "00_pptx_section_slide.r"))
 
 # --- Paths ----------------------------------------------------------------
 if (!exists("projectFolder", envir = .GlobalEnv)) {
@@ -210,7 +211,7 @@ thankyou_variant <- sample(71:76, 1)
 
 pptx <- read_pptx(template_path)
 n_template_slides <- length(pptx)
-keep_slides <- c(title_variant, 17, thankyou_variant)
+keep_slides <- c(17, title_variant, thankyou_variant)
 if (n_template_slides > 0) {
   for (i in seq(n_template_slides, 1)) {
     if (!(i %in% keep_slides)) {
@@ -219,10 +220,10 @@ if (n_template_slides > 0) {
   }
 }
 # Track position of thank-you slide among retained template slides
-thankyou_pos <- which(sort(keep_slides) == thankyou_variant)
-
-# --- Slide 1: Replace title/subtitle using the title-slide module ---------
-apply_title_text(
+# After removal, slides are in original template order:
+#   position 1 = title_variant (1-11), position 2 = slide 17, position 3 = thank-you
+# Apply title text at position 1 (where the title variant naturally sits).
+pptx <- apply_title_text(
   pptx, slide_index = 1,
   title    = title_text,
   subtitle = subtitle_text,
@@ -230,9 +231,28 @@ apply_title_text(
   date     = format(Sys.Date(), "%B %Y")
 )
 
-# Slide 2 is retained from the template as a branded nutrition photo divider.
+# Slide 1 is the title (title_variant), slide 2 is the branded divider (17),
+# slide 3 is the thank-you.  New slides are appended after slide 3.
+# After the deck is built we post-process the PPTX zip to reorder slides
+# (see below) because officer::move_slide is non-functional in this version.
 
-# --- Slide 3: Headline summary -------------------------------------------
+# --- Slide 3: Overview (sections of the briefing) ------------------------
+overview_items <- c(
+  "What this briefing shows",
+  "Stunting prevalence: highest rates and fastest reductions"
+)
+if (has_numbers) {
+  overview_items <- c(overview_items,
+    "Stunting burden: number of children affected"
+  )
+}
+overview_items <- c(overview_items, "Key findings and programme implications")
+
+pptx <- add_section_slide(pptx, title = "Overview",
+                          items = overview_items, style = bullet_style,
+                          footer_title = title_text)
+
+# --- Headline summary -----------------------------------------------------
 top_high_country <- results$highest$country_name[1]
 top_high_prev <- results$highest$prevalence[1]
 top_10_country <- results$improve_10yr$country_name[1]
@@ -271,14 +291,9 @@ pptx <- add_bullet_slides(pptx, "What this briefing shows",
 # SECTION A: Prevalence
 # =========================================================================
 
-pptx <- pptx %>%
-  add_slide(layout = "Title Slide", master = "UNICEF") %>%
-  ph_with(value = fpar(ftext("Stunting prevalence",
-    prop = fp_text(font.size = 36, bold = TRUE, color = unicef_dark, font.family = brand_font))),
-    location = ph_location_type(type = "ctrTitle")) %>%
-  ph_with(value = fpar(ftext("Countries with the highest rates and fastest reductions",
-    prop = fp_text(font.size = 20, color = unicef_warmgrey, font.family = brand_font))),
-    location = ph_location_type(type = "subTitle"))
+pptx <- add_section_slide(pptx, title = "Stunting prevalence",
+                          items = c("Countries with the highest rates and fastest reductions"),
+                          style = bullet_style, footer_title = title_text)
 
 pptx <- pptx %>%
   add_slide(layout = "Title Only", master = "UNICEF") %>%
@@ -371,14 +386,9 @@ if (has_numbers) {
     theme_unicef
 
   # --- Section divider: Burden ---------------------------------------------
-  pptx <- pptx %>%
-    add_slide(layout = "Title Slide", master = "UNICEF") %>%
-    ph_with(value = fpar(ftext("Stunting burden: number of children affected",
-      prop = fp_text(font.size = 36, bold = TRUE, color = unicef_dark, font.family = brand_font))),
-      location = ph_location_type(type = "ctrTitle")) %>%
-    ph_with(value = fpar(ftext("Countries with the highest absolute numbers and largest reductions",
-      prop = fp_text(font.size = 20, color = unicef_warmgrey, font.family = brand_font))),
-      location = ph_location_type(type = "subTitle"))
+  pptx <- add_section_slide(pptx, title = "Stunting burden: number of children affected",
+                            items = c("Countries with the highest absolute numbers and largest reductions"),
+                            style = bullet_style, footer_title = title_text)
 
   pptx <- pptx %>%
     add_slide(layout = "Title Only", master = "UNICEF") %>%
@@ -446,12 +456,53 @@ pptx <- add_bullet_slides(pptx, "Key findings and programme implications",
                           bullets = narrative_bullets, levels = narrative_levels,
                           style = bullet_style, footer_title = title_text)
 
-# --- Move retained thank-you slide to the end -----------------------------
-pptx <- move_slide(pptx, index = thankyou_pos, to = length(pptx))
-
-# --- Save -----------------------------------------------------------------
+# --- Save and reorder slides ----------------------------------------------
+# officer::move_slide() is non-functional in this version, so we post-process
+# the saved PPTX zip to reorder the sldIdLst in presentation.xml.
+# After removal + appends, the internal order is:
+#   1 = title_variant, 2 = slide 17 (divider), 3 = thank-you, 4..N = content
+# Desired order:
+#   1 = divider, 2 = title, 3..N-1 = content, N = thank-you
 pptx_path <- file.path(output_dir, "stunting_top20_briefing.pptx")
 print(pptx, target = pptx_path)
+
+.reorder_pptx_slides <- function(pptx_path, new_order) {
+  extract_dir <- file.path(tempdir(), paste0("pptx_reorder_", format(Sys.time(), "%H%M%S")))
+  on.exit(unlink(extract_dir, recursive = TRUE), add = TRUE)
+  utils::unzip(pptx_path, exdir = extract_dir)
+
+  pres_path <- file.path(extract_dir, "ppt", "presentation.xml")
+  pres_text <- paste(readLines(pres_path, warn = FALSE), collapse = "\n")
+
+  # Extract all sldId entries in order
+  sld_pat <- '<p:sldId\\s+id="\\d+"\\s+r:id="rId\\d+"\\s*/>'
+  entries <- regmatches(pres_text, gregexpr(sld_pat, pres_text, perl = TRUE))[[1]]
+  stopifnot(length(entries) == length(new_order))
+
+  # Build reordered block
+  reordered <- entries[new_order]
+
+  # Replace the sldIdLst content
+  lst_pat <- '(<p:sldIdLst[^>]*>)\\s*((?:<p:sldId[^/]*/?>\\s*)+)(</p:sldIdLst>)'
+  replacement <- paste0("\\1\n  ", paste(reordered, collapse = "\n  "), "\n\\3")
+  pres_text <- sub(lst_pat, replacement, pres_text, perl = TRUE)
+
+  writeLines(pres_text, pres_path)
+
+  # Re-zip (overwrite original)
+  wd <- getwd()
+  on.exit(setwd(wd), add = TRUE)
+  setwd(extract_dir)
+  file.remove(pptx_path)
+  zip::zip(pptx_path, files = list.files(".", recursive = TRUE, all.files = TRUE))
+}
+
+# Build the reorder map:
+# Internal positions: 1=title, 2=divider, 3=thankyou, 4..N=content slides
+# Desired: divider(2), title(1), content(4..N), thankyou(3)
+n_slides <- length(pptx)
+new_order <- c(2L, 1L, seq(4L, n_slides), 3L)
+.reorder_pptx_slides(pptx_path, new_order)
 message("PowerPoint saved: ", pptx_path)
 
 # --- Excel workbook with one sheet per figure slide -----------------------

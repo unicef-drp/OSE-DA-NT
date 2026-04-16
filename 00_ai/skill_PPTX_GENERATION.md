@@ -27,7 +27,8 @@ Apply this skill when:
 ```
 02_codes/
   00_pptx_design_tokens.r   ← shared brand constants (unicef_tokens)
-  00_pptx_title_slide.r     ← title slide module
+  00_pptx_title_slide.r     ← title slide module (retain-and-replace)
+  00_pptx_bullet_slide.r    ← bullet slide module (add-from-layout)
   00_pptx_<type>_slide.r    ← future modules follow same pattern
   4_create_ppt.r            ← orchestrator: sources modules, builds deck
 ```
@@ -39,7 +40,21 @@ Apply this skill when:
   called by the conductor (`1_execute_conductor.r`); instead the
   orchestrator step (`4_create_ppt.r`) sources them directly.
 - Each module exposes a public API (e.g. `make_title_slide()`,
-  `apply_title_text()`) and keeps helper functions private (`.prefixed`).
+  `apply_title_text()`, `add_bullet_slides()`) and keeps helper
+  functions private (`.prefixed`).
+
+### Slide Construction Strategy
+
+Choose the approach based on whether the template slide carries embedded
+assets (pictures, decorative shapes) or relies only on the slide layout:
+
+| Approach | When to use | Example |
+|----------|-------------|---------|
+| **Retain & replace** | Template slide has embedded images or decorative shapes that are not part of the layout. Keep the slide in `keep_slides`, then mutate its XML to replace placeholder text. | Title slides (1–11): each has a unique background photo embedded in the slide itself. |
+| **Add from layout** | The layout alone defines the full visual design (placeholders, colours, numbering). No per-slide assets to preserve. Use `add_slide(layout, master)` and populate with `ph_with()`. | Bullet slides: "8_Title and Content" layout provides everything including `buAutoNum`. |
+
+Do not mix the two approaches on a single slide type. If a slide has
+embedded assets, retain it; if the layout is sufficient, add fresh.
 
 ---
 
@@ -126,7 +141,23 @@ bu_xml <- xml2::read_xml(paste0(
 xml2::xml_add_child(pPr, bu_xml)
 ```
 
-### 2g. `ph_with()` strips `ph_type`
+### 2g. `move_slide()` is non-functional
+
+`officer::move_slide()` is a no-op in the currently installed version —
+slides remain in their original position regardless of arguments. This was
+verified by testing every combination of `index`/`to`, save-and-reopen
+cycles, and direct R6 private-field manipulation.
+
+**Workaround:** After saving the PPTX with `print()`, post-process the
+zip file by reordering `<p:sldId>` entries inside the `<p:sldIdLst>`
+element in `ppt/presentation.xml`. PowerPoint reads slide order from this
+list. The `.reorder_pptx_slides(pptx_path, new_order)` helper in
+`4_create_ppt.r` implements this: extract zip → regex-reorder sldIdLst →
+re-zip with `zip::zip()`. The `new_order` argument is an integer vector
+mapping desired positions to current positions (same semantics as R
+vector indexing).
+
+### 2h. `ph_with()` strips `ph_type`
 
 `officer::ph_with()` removes the `ph_type` attribute from the shape after
 populating it. This means post-processing code cannot use `<p:ph type="body">`
@@ -223,7 +254,8 @@ UNICEF Branded Presentation Template (2025 & 2026, identical):
 - 76 slides total.
 - Slides 1–11: title variants (Number slide layout). Slide 9 excluded
   (older child, not under-5).
-- Slide 17: branded divider.
+- Slide 17: branded photo divider (used as full-bleed cover when placed
+  before the title slide — a "screensaver" for the audience filing in).
 - Slides 71–76: thank-you / closing variants.
 - Placeholder names: "Title 1", "Text Placeholder 3" (subtitle),
   "Text Placeholder 4" (section), "Text Placeholder 5" (date).
@@ -236,3 +268,13 @@ Full-width bullet layout used by `add_bullet_slides()`.
 - Placeholders: "Title 1", "Content Placeholder 2", "Date Placeholder 3" (footer).
 - Has `<a:buAutoNum type="arabicPeriod"/>` at shape `lstStyle` level (inherited, not per-paragraph).
 - `unordered_list()` content works with this layout; numbering is automatic but must be overridden via XML injection for continuation numbering across slides.
+
+### Layout: "Title and Content" (slideLayout31.xml, master UNICEF)
+
+Split layout used by `add_section_slide()` for overview and section breaks.
+Design matches template slides 30–31.
+- Left ~55%: "Title 1" + "Content Placeholder 2" (body text).
+- Right ~45%: "Picture Placeholder 2" (empty — user inserts own photo).
+- Footer: "Date Placeholder 3".
+- Variant "2_Title and Content" (slideLayout19) is visually identical.
+- This is an add-from-layout slide: no embedded assets to retain.
