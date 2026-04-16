@@ -141,6 +141,7 @@ if (!exists("analysisDatasetsInputDir") || !nzchar(analysisDatasetsInputDir)) {
 inputdir <- file.path(teamsFolder, "01_dw_prep", "011_rawdata", "nt", "input")
 outputdir <- file.path(teamsFolder, "01_dw_prep", "011_rawdata", "nt", "output")
 interdir <- file.path(outputdir, "inter")
+wasting_csv_path <- file.path(interdir, "agg_domain", "agg_ant_wasting.csv")
 
 #------------------------------------------------------------------------------
 # Output directory

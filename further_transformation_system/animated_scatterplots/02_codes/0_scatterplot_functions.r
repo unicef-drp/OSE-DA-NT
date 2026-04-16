@@ -63,6 +63,57 @@ load_regional_series <- function(indicator_code, crosswalk, population,
     dplyr::arrange(Region, year)
 }
 
+# Load pre-aggregated wasting regional series from the DW agg_domain CSV.
+# Wasting data are produced separately and stored as already-aggregated
+# regional estimates (not in the country-level parquet).
+load_wasting_series <- function(csv_path, crosswalk, population,
+                                indicator_code = "NT_ANT_WHZ_NE2",
+                                exclude_regions = c("Western Europe",
+                                                    "Eastern Europe and Central Asia",
+                                                    "Sub-Saharan Africa")) {
+  # Read the pre-aggregated CSV (columns: Classification, Region, INDICATOR,
+  # SEX, OBS_VALUE, REF_AREA, TIME_PERIOD, OBS_FOOTNOTE)
+  wst <- readr::read_csv(csv_path, show_col_types = FALSE) %>%
+    dplyr::filter(
+      Classification == "UNICEF Regions",
+      INDICATOR      == indicator_code,
+      SEX            == "_T"
+    ) %>%
+    dplyr::transmute(
+      Region_csv = Region,
+      year       = as.integer(TIME_PERIOD),
+      prevalence = as.numeric(OBS_VALUE)
+    ) %>%
+    dplyr::filter(!is.na(year), !is.na(prevalence), prevalence > 0)
+
+  # Harmonise CSV region names to the crosswalk names used elsewhere
+  region_map <- c(
+    "East Asia and the Pacific"   = "East Asia and Pacific",
+    "Latin America and the Caribbean" = "Latin America and Caribbean",
+    "East and Southern Africa"    = "Eastern and Southern Africa"
+  )
+  wst <- wst %>%
+    dplyr::mutate(Region = dplyr::coalesce(region_map[Region_csv], Region_csv)) %>%
+    dplyr::select(-Region_csv)
+
+  # Compute regional population from country data so bubble sizes are available
+  cw_regional <- crosswalk %>%
+    dplyr::filter(Classification == "UNICEF_REP_REG_GLOBAL")
+
+  reg_pop <- population %>%
+    dplyr::inner_join(cw_regional, by = "REF_AREA",
+                      relationship = "many-to-many") %>%
+    dplyr::group_by(Region, year) %>%
+    dplyr::summarise(total_pop = sum(pop, na.rm = TRUE), .groups = "drop")
+
+  wst %>%
+    dplyr::inner_join(reg_pop, by = c("Region", "year")) %>%
+    dplyr::mutate(pop_affected = prevalence / 100 * total_pop) %>%
+    dplyr::filter(!Region %in% exclude_regions) %>%
+    dplyr::mutate(Region = factor(Region)) %>%
+    dplyr::arrange(Region, year)
+}
+
 # Build the animated ggplot scatterplot
 #
 # focus_regions: character vector of region names to emphasize (bold labels,

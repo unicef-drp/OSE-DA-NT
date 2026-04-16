@@ -1,11 +1,12 @@
 # =============================================================================
-# Animated scatterplot — Child wasting (ANT_WHZ_NE2_MOD)
+# Animated scatterplot — Child wasting (NT_ANT_WHZ_NE2)
+# Wasting uses pre-aggregated regional estimates from agg_ant_wasting.csv
 # Shared functions are loaded by 1_execute.r via 0_scatterplot_functions.r
 # =============================================================================
 
 message("Building animated scatterplot: wasting")
 
-reg_rep <- load_regional_series("ANT_WHZ_NE2", .crosswalk, .population)
+reg_rep <- load_wasting_series(wasting_csv_path, .crosswalk, .population)
 
 p <- build_scatterplot(
   reg_rep,
