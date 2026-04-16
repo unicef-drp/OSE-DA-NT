@@ -40,7 +40,7 @@ conf_idx <- conf_idx | (!is.na(all_data$REF_AREA) & all_data$REF_AREA == "NIC")
 # BHR: overweight series estimates are unreliable
 conf_idx <- conf_idx | (
   !is.na(all_data$REF_AREA) & all_data$REF_AREA == "BHR" &
-  !is.na(all_data$INDICATOR) & grepl("WHZ.*PO2", all_data$INDICATOR, ignore.case = TRUE)
+  !is.na(all_data$IndicatorCode) & grepl("WHZ.*PO2", all_data$IndicatorCode, ignore.case = TRUE)
 )
 
 if (sum(conf_idx) > 0L) {

@@ -633,9 +633,7 @@ build_layer2_dataset <- function(data, disagg_map, dataset_name = NA_character_)
                           derive_sex_from_region_context(.),
                           .data$SEX),
       REF_AREA    = coalesce(get_chr_col(., "REF_AREA"), get_chr_col(., "ISO3Code"), get_chr_col(., "CND_Country_Code")),
-      TIME_PERIOD = coalesce(get_chr_col(., "TIME_PERIOD"), get_chr_col(., "CMRS_year"), get_chr_col(., "warehouse_year"), get_chr_col(., "middle_year")),
-      INDICATOR   = coalesce(get_chr_col(., "INDICATOR"), get_chr_col(., "IndicatorCode"), get_chr_col(., "Indicator")),
-      VALUE       = coalesce(get_num_col(., "VALUE"), get_num_col(., "r"), get_num_col(., "r_raw"))
+      TIME_PERIOD = coalesce(get_chr_col(., "TIME_PERIOD"), get_chr_col(., "CMRS_year"), get_chr_col(., "warehouse_year"))
     ) %>%
     # --- ZWE Survey 2879 TIME_PERIOD correction ---
     # TODO(upstream): CMRS source has TIME_PERIOD=2013 and CMRS_year_exact=2013.024
@@ -661,7 +659,7 @@ build_layer2_dataset <- function(data, disagg_map, dataset_name = NA_character_)
       }
     } %>%
     mutate(
-      SEX = if_else(.data$SEX == "_T" & str_detect(.data$INDICATOR, regex("^ANE_WOM", ignore_case = TRUE)), "F", .data$SEX)
+      SEX = if_else(.data$SEX == "_T" & str_detect(.data$IndicatorCode, regex("^ANE_WOM", ignore_case = TRUE)), "F", .data$SEX)
     ) %>%
     apply_dataset_fallback_dims(dataset_name = dataset_name)
 
@@ -696,11 +694,11 @@ build_layer2_dataset <- function(data, disagg_map, dataset_name = NA_character_)
       "OSE_DELIVERY_MODE", "OSE_MULTIPLE_BIRTH", "OSE_AGE", "OSE_EDUCATION",
       "OSE_CODE"
     ))) %>%
-    relocate(any_of(c("REF_AREA", "TIME_PERIOD", "INDICATOR",
+    relocate(any_of(c("REF_AREA", "TIME_PERIOD", "IndicatorCode",
                       "SEX", "AGE", "RESIDENCE", "WEALTH", "EDUCATION",
                       "HEAD_OF_HOUSEHOLD", "MOTHER_AGE", "DELIVERY_ASSISTANCE",
                       "PLACE_OF_DELIVERY", "DELIVERY_MODE", "MULTIPLE_BIRTH",
-                      "REGION", "VALUE")),
+                      "REGION")),
              .before = everything()) %>%
     as_tibble()
 }
@@ -722,12 +720,12 @@ dedup_analytical_key <- function(df) {
                 "PLACE_OF_DELIVERY", "DELIVERY_MODE", "MULTIPLE_BIRTH", "REGION")
 
   key_cols <- intersect(
-    c("UNICEF_Survey_ID", "REF_AREA", "TIME_PERIOD", "INDICATOR", dim_cols),
+    c("UNICEF_Survey_ID", "REF_AREA", "TIME_PERIOD", "IndicatorCode", dim_cols),
     names(df)
   )
 
   value_cols <- intersect(
-    c("VALUE", "r", "se", "ll", "ul", "weighted_N", "unweighted_N"),
+    c("r", "se", "ll", "ul", "weighted_N", "unweighted_N"),
     names(df)
   )
 
@@ -746,12 +744,12 @@ dedup_analytical_key <- function(df) {
 
   # Log sample of removed rows (cap at 20 to avoid flooding output)
   removed_idx <- which(is_dup)
-  if (all(c("entryid", "standard_disagg", "REF_AREA", "TIME_PERIOD", "INDICATOR") %in% names(df))) {
+  if (all(c("entryid", "standard_disagg", "REF_AREA", "TIME_PERIOD", "IndicatorCode") %in% names(df))) {
     show_n <- min(length(removed_idx), 20L)
     for (idx in removed_idx[seq_len(show_n)]) {
       message(
         "Dedup: removing duplicate row for ",
-        df$REF_AREA[idx], " ", df$TIME_PERIOD[idx], " ", df$INDICATOR[idx],
+        df$REF_AREA[idx], " ", df$TIME_PERIOD[idx], " ", df$IndicatorCode[idx],
         " [entryid: ", df$entryid[idx],
         ", standard_disagg: ", df$standard_disagg[idx], "]"
       )
@@ -811,7 +809,7 @@ assign_data_source_priority <- function(df) {
   #   5. Tiebreak â€” keep first preferred row within group
   #   6. Flag latest preferred source across all years
   #
-  # Grouping: REF_AREA x YEAR x INDICATOR x all 12 analytical dimensions.
+  # Grouping: REF_AREA x YEAR x IndicatorCode x all 12 analytical dimensions.
   # This ensures preferred selection operates at the same granularity as
   # the analytical key â€” rows in different disaggregation cells never compete.
 
@@ -820,8 +818,8 @@ assign_data_source_priority <- function(df) {
   has_indicator_code <- "IndicatorCode" %in% names(df)
   has_cmrs_exact     <- "CMRS_year_exact" %in% names(df)
 
-  if (!"INDICATOR" %in% names(df))
-    stop("INDICATOR column required for assign_data_source_priority()")
+  if (!"IndicatorCode" %in% names(df))
+    stop("IndicatorCode column required for assign_data_source_priority()")
 
   iycf_seeds <- c(
     "BF_EBF", "BF_EIBF", "BF_EXBF_2D", "BF_EXBF", "BF_CBF_12_23", "BF_MIXMF",
@@ -865,7 +863,7 @@ assign_data_source_priority <- function(df) {
       },
       .pref_year = as.character(time_period_to_year(.pref_tp)),
       .pref_row_id = row_number(),
-      .pref_seed = toupper(trimws(sub("^NT_", "", INDICATOR))),
+      .pref_seed = toupper(trimws(sub("^NT_", "", IndicatorCode))),
       .pref_is_iycf = .pref_seed %in% iycf_seeds,
       .pref_adj = if (has_estimate_type) coalesce(Estimate_Type == "Adjusted", FALSE) else FALSE,
       .pref_stype = if (has_source_type) coalesce(DataSourceTypeGlobal, "") else "",
@@ -874,7 +872,7 @@ assign_data_source_priority <- function(df) {
     )
 
   grp <- intersect(
-    c("REF_AREA", ".pref_year", "INDICATOR", "SEX", "AGE",
+    c("REF_AREA", ".pref_year", "IndicatorCode", "SEX", "AGE",
       "WEALTH", "RESIDENCE", "EDUCATION", "HEAD_OF_HOUSEHOLD",
       "MOTHER_AGE", "DELIVERY_ASSISTANCE", "PLACE_OF_DELIVERY",
       "DELIVERY_MODE", "MULTIPLE_BIRTH", "REGION"),
@@ -1018,8 +1016,8 @@ assign_data_source_priority <- function(df) {
 # columns into R memory.
 
 .priority_input_col_names <- c(
-  "INDICATOR", "REF_AREA", "TIME_PERIOD", "UNICEF_Survey_ID",
-  "CMRS_year_exact", "Estimate_Type", "DataSourceTypeGlobal", "IndicatorCode",
+  "IndicatorCode", "REF_AREA", "TIME_PERIOD", "UNICEF_Survey_ID",
+  "CMRS_year_exact", "Estimate_Type", "DataSourceTypeGlobal",
   "SEX", "AGE", "WEALTH", "RESIDENCE", "EDUCATION", "HEAD_OF_HOUSEHOLD",
   "MOTHER_AGE", "DELIVERY_ASSISTANCE", "PLACE_OF_DELIVERY",
   "DELIVERY_MODE", "MULTIPLE_BIRTH", "REGION"

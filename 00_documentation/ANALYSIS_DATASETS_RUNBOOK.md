@@ -1,6 +1,6 @@
 # Analysis Datasets Runbook
 
-Last updated: 2026-04-13
+Last updated: 2026-04-15
 
 ## Scope
 
@@ -76,9 +76,25 @@ source("analysis_datasets/02_codes/0_verify_all_outputs.r")
 Output directory is configured by `analysisDatasetsOutputDir` in
 `profile_OSE-DA-NT.R`.
 
-## Output Schema — Analytical Dimensions
+## Output Schema — Key Columns
 
-Each output carries 12 dimension columns:
+Each output carries the native source column `IndicatorCode` for indicator
+identification (no derived `INDICATOR` column is created). The primary estimate
+column is `r` — no derived `VALUE` column is created. Downstream consumers
+should use `IndicatorCode` and `r` directly.
+
+### Canonical Columns
+
+| Column | Description |
+|--------|-------------|
+| `IndicatorCode` | Indicator code from the source DTA (e.g. `ANT_HAZ_NE2_MOD`). No `NT_` prefix at this layer. |
+| `REF_AREA` | Country code, coalesced from `REF_AREA`, `ISO3Code`, or `CND_Country_Code`. |
+| `TIME_PERIOD` | Year, coalesced from `TIME_PERIOD`, `CMRS_year`, or `warehouse_year`. |
+| `r` | Primary estimate value (proportion 0–1). |
+
+### Analytical Dimensions
+
+Each output also carries 12 dimension columns:
 
 | Column | Layer 1 Reference Source | Layer 2 Fallback |
 |--------|--------------------------|------------------|

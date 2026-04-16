@@ -1,6 +1,6 @@
 # Further Transformation System Runbook
 
-Last updated: 2026-04-14
+Last updated: 2026-04-15
 
 ## Scope
 
@@ -62,6 +62,14 @@ parquet files (`cmrs2_series_accepted.parquet`, `cmrs2_ant_accepted.parquet`,
 `cmrs2_iycf_accepted.parquet`). Regional estimates still come from DW-Production
 regional aggregation outputs in interdir.
 
+## Column Conventions
+
+All projection scripts use `IndicatorCode` as the indicator column name
+(not `INDICATOR`). The `NT_` prefix is prepended during parquet import in
+`1a_import_inputs.r`. Estimate values flow through as `OBS_VALUE` after being
+converted from the parquet's 0–1 proportion scale to 0–100 percent scale during
+import (the source `r` column is renamed to `OBS_VALUE`).
+
 ## Final Output Stage
 
 Script:
@@ -69,7 +77,7 @@ Script:
 
 Behavior:
 - Reads progress split files from projections inter folder.
-- Applies business-rule overrides for specific indicator/country combinations.
+- Applies business-rule overrides for specific IndicatorCode/country combinations (e.g. NIC).
 - Writes final appended files to projections final folder:
   - progress_2030_appended.csv
   - progress_2030_appended.xlsx

@@ -44,7 +44,7 @@ message("Using staged NT projection ane input: ", basename(dw_ane_path))
 
 dw_ane_raw <- read_csv(dw_ane_path, show_col_types = FALSE) %>%
   filter(
-    INDICATOR == "NT_ANE_WOM_15_49_MOD",
+    IndicatorCode == "NT_ANE_WOM_15_49_MOD",
     SEX == "_T"
   ) %>%
   mutate(
@@ -67,8 +67,8 @@ country_df <- dw_ane_raw %>%
   mutate(data_level = "Country")
 
 ane_analysis_df <- bind_rows(
-  regional_df %>% transmute(data_level, REF_AREA, INDICATOR, SEX, TIME_PERIOD, OBS_VALUE),
-  country_df %>% transmute(data_level, REF_AREA, INDICATOR, SEX, TIME_PERIOD, OBS_VALUE)
+  regional_df %>% transmute(data_level, REF_AREA, IndicatorCode, SEX, TIME_PERIOD, OBS_VALUE),
+  country_df %>% transmute(data_level, REF_AREA, IndicatorCode, SEX, TIME_PERIOD, OBS_VALUE)
 )
 
 # =============================================================================
@@ -161,7 +161,7 @@ final_ane <- baseline_df %>%
 # === Export summary (classification table) ===
 progress_ane <- final_ane %>%
   transmute(
-    INDICATOR = "NT_ANE_WOM_15_49_MOD",
+    IndicatorCode = "NT_ANE_WOM_15_49_MOD",
     reporting_level = data_level,
     REF_AREA,
     baseline_year = 2012L,
@@ -193,12 +193,12 @@ write_csv(progress_ane, file.path(outputdir_projections_inter, "ane_progress_203
 progress_append_path <- file.path(outputdir_projections_final, "progress_2030_appended.csv")
 if (file.exists(progress_append_path)) {
   progress_appended <- read_nt_projection_progress_file(progress_append_path)
-  if (!("INDICATOR" %in% names(progress_appended))) {
+  if (!("IndicatorCode" %in% names(progress_appended))) {
     progress_appended <- progress_appended %>%
-      mutate(INDICATOR = if ("indicator_code" %in% names(progress_appended)) as.character(indicator_code) else NA_character_)
+      mutate(IndicatorCode = if ("indicator_code" %in% names(progress_appended)) as.character(indicator_code) else NA_character_)
   }
   progress_appended <- progress_appended %>%
-    filter(INDICATOR != "NT_ANE_WOM_15_49_MOD") %>%
+    filter(IndicatorCode != "NT_ANE_WOM_15_49_MOD") %>%
     bind_rows(progress_ane)
 } else {
   progress_appended <- progress_ane
@@ -222,23 +222,23 @@ projected_2013_2030 <- final_ane %>%
   crossing(TIME_PERIOD = years) %>%
   mutate(
     SEX = "_T",
-    INDICATOR = "NT_ANE_WOM_15_49_MOD",
+    IndicatorCode = "NT_ANE_WOM_15_49_MOD",
     OBS_VALUE = stata_round(r_2012 * (1 - (current_AARR / 100))^(TIME_PERIOD - 2012), round_digits_prev),
     TYPE = "Projected"
   ) %>%
-  select(data_level, REF_AREA, INDICATOR, SEX, TIME_PERIOD, OBS_VALUE, current_AARR, required_AARR_2030, TYPE)
+  select(data_level, REF_AREA, IndicatorCode, SEX, TIME_PERIOD, OBS_VALUE, current_AARR, required_AARR_2030, TYPE)
 
 target_2013_2030 <- final_ane %>%
   select(data_level, REF_AREA, r_2012, current_AARR, required_AARR_2030, target_value_2030) %>%
   crossing(TIME_PERIOD = years) %>%
   mutate(
     SEX = "_T",
-    INDICATOR = "NT_ANE_WOM_15_49_MOD",
+    IndicatorCode = "NT_ANE_WOM_15_49_MOD",
     OBS_VALUE = stata_round(r_2012 * (1 - (required_AARR_2030 / 100))^(TIME_PERIOD - 2012), round_digits_prev),
     OBS_VALUE = if_else(TIME_PERIOD == 2030, target_value_2030, OBS_VALUE),
     TYPE = "Target"
   ) %>%
-  select(data_level, REF_AREA, INDICATOR, SEX, TIME_PERIOD, OBS_VALUE, current_AARR, required_AARR_2030, TYPE)
+  select(data_level, REF_AREA, IndicatorCode, SEX, TIME_PERIOD, OBS_VALUE, current_AARR, required_AARR_2030, TYPE)
 
 # Export DW-ready 2030 target indicator for anemia (women 15-49)
 dir.create(file.path(outputdir, "Targets"), recursive = TRUE, showWarnings = FALSE)
@@ -256,7 +256,7 @@ trgt_2030_nt_ane_wra <- bind_rows(
 ) %>%
   transmute(
     REF_AREA = REF_AREA,
-    INDICATOR = "TRGT_2030_NT_ANE_WOM_15_49_MOD",
+    IndicatorCode = "TRGT_2030_NT_ANE_WOM_15_49_MOD",
     SEX = SEX,
     AGE = "_T",
     TIME_PERIOD = TIME_PERIOD,
@@ -292,18 +292,18 @@ combined_df <- bind_rows(
 # =============================================================================
 export_df <- combined_df %>%
   mutate(
-    INDICATOR = "NT_ANE_WOM_15_49_MOD"
+    IndicatorCode = "NT_ANE_WOM_15_49_MOD"
   )
 if ("SEX" %in% names(export_df)) {
   export_df <- export_df %>%
     filter(is.na(SEX) | SEX == "_T")
 }
 export_df <- add_nt_population_columns(export_df, "NT_ANE_WOM_15_49_MOD") %>%
-  select(any_of(c("INDICATOR", "data_level", "REF_AREA", "TIME_PERIOD", "population", "OBS_VALUE", "number_affected", "TYPE")))
+  select(any_of(c("IndicatorCode", "data_level", "REF_AREA", "TIME_PERIOD", "population", "OBS_VALUE", "number_affected", "TYPE")))
 
 codebook <- tribble(
   ~Column, ~Description,
-  "INDICATOR", "Indicator code",
+  "IndicatorCode", "Indicator code",
   "data_level", "Country or Regional reporting level included in the output",
   "REF_AREA", "Country/Region code",
   "TIME_PERIOD", "Year",

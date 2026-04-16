@@ -111,6 +111,17 @@ two-layer strategy:
 | MULTIPLE_BIRTH | OSE_MULTIPLE_BIRTH | BW singleton/multiple parser |
 | REGION | — | Subnational region as canonical REGION_N from StandardDisaggregations; ethnicity/religion/caste parser |
 
+## Estimate Columns
+
+The primary estimate value in each output dataset is the `r` column carried
+forward from the upstream CMRS source. The pipeline does not create a derived
+VALUE column — downstream consumers should read `r` directly.
+
+Rows where `r` is `NA` but `r_raw` is populated represent surveys with very
+low sample sizes for that indicator; those estimates are not considered
+reliable and are intentionally excluded from analytical use. Do not fall back
+to `r_raw` as a substitute for `r`.
+
 ## Dependencies
 
 - **R packages:** dplyr, stringr, readr, arrow, haven, tibble

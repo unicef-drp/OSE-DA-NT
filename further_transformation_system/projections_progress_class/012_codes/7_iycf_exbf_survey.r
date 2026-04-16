@@ -46,7 +46,7 @@ message("Using staged NT projection iycf input: ", basename(dw_iycf_path))
 
 exbf_raw <- read_csv(dw_iycf_path, show_col_types = FALSE) %>%
   filter(
-    INDICATOR == "NT_BF_EXBF",
+    IndicatorCode == "NT_BF_EXBF",
     SEX == "_T",
     AGE == "_T",
     REPORTING_LVL == "C"
@@ -215,7 +215,7 @@ final_exbf <- country_final %>%
 # === Export summary ===
 progress_exbf <- final_exbf %>%
   transmute(
-    INDICATOR = "NOT_NT_BF_EXBF",
+    IndicatorCode = "NOT_NT_BF_EXBF",
     reporting_level = data_level,
     REF_AREA,
     baseline_year = year_baseline,
@@ -248,12 +248,12 @@ write_csv(progress_exbf, file.path(outputdir_projections_inter, "exbf_progress_2
 progress_append_path <- file.path(outputdir_projections_final, "progress_2030_appended.csv")
 if (file.exists(progress_append_path)) {
   progress_appended <- read_nt_projection_progress_file(progress_append_path)
-  if (!("INDICATOR" %in% names(progress_appended))) {
+  if (!("IndicatorCode" %in% names(progress_appended))) {
     progress_appended <- progress_appended %>%
-      mutate(INDICATOR = if ("indicator_code" %in% names(progress_appended)) as.character(indicator_code) else NA_character_)
+      mutate(IndicatorCode = if ("indicator_code" %in% names(progress_appended)) as.character(indicator_code) else NA_character_)
   }
   progress_appended <- progress_appended %>%
-    filter(INDICATOR != "NT_BF_EXBF", INDICATOR != "NOT_NT_BF_EXBF") %>%
+    filter(IndicatorCode != "NT_BF_EXBF", IndicatorCode != "NOT_NT_BF_EXBF") %>%
     bind_rows(progress_exbf)
 } else {
   progress_appended <- progress_exbf
@@ -325,18 +325,18 @@ combined_df <- bind_rows(
 # =============================================================================
 export_df <- combined_df %>%
   mutate(
-    INDICATOR = "NOT_NT_BF_EXBF"
+    IndicatorCode = "NOT_NT_BF_EXBF"
   )
 if ("SEX" %in% names(export_df)) {
   export_df <- export_df %>%
     filter(is.na(SEX) | SEX == "_T")
 }
 export_df <- add_nt_population_columns(export_df, "NOT_NT_BF_EXBF") %>%
-  select(any_of(c("INDICATOR", "data_level", "REF_AREA", "TIME_PERIOD", "population", "OBS_VALUE", "number_affected", "TYPE")))
+  select(any_of(c("IndicatorCode", "data_level", "REF_AREA", "TIME_PERIOD", "population", "OBS_VALUE", "number_affected", "TYPE")))
 
 codebook <- tribble(
   ~Column, ~Description,
-  "INDICATOR", "Indicator code",
+  "IndicatorCode", "Indicator code",
   "data_level", "Country or Regional reporting level included in the output",
   "REF_AREA", "Country/Region code",
   "TIME_PERIOD", "Year",

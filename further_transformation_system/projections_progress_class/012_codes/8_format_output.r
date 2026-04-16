@@ -106,17 +106,17 @@ progress <- dplyr::bind_rows(lapply(existing_progress_paths, read_nt_progress_ap
 progress <- dplyr::mutate(
   progress,
   assessment_not_possible_flag = dplyr::if_else(
-    INDICATOR == "NT_ANT_HAZ_NE2_MOD" & REF_AREA %in% c("NIC"),
+    IndicatorCode == "NT_ANT_HAZ_NE2_MOD" & REF_AREA %in% c("NIC"),
     1L,
     assessment_not_possible_flag
   ),
   fullclassification_2030 = dplyr::if_else(
-    INDICATOR == "NT_ANT_HAZ_NE2_MOD" & REF_AREA %in% c("NIC"),
+    IndicatorCode == "NT_ANT_HAZ_NE2_MOD" & REF_AREA %in% c("NIC"),
     "Assessment not Possible",
     fullclassification_2030
   ),
   unicef_classification_2030 = dplyr::if_else(
-    INDICATOR == "NT_ANT_HAZ_NE2_MOD" & REF_AREA %in% c("NIC"),
+    IndicatorCode == "NT_ANT_HAZ_NE2_MOD" & REF_AREA %in% c("NIC"),
     "Assessment not Possible",
     unicef_classification_2030
   )
@@ -125,17 +125,17 @@ progress <- dplyr::mutate(
 progress <- dplyr::mutate(
   progress,
   assessment_not_possible_flag = dplyr::if_else(
-    INDICATOR == "NT_ANT_WHZ_PO2_MOD" & REF_AREA %in% c("NIC"),
+    IndicatorCode == "NT_ANT_WHZ_PO2_MOD" & REF_AREA %in% c("NIC"),
     1L,
     assessment_not_possible_flag
   ),
   fullclassification_2030 = dplyr::if_else(
-    INDICATOR == "NT_ANT_WHZ_PO2_MOD" & REF_AREA %in% c("NIC"),
+    IndicatorCode == "NT_ANT_WHZ_PO2_MOD" & REF_AREA %in% c("NIC"),
     "Assessment not Possible",
     fullclassification_2030
   ),
   unicef_classification_2030 = dplyr::if_else(
-    INDICATOR == "NT_ANT_WHZ_PO2_MOD" & REF_AREA %in% c("NIC"),
+    IndicatorCode == "NT_ANT_WHZ_PO2_MOD" & REF_AREA %in% c("NIC"),
     "Assessment not Possible",
     unicef_classification_2030
   )

@@ -1,6 +1,6 @@
 # Analysis Datasets Build Conventions Skill
 
-Last updated: 2026-04-14
+Last updated: 2026-04-15
 
 ## Purpose
 
@@ -133,23 +133,29 @@ stata_round <- function(x, digits = 0) {
 
 | Data source | Scale | Example |
 |-------------|-------|---------|
-| Analysis datasets parquets (`VALUE` column) | Proportion 0–1 | 0.093 = 9.3% |
+| Analysis datasets parquets (`r` column) | Proportion 0–1 | 0.093 = 9.3% |
 | Projections pipeline (`OBS_VALUE`) | Percent 0–100 | 9.3 |
 | Regional aggregation outputs | Percent 0–100 | 9.3 |
 
-`read_analysis_parquet_as_char()` in the projections import script multiplies
-`VALUE`, `LOWER_BOUND`, and `UPPER_BOUND` by 100 during import.
+`read_analysis_parquet_as_char()` in the projections import script renames the
+`r` column to `OBS_VALUE` and multiplies `OBS_VALUE`, `LOWER_BOUND`, and
+`UPPER_BOUND` by 100 during import.
+
+Note: The pipeline no longer creates a derived `VALUE` column. Downstream
+consumers should use `r` directly from analysis_datasets parquets.
 
 ---
 
 ## 6. Indicator Code Prefix Convention
 
-| Context | Code format | Example |
-|---------|-------------|---------|
-| Analysis datasets parquets | No prefix | `ANT_WHZ_NE2` |
-| Projections pipeline, DW output | `NT_` prefix | `NT_ANT_WHZ_NE2` |
+| Context | Column name | Code format | Example |
+|---------|-------------|-------------|---------|
+| Analysis datasets parquets | `IndicatorCode` | No prefix | `ANT_WHZ_NE2` |
+| Projections pipeline, DW output | `IndicatorCode` | `NT_` prefix | `NT_ANT_WHZ_NE2` |
 
 The prefix is prepended during parquet import in `read_analysis_parquet_as_char()`.
+The pipeline uses the native column name `IndicatorCode` throughout — no derived
+`INDICATOR` column is created.
 
 ---
 
