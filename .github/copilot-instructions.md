@@ -21,6 +21,7 @@ Always read:
 2. 00_documentation/REPO_SCOPE_AND_BOUNDARIES.md
 3. 00_documentation/FURTHER_TRANSFORMATION_SYSTEM_RUNBOOK.md
 4. Any local README in the target folder being edited
+5. 00_ai agent instructions and skills in this folder and subfolders for specific pipelines
 
 ## Coding And Path Rules
 
