@@ -87,6 +87,11 @@ Quick start:
 Start here:
 - 00_documentation/DOCUMENTATION_INDEX.md
 
+Brand resources (external analysis space, not in repo):
+- `{nutritionRoot}/github/documentation/unicef_brand`
+- Keep global UNICEF brand guidance/resources as the canonical baseline.
+- Use office-specific bundles (for example `OneDrive_1_4-15-2026`) as complementary local assets.
+
 Core docs:
 - 00_documentation/REPO_SCOPE_AND_BOUNDARIES.md
 - 00_documentation/ANALYSIS_DATASETS_RUNBOOK.md

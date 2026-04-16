@@ -69,6 +69,19 @@ Define practical, repository-specific AI skill modules that improve consistency 
 - Key constraint: accepted parquets contain both priority=0 and priority=1 rows. Filtering to priority=1 upstream breaks AARR regression in downstream scripts.
 - Trigger: editing any `2_build_cmrs2_*.r` script, `0_layer2_utils.r`, adding new hardcoded corrections, or debugging missing rows in accepted parquets.
 
+10. PowerPoint Generation Skill
+- Purpose: guide creation and extension of UNICEF-branded PowerPoint slide modules using the officer + xml2 approach, covering OOXML pitfalls, modular slide-function pattern, design token usage, and integration into orchestrator scripts.
+- Skill file: `00_ai/PPTX_GENERATION_SKILL.md`
+- Key constraint: `<a:endParaRPr>` must be the last child of `<a:p>` — inserting `<a:r>` after it causes invisible text.
+- Key constraint: UNICEF template title slides have empty placeholders (no `<a:r>`, only `<a:endParaRPr>`). Must clone font props and insert run before endParaRPr.
+- Trigger: building a new slide-type module, editing existing `00_pptx_*.r` modules, or debugging missing text in generated PPTX.
+
+11. Codes Naming Convention Skill
+- Purpose: document the numeric-prefix naming convention for scripts in `02_codes/` and `012_codes/` folders — `0_` for utilities, `00_` for module libraries, `1_` for conductors, `1a_`/`1b_` for sub-steps, `2_`+ for ordered pipeline steps.
+- Skill file: `00_ai/CODES_NAMING_CONVENTION_SKILL.md`
+- Key rule: `0_` and `00_` scripts are never sourced by the conductor. `00_` is for self-contained modules with public APIs; `0_` is for general helpers.
+- Trigger: creating, renaming, or reordering scripts in any codes folder.
+
 ## Definition Of Done For A Skill
 
 - Clear trigger condition.

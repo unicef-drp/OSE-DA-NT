@@ -21,6 +21,11 @@ for (pkg in c("officer", "rvg")) {
 library(officer)
 library(rvg)
 
+# --- Load slide modules ---------------------------------------------------
+codes_dir_ppt <- dirname(sys.frame(1)$ofile %||% ".")
+source(file.path(codes_dir_ppt, "00_pptx_design_tokens.r"))
+source(file.path(codes_dir_ppt, "00_pptx_title_slide.r"))
+
 # --- Paths ----------------------------------------------------------------
 if (!exists("projectFolder", envir = .GlobalEnv)) {
   source(file.path(getwd(), "profile_OSE-DA-NT.R"))
@@ -42,36 +47,62 @@ yr_20_ago   <- results$metadata$yr_20_ago
 has_numbers <- !is.null(results$highest_number)
 
 # --- UNICEF brand assets --------------------------------------------------
-brand_dir <- file.path(nutritionRoot, "github", "documentation", "unicef_brand", "_extracted")
-template_2025 <- file.path(
-  nutritionRoot,
-  "github",
-  "documentation",
-  "unicef_brand",
-  "OneDrive_1_4-13-2026",
-  "UNICEF Branded Presentation Template 2025.pptx"
+brand_root <- file.path(nutritionRoot, "github", "documentation", "unicef_brand")
+brand_dir <- file.path(brand_root, "_extracted")
+
+onedrive_dirs <- list.dirs(brand_root, recursive = FALSE, full.names = TRUE)
+onedrive_dirs <- onedrive_dirs[grepl("OneDrive", basename(onedrive_dirs), ignore.case = TRUE)]
+
+# First check brand_root (short path, avoids long-path issues)
+template_candidates <- c(
+  file.path(brand_root, "UNICEF Branded Presentation Template 2026.pptx"),
+  file.path(brand_root, "UNICEF Branded Presentation Template 2025.pptx")
 )
-template_fallback <- file.path(brand_dir, "template_2026.pptx")
 
-template_path <- if (file.exists(template_2025)) template_2025 else template_fallback
+# Then check inside OneDrive subfolders
+template_candidates <- c(template_candidates, unlist(lapply(onedrive_dirs, function(d) {
+  candidates <- c(
+    file.path(d, "Brand template_PowerPoint Presentation", "UNICEF Branded Presentation Template 2026.pptx"),
+    file.path(d, "UNICEF Branded Presentation Template 2026.pptx"),
+    file.path(d, "Brand template_PowerPoint Presentation", "UNICEF Branded Presentation Template 2025.pptx"),
+    file.path(d, "UNICEF Branded Presentation Template 2025.pptx")
+  )
+  candidates[file.exists(candidates)]
+})))
 
-if (!file.exists(template_path)) {
-  stop("UNICEF template not found: ", template_path)
+# Legacy fallback
+template_candidates <- c(template_candidates, file.path(brand_dir, "template_2026.pptx"))
+template_path <- template_candidates[file.exists(template_candidates)][1]
+
+if (is.na(template_path) || !nzchar(template_path)) {
+  stop(
+    "UNICEF template not found. Checked: ",
+    paste(template_candidates, collapse = ", ")
+  )
 }
 
-# --- UNICEF brand colours -------------------------------------------------
-unicef_cyan    <- "#00AEEF"
-unicef_dark    <- "#374EA2"
-unicef_green   <- "#00833D"
-unicef_yellow  <- "#FFC20E"
-unicef_orange  <- "#F26A21"
-unicef_red     <- "#E2231A"
-unicef_magenta <- "#961A49"
-unicef_purple  <- "#6A1E74"
-unicef_warmgrey <- "#777779"
-unicef_coolgrey <- "#ADAFB2"
-unicef_black   <- "#1D1D1B"
-brand_font     <- "Noto Sans"
+# Workaround: R's zip library cannot handle very long paths (common with
+# OneDrive/Teams sync folders). Copy to a temp file for read_pptx().
+if (nchar(template_path) > 200) {
+  tmp_template <- file.path(tempdir(), "unicef_template_tmp.pptx")
+  file.copy(template_path, tmp_template, overwrite = TRUE)
+  message("Copied template to temp path for long-path compatibility: ", tmp_template)
+  template_path <- tmp_template
+}
+
+# --- UNICEF brand colours (from design tokens) ----------------------------
+unicef_cyan    <- unicef_tokens$colour$cyan
+unicef_dark    <- unicef_tokens$colour$dark_blue
+unicef_green   <- unicef_tokens$colour$green
+unicef_yellow  <- unicef_tokens$colour$yellow
+unicef_orange  <- unicef_tokens$colour$orange
+unicef_red     <- unicef_tokens$colour$red
+unicef_magenta <- unicef_tokens$colour$magenta
+unicef_purple  <- unicef_tokens$colour$purple
+unicef_warmgrey <- unicef_tokens$colour$warm_grey
+unicef_coolgrey <- unicef_tokens$colour$cool_grey
+unicef_black   <- unicef_tokens$colour$black
+brand_font     <- unicef_tokens$font$family
 
 # --- ggplot2 theme (UNICEF brand-aligned) ---------------------------------
 theme_unicef <- theme_minimal(base_size = 16, base_family = brand_font) +
@@ -168,11 +199,16 @@ p_dot_10 <- results$improve_10yr %>%
   theme(legend.position = "top", legend.text = element_text(size = 13))
 
 # --- Build PowerPoint using UNICEF branded template -----------------------
-# Keep key template slides so title and thank-you slides stay brand-authentic.
-pptx <- read_pptx(template_path)
+# Pick a random title-slide variant (1-11) based on the title text hash,
+# keep the branded divider (slide 17) and thank-you slide (slide 71).
+title_text    <- "Stunting: Current Levels and Trends Over Two Decades"
+subtitle_text <- "Executive Director briefing"
 
+title_variant <- pick_title_variant(title_text)
+
+pptx <- read_pptx(template_path)
 n_template_slides <- length(pptx)
-keep_slides <- c(1, 17, 71)
+keep_slides <- c(title_variant, 17, 71)
 if (n_template_slides > 0) {
   for (i in seq(n_template_slides, 1)) {
     if (!(i %in% keep_slides)) {
@@ -181,33 +217,14 @@ if (n_template_slides > 0) {
   }
 }
 
-# --- Slide 1: Replace title/subtitle via direct XML text replacement ------
-# Template slide 1 uses a non-standard layout ("2_Number slide") so
-# ph_location_label() cannot target its placeholders. Instead we edit the
-# text nodes in the slide XML directly, preserving all original formatting,
-# position and styling from the template.
-pptx <- on_slide(pptx, index = 1)
-
-slide_xml <- pptx$slide$get_slide(1)$get()
-sl_ns <- xml2::xml_ns(slide_xml)
-sps <- xml2::xml_find_all(slide_xml, "//p:sp", sl_ns)
-
-for (sp in sps) {
-  t_nodes <- xml2::xml_find_all(sp, ".//a:t", sl_ns)
-  combined <- paste(sapply(t_nodes, xml2::xml_text), collapse = "")
-
-  if (grepl("Presentation title here", combined) && length(t_nodes) > 0) {
-    xml2::xml_set_text(t_nodes[[1]],
-      "Stunting: where burdens remain highest and where progress is fastest")
-    if (length(t_nodes) > 1) for (j in 2:length(t_nodes)) xml2::xml_set_text(t_nodes[[j]], "")
-  }
-
-  if (grepl("Your subheadings here", combined) && length(t_nodes) > 0) {
-    xml2::xml_set_text(t_nodes[[1]],
-      paste0("Executive Director briefing  |  ", format(Sys.Date(), "%d %B %Y")))
-    if (length(t_nodes) > 1) for (j in 2:length(t_nodes)) xml2::xml_set_text(t_nodes[[j]], "")
-  }
-}
+# --- Slide 1: Replace title/subtitle using the title-slide module ---------
+apply_title_text(
+  pptx, slide_index = 1,
+  title    = title_text,
+  subtitle = subtitle_text,
+  section  = "Office of Strategy and Evidence\nData & Analytics Section - Nutrition",
+  date     = format(Sys.Date(), "%B %Y")
+)
 
 # Slide 2 is retained from the template as a branded nutrition photo divider.
 

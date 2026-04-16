@@ -44,6 +44,20 @@ Run scripts from the **repository root** (so `profile_OSE-DA-NT.R` resolves):
 
 R packages: `arrow`, `dplyr`, `tidyr`, `readr`, `ggplot2`, `countrycode`, `officer`, `rvg`, `openxlsx`.
 
+## Brand Assets
+
+- Brand root (resolved via `nutritionRoot`): `github/documentation/unicef_brand`
+- Global UNICEF guidance/template resources remain in scope and are still used.
+- Office-specific resources (Innocenti) in `OneDrive_1_4-15-2026` are complementary and should be used for local office identity assets (e.g., signature, letterhead, office naming), not as a replacement for global UNICEF brand guidance.
+- The PPT script searches for `UNICEF Branded Presentation Template 2026.pptx` (then 2025) in the brand root first, then inside `OneDrive_*` subfolders, with a legacy fallback to `_extracted/template_2026.pptx`.
+
+## Slide Modules
+
+| Module | Purpose |
+|--------|----------|
+| `02_codes/00_pptx_design_tokens.r` | UNICEF brand colours, font specs, text-box constraints. All slide modules consume this. |
+| `02_codes/00_pptx_title_slide.r` | Title slide generation: variant selection (excluding slide 9), text replacement with auto-fit and auto-width, multi-line support via `\n`, vertical spacing adjustments. |
+
 ## Notes
 
 - "Improvement" is measured as absolute reduction in stunting prevalence (percentage points).
