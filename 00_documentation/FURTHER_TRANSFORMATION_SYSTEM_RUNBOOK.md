@@ -1,18 +1,22 @@
 # Further Transformation System Runbook
 
-Last updated: 2026-04-15
+Last updated: 2026-04-16
 
 ## Scope
 
-This runbook covers the active workflow under:
+This runbook covers the active workflows under:
 - further_transformation_system/projections_progress_class/
+- further_transformation_system/animated_scatterplots/
 
-Main code folder:
+Main code folders:
 - further_transformation_system/projections_progress_class/012_codes/
+- further_transformation_system/animated_scatterplots/02_codes/
 
 ## Pipeline Goal
 
-Generate nutrition projections and progress classifications for key indicator groups and produce consolidated final outputs for downstream use.
+Generate nutrition projections, progress classifications, and animated
+visualizations for key indicator groups, producing consolidated outputs
+for downstream use.
 
 Legacy manuals, especially the overall CND manual and IYCF/birthweight/vitamin A instructions, frame this layer as downstream of standardized warehouse/CMRS outputs. The current repo structure keeps that same intent, but narrows it to nutrition-owned transformation logic.
 
@@ -88,6 +92,68 @@ Behavior:
 - Some business rules are intentionally hardcoded for nutrition-team requested classifications.
 - Any change to output filenames should be treated as a breaking interface change and documented before merge.
 - The legacy documentation set consistently treats projections/reporting outputs as dependent on curated upstream indicator inputs, so upstream interface assumptions should remain explicit whenever this workflow changes.
+
+---
+
+## Animated Scatterplots Pipeline
+
+### Pipeline Goal
+
+Produce animated GIF and MP4 bubble-scatterplots showing regional nutrition
+trends (prevalence vs. number of affected children over time) for stunting,
+overweight, and wasting. Each indicator gets a base animation plus a looped
+version with UNICEF-blue panel overlays carrying headline/subline messages.
+
+See `further_transformation_system/animated_scatterplots/README.md` for the
+full pipeline README including code structure, configurable parameters, and
+instructions for adding new indicators.
+
+### Entrypoint
+
+- further_transformation_system/animated_scatterplots/02_codes/1_execute.r
+
+### Execution Order
+
+1. 1_execute.r — loads libraries, resolves paths, sources shared functions
+2. 0_scatterplot_functions.r — shared data-loading, plotting, and rendering functions
+3. animated_scatterplot_stunting.R — stunting indicator (parquet → regional aggregation)
+4. animated_scatterplot_overweight.R — overweight indicator (parquet → regional aggregation)
+5. animated_scatterplot_wasting.R — wasting indicator (pre-aggregated CSV, special case)
+
+### Input Sources
+
+**Standard indicators (stunting, overweight):**
+- **Country series**: `cmrs2_series_accepted.parquet` from `analysisDatasetsInputDir`
+  - `ANT_HAZ_NE2_MOD` (stunting), `ANT_WHZ_PO2_MOD` (overweight)
+  - Proportion 0–1 scale, converted to percent internally
+- **Crosswalk**: `groups_for_agg.csv` from DW-Production `interdir`
+- **Population**: `base_population_1990_2030.csv` from DW-Production `inputdir`
+
+**Wasting (special case):**
+- **Pre-aggregated regional estimates**: `agg_ant_wasting.csv` from `interdir/agg_domain/`
+  - Already aggregated to UNICEF Regions; region names harmonized internally
+  - Population for bubble sizes still computed from country-level data via crosswalk
+
+### Output Location
+
+- `{nutritionRoot}/github/animated_scatterplots/`
+
+### Output Files (per indicator)
+
+- `{indicator}_regions_bubble.gif` — base animated scatterplot (120 frames, 6 fps)
+- `{indicator}_regions_bubble.mp4` — MP4 version (10 fps)
+- `{indicator}_filler_loops_UNICEFblue_slide.gif` — looped version with UNICEF panel overlays
+- `{indicator}_filler_loops_UNICEFblue_slide.mp4` — MP4 of looped version
+- `{indicator}_frames_unicef/` — individual frame PNGs
+
+Indicators: stunting, overweight, wasting
+
+### Dependencies
+
+R packages: arrow, dplyr, readr, ggplot2, gganimate, scales, grid,
+RColorBrewer, ggrepel, av, magick, gifski, ragg, yaml
+
+---
 
 ## Dependencies
 
