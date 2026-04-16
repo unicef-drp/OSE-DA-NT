@@ -77,6 +77,7 @@ To extract additional icons, inspect slides 65–70 of the template PPTX (icons 
 | `02_codes/00_pptx_stat_slide.r` | Statistic callout slides (1, 2, or 4 stats) on "Title Only" layout with absolute positioning, rich formatting via `block_list`/`fpar`/`ftext`, and a source-text footer. |
 | `02_codes/00_pptx_photo_stat_slide.r` | Full-bleed photo stat slides (template slides 57–59). Retains the embedded photo and layout; replaces the stat value, description, credit, and caption text via XML mutation. Shapes are identified by font size (≥ 100 pt for stat value), name pattern (`"^Shape"` for description), and rotation (270° for credit, 180° for caption) to handle name variation across the three template variants. |
 | `02_codes/00_pptx_section_slide.r` | Overview and section break slides using layouts "Title and Content" / "2_Title and Content" (template slides 30–31 design). Left side: title + body text; right side: empty picture placeholder for the user to insert their own photo in PowerPoint. Used for the presentation overview and as section dividers between content blocks. |
+| `02_codes/00_pptx_chart_slide.r` | Data chart slides with two variants: `add_chart_slide()` for full-width charts and `add_chart_bullet_slide()` for charts with 2–3 short talking-point bullets on the right. Both use "Title Only" layout with absolute positioning, render ggplot objects as editable vector graphics via `dml()`, add an italic source-text footer, and attach detailed speaker notes for presentation interpretation. |
 
 ## Notes
 

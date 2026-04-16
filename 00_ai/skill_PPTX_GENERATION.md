@@ -31,6 +31,8 @@ Apply this skill when:
   00_pptx_bullet_slide.r    ← bullet slide module (add-from-layout)
   00_pptx_section_slide.r   ← section/overview slide module
   00_pptx_stat_slide.r      ← statistic callout slide module (1/2/4 stats)
+  00_pptx_photo_stat_slide.r ← full-bleed photo stat (retain-and-replace)
+  00_pptx_chart_slide.r     ← chart slide module (full-width + chart+bullets)
   00_pptx_<type>_slide.r    ← future modules follow same pattern
   4_create_ppt.r            ← orchestrator: sources modules, builds deck
 ```
@@ -42,8 +44,9 @@ Apply this skill when:
   called by the conductor (`1_execute_conductor.r`); instead the
   orchestrator step (`4_create_ppt.r`) sources them directly.
 - Each module exposes a public API (e.g. `make_title_slide()`,
-  `apply_title_text()`, `add_bullet_slides()`) and keeps helper
-  functions private (`.prefixed`).
+  `apply_title_text()`, `add_bullet_slides()`, `add_chart_slide()`,
+  `add_chart_bullet_slide()`) and keeps helper functions private
+  (`.prefixed`).
 
 ### Slide Construction Strategy
 
@@ -166,6 +169,35 @@ populating it. This means post-processing code cannot use `<p:ph type="body">`
 to locate the content shape. Instead, find the shape by its **name** attribute
 (e.g. `"Content Placeholder 2"`) via `<p:cNvPr name="...">` on the `<p:sp>`.
 
+### 2i. `buNone` and `buChar` are mutually exclusive
+
+officer emits `<a:buNone/>` in `<a:pPr>` by default. Adding `<a:buChar>`
+alongside it violates the OOXML schema (CT_TextNoBullet vs CT_TextCharBullet
+in a choice group). PowerPoint will show a repair dialog and strip the
+offending elements. Always remove `<a:buNone/>` before injecting any
+`buChar`/`buAutoNum`/`buFont`/`buClr` elements.
+
+### 2j. Freeform text boxes do not render OOXML bullets
+
+Text boxes created with `ph_location()` (not layout placeholders) lack
+`<a:lstStyle>` shape-level bullet inheritance. Even with correct
+`<a:buChar>`, `marL="342900"`, `indent="-342900"`, and `buNone` removal,
+bullets remain invisible. Use literal Unicode bullet characters (`\u2022`)
+as `ftext()` runs instead — see Section 6 (Chart Slide Module).
+
+### 2k. officer's in-memory XML and R6 references
+
+officer keeps slide XML in-memory as R6 objects with reference semantics.
+To mutate the XML of a specific slide in place:
+
+```r
+xml_doc <- pptx$slide$get_slide(sl_idx)$get()   # live reference
+# mutations here persist when officer writes the PPTX via print()
+```
+
+Writing to disk via `xml2::write_xml()` does NOT work — officer rebuilds
+from its in-memory R6 objects, discarding any disk changes.
+
 ---
 
 ## 3. Text-Box Manipulation
@@ -231,7 +263,65 @@ tokens file.
 
 ---
 
-## 6. New Module Checklist
+## 6. Chart Slide Module
+
+The chart slide module (`00_pptx_chart_slide.r`) provides two variants:
+
+| Function | Layout | Description |
+|----------|--------|-------------|
+| `add_chart_slide()` | Full-width | Chart at (0.5, 1.7, 12.0×5.1), title 20pt bold, source footer, speaker notes |
+| `add_chart_bullet_slide()` | Chart + bullets | Chart left (0.5, 1.7, 8.0×5.1), bullet panel right (8.8, 1.8, 3.8×4.8) |
+
+Both use "Title Only" layout (master "UNICEF") with absolute positioning.
+
+### Bullet rendering in freeform text boxes
+
+officer's `block_list` placed into a freeform text box (`ph_location()`) does
+not inherit layout-level bullet formatting. OOXML `<a:buChar>` injection into
+the in-memory XML was tested extensively but does **not** render reliably:
+
+- officer emits `<a:buNone/>` by default; removing it and injecting `buChar`
+  with correct `marL`/`indent` still produced invisible bullets.
+- Root cause: freeform text boxes lack the `<a:lstStyle>` shape-level
+  bullet inheritance that layout placeholders provide.
+
+**Working approach:** Use literal Unicode bullet characters (`\u2022`) as a
+separate `ftext()` run with desired colour, followed by the text run:
+
+```r
+fpar(
+  ftext("\u2022  ", prop = bullet_marker_style),
+  ftext(text, prop = bullet_text_style),
+  fp_p = fp_par(padding.bottom = 12, text.align = "left")
+)
+```
+
+This is plain text content — it renders reliably in any text box without
+XML post-processing.
+
+### Colour awareness
+
+The "Title Only" layout on the UNICEF template has a **blue background**.
+Bullet text must use white (`#FFFFFF`) or another high-contrast colour.
+Do not use dark blue or cyan — they are invisible on the blue background.
+
+### ggplot integration
+
+- Charts are wrapped in `dml(ggobj = chart)` for editable vector graphics.
+- Remove ggplot titles/subtitles/captions when the slide already has a title:
+  `labs(title = NULL, subtitle = NULL, caption = NULL)`.
+- Set `theme_unicef` to blank out title elements:
+  `plot.title = element_blank(), plot.subtitle = element_blank(), plot.caption = element_blank()`.
+- Title font size at 20pt bold prevents wrapping and overlap with the chart.
+
+### Speaker notes
+
+`.add_speaker_notes()` splits on `\n`, builds a `block_list` of 12pt Noto Sans
+paragraphs, and calls `set_notes()` with `notes_location_type()`.
+
+---
+
+## 7. New Module Checklist
 
 When creating a new slide module (`00_pptx_<type>_slide.r`):
 

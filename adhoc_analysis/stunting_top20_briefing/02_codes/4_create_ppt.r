@@ -29,6 +29,7 @@ source(file.path(codes_dir_ppt, "00_pptx_bullet_slide.r"))
 source(file.path(codes_dir_ppt, "00_pptx_section_slide.r"))
 source(file.path(codes_dir_ppt, "00_pptx_stat_slide.r"))
 source(file.path(codes_dir_ppt, "00_pptx_photo_stat_slide.r"))
+source(file.path(codes_dir_ppt, "00_pptx_chart_slide.r"))
 
 # --- Paths ----------------------------------------------------------------
 if (!exists("projectFolder", envir = .GlobalEnv)) {
@@ -120,16 +121,16 @@ brand_font     <- unicef_tokens$font$family
 # --- ggplot2 theme (UNICEF brand-aligned) ---------------------------------
 theme_unicef <- theme_minimal(base_size = 16, base_family = brand_font) +
   theme(
-    plot.title       = element_text(face = "bold", size = 24, colour = unicef_dark),
-    plot.subtitle    = element_text(size = 16, colour = unicef_warmgrey, margin = margin(b = 10)),
-    plot.caption     = element_text(size = 11, colour = unicef_coolgrey, hjust = 0),
+    plot.title       = element_blank(),
+    plot.subtitle    = element_blank(),
+    plot.caption     = element_blank(),
     axis.title       = element_text(size = 14, colour = unicef_warmgrey),
     axis.text        = element_text(size = 13, colour = unicef_black),
     panel.grid.major.y = element_blank(),
     panel.grid.major.x = element_line(colour = "#E6E6E6", linewidth = 0.5),
     panel.grid.minor   = element_blank(),
     legend.position  = "none",
-    plot.margin      = margin(10, 20, 10, 10)
+    plot.margin      = margin(5, 20, 5, 10)
   )
 
 # --- Chart 1: Highest prevalence (horizontal bar) ------------------------
@@ -144,7 +145,6 @@ p_highest <- results$highest %>%
   coord_flip(ylim = c(0, max(results$highest$prevalence, na.rm = TRUE) * 1.15)) +
   labs(
     title = NULL, subtitle = NULL,
-    caption  = "Source: UNICEF/WHO/World Bank Joint Malnutrition Estimates",
     x = NULL, y = "Prevalence (%)"
   ) +
   scale_y_continuous(labels = label_percent(scale = 1)) +
@@ -162,7 +162,6 @@ p_improve_10 <- results$improve_10yr %>%
   coord_flip(ylim = c(0, max(abs(results$improve_10yr$change_pp), na.rm = TRUE) * 1.15)) +
   labs(
     title = NULL, subtitle = NULL,
-    caption  = "Source: UNICEF/WHO/World Bank Joint Malnutrition Estimates",
     x = NULL, y = "Reduction (pp)"
   ) +
   theme_unicef
@@ -179,7 +178,6 @@ p_improve_20 <- results$improve_20yr %>%
   coord_flip(ylim = c(0, max(abs(results$improve_20yr$change_pp), na.rm = TRUE) * 1.15)) +
   labs(
     title = NULL, subtitle = NULL,
-    caption  = "Source: UNICEF/WHO/World Bank Joint Malnutrition Estimates",
     x = NULL, y = "Reduction (pp)"
   ) +
   theme_unicef
@@ -204,7 +202,6 @@ p_dot_10 <- results$improve_10yr %>%
   labs(
     title = NULL,
     subtitle = NULL,
-    caption  = "Source: UNICEF/WHO/World Bank Joint Malnutrition Estimates",
     x = "Prevalence (%)", y = NULL, colour = NULL
   ) +
   scale_x_continuous(labels = label_percent(scale = 1)) +
@@ -384,33 +381,68 @@ pptx <- add_stat_slide(pptx,
   title = "Stunting prevalence: key metrics",
   source_text = jme_source)
 
-pptx <- pptx %>%
-  add_slide(layout = "Title Only", master = "UNICEF") %>%
-  ph_with(value = paste0("Highest stunting prevalence (", latest_year, ")"),
-          location = ph_location_type(type = "title")) %>%
-  ph_with(value = dml(ggobj = p_highest),
-          location = ph_location(left = 0.7, top = 1.5, width = 11.3, height = 5.3))
+pptx <- add_chart_bullet_slide(pptx,
+  title   = paste0("Highest stunting prevalence (", latest_year, ")"),
+  chart   = p_highest,
+  bullets = c(
+    "Concentrated in sub-Saharan Africa and South Asia",
+    "Prevalence exceeds 30% in most top-15 countries",
+    "Structural drivers: poverty, food insecurity, poor WASH"
+  ),
+  source_text = jme_source,
+  notes   = paste0(
+    "This chart ranks the 15 countries with the highest stunting prevalence among children ",
+    "under 5 in ", latest_year, " based on UNICEF/WHO/World Bank JME modelled estimates.\n",
+    "Stunting remains heavily concentrated in sub-Saharan Africa and South Asia, where ",
+    "underlying determinants\u2014including poverty, food insecurity, inadequate dietary diversity, ",
+    "and poor water, sanitation, and hygiene (WASH)\u2014persist.\n",
+    "Countries at the top of this ranking represent priority settings for accelerated nutrition action."
+  ))
 
-pptx <- pptx %>%
-  add_slide(layout = "Title Only", master = "UNICEF") %>%
-  ph_with(value = paste0("Biggest reduction in stunting: ", yr_10_ago, "\u2013", latest_year),
-          location = ph_location_type(type = "title")) %>%
-  ph_with(value = dml(ggobj = p_improve_10),
-          location = ph_location(left = 0.7, top = 1.5, width = 11.3, height = 5.3))
+pptx <- add_chart_slide(pptx,
+  title   = paste0("Biggest reduction in stunting: ", yr_10_ago, "\u2013", latest_year),
+  chart   = p_improve_10,
+  source_text = jme_source,
+  notes   = paste0(
+    "This chart shows the 15 countries with the largest absolute reductions in stunting prevalence ",
+    "(percentage points) over the past decade (", yr_10_ago, "\u2013", latest_year, ").\n",
+    "Substantial progress has been achieved in several countries, demonstrating that sustained ",
+    "investment in nutrition-specific and nutrition-sensitive interventions can yield significant ",
+    "declines.\n",
+    "Reductions of this magnitude typically reflect a combination of improved infant and young child ",
+    "feeding practices, expanded health-service coverage, economic growth, and improved WASH infrastructure."
+  ))
 
-pptx <- pptx %>%
-  add_slide(layout = "Title Only", master = "UNICEF") %>%
-  ph_with(value = paste0("Stunting prevalence: before and after (", yr_10_ago, " vs ", latest_year, ")"),
-          location = ph_location_type(type = "title")) %>%
-  ph_with(value = dml(ggobj = p_dot_10),
-          location = ph_location(left = 0.7, top = 1.5, width = 11.3, height = 5.3))
+pptx <- add_chart_bullet_slide(pptx,
+  title   = paste0("Stunting prevalence: before and after (", yr_10_ago, " vs ", latest_year, ")"),
+  chart   = p_dot_10,
+  bullets = c(
+    "Green dot = current; orange = baseline",
+    "Wider gaps signal faster progress",
+    "Some high-burden countries show stagnation"
+  ),
+  source_text = jme_source,
+  notes   = paste0(
+    "The dot plot compares stunting prevalence in ", yr_10_ago, " (orange) versus ", latest_year,
+    " (green) for the top 15 improvers.\n",
+    "The horizontal distance between dots indicates the magnitude of the reduction. Countries with ",
+    "wider gaps achieved more progress, while narrow gaps suggest slower change despite remaining ",
+    "high prevalence.\n",
+    "This visual helps identify where progress is real and where additional effort is urgently needed."
+  ))
 
-pptx <- pptx %>%
-  add_slide(layout = "Title Only", master = "UNICEF") %>%
-  ph_with(value = paste0("Biggest reduction in stunting: ", yr_20_ago, "\u2013", latest_year),
-          location = ph_location_type(type = "title")) %>%
-  ph_with(value = dml(ggobj = p_improve_20),
-          location = ph_location(left = 0.7, top = 1.5, width = 11.3, height = 5.3))
+pptx <- add_chart_slide(pptx,
+  title   = paste0("Biggest reduction in stunting: ", yr_20_ago, "\u2013", latest_year),
+  chart   = p_improve_20,
+  source_text = jme_source,
+  notes   = paste0(
+    "This chart extends the time horizon to two decades (", yr_20_ago, "\u2013", latest_year,
+    "), showing the 15 countries with the largest absolute reductions over 20 years.\n",
+    "Longer time frames reveal sustained structural change. Countries that appear in both the ",
+    "10-year and 20-year lists have maintained momentum, while those new to the 20-year list ",
+    "may have experienced earlier gains that have since slowed.\n",
+    "These trends inform long-term programming strategy and advocacy for continued investment."
+  ))
 
 # =========================================================================
 # SECTION B: Burden (number of stunted children)
@@ -430,9 +462,8 @@ if (has_numbers) {
               hjust = -0.1, size = 4.4, colour = unicef_warmgrey, family = brand_font) +
     coord_flip(ylim = c(0, max(results$highest_number$number_thousands, na.rm = TRUE) * 1.15)) +
     labs(
-      title    = paste0("Top 15 countries: highest number of stunted children (", latest_year, ")"),
-      subtitle = "Children under 5 years, modelled estimates (millions)",
-      caption  = "Source: UNICEF/WHO/World Bank Joint Malnutrition Estimates",
+      title    = NULL,
+      subtitle = NULL,
       x = NULL, y = "Stunted children (millions)"
     ) +
     scale_y_continuous(labels = function(x) paste0(round(x / 1000, 1), " M")) +
@@ -448,9 +479,8 @@ if (has_numbers) {
               hjust = -0.1, size = 4.4, colour = unicef_warmgrey, family = brand_font) +
     coord_flip(ylim = c(0, max(abs(results$improve_10yr_number$change_th), na.rm = TRUE) * 1.15)) +
     labs(
-      title    = paste0("Biggest reduction in stunted numbers: ", yr_10_ago, "\u2013", latest_year),
-      subtitle = "Absolute decrease in number of stunted children (millions)",
-      caption  = "Source: UNICEF/WHO/World Bank Joint Malnutrition Estimates",
+      title    = NULL,
+      subtitle = NULL,
       x = NULL, y = "Reduction (millions)"
     ) +
     scale_y_continuous(labels = function(x) paste0(round(x / 1000, 1), " M")) +
@@ -466,9 +496,8 @@ if (has_numbers) {
               hjust = -0.1, size = 4.4, colour = unicef_warmgrey, family = brand_font) +
     coord_flip(ylim = c(0, max(abs(results$improve_20yr_number$change_th), na.rm = TRUE) * 1.15)) +
     labs(
-      title    = paste0("Biggest reduction in stunted numbers: ", yr_20_ago, "\u2013", latest_year),
-      subtitle = "Absolute decrease in number of stunted children (millions)",
-      caption  = "Source: UNICEF/WHO/World Bank Joint Malnutrition Estimates",
+      title    = NULL,
+      subtitle = NULL,
       x = NULL, y = "Reduction (millions)"
     ) +
     scale_y_continuous(labels = function(x) paste0(round(x / 1000, 1), " M")) +
@@ -492,26 +521,49 @@ if (has_numbers) {
     title = "Stunting burden",
     source_text = jme_source)
 
-  pptx <- pptx %>%
-    add_slide(layout = "Title Only", master = "UNICEF") %>%
-    ph_with(value = paste0("Highest number of stunted children (", latest_year, ")"),
-            location = ph_location_type(type = "title")) %>%
-    ph_with(value = dml(ggobj = p_highest_num),
-            location = ph_location(left = 0.7, top = 1.5, width = 11.3, height = 5.3))
+  pptx <- add_chart_bullet_slide(pptx,
+    title   = paste0("Highest number of stunted children (", latest_year, ")"),
+    chart   = p_highest_num,
+    bullets = c(
+      "A few countries account for the majority",
+      "India alone exceeds all others combined",
+      "Numbers reflect population size and prevalence"
+    ),
+    source_text = jme_source,
+    notes   = paste0(
+      "This chart ranks the 15 countries with the highest absolute number of stunted children ",
+      "under 5 in ", latest_year, ".\n",
+      "While prevalence captures the intensity of the problem within a country, absolute numbers ",
+      "reflect the scale of the burden. A small number of high-population countries account for the ",
+      "vast majority of the global total.\n",
+      "These figures highlight where the largest gains can be achieved through scaled-up programming."
+    ))
 
-  pptx <- pptx %>%
-    add_slide(layout = "Title Only", master = "UNICEF") %>%
-    ph_with(value = paste0("Biggest reduction in stunted numbers: ", yr_10_ago, "\u2013", latest_year),
-            location = ph_location_type(type = "title")) %>%
-    ph_with(value = dml(ggobj = p_improve_10_num),
-            location = ph_location(left = 0.7, top = 1.5, width = 11.3, height = 5.3))
+  pptx <- add_chart_slide(pptx,
+    title   = paste0("Biggest reduction in stunted numbers: ", yr_10_ago, "\u2013", latest_year),
+    chart   = p_improve_10_num,
+    source_text = jme_source,
+    notes   = paste0(
+      "This chart shows the 15 countries with the largest absolute reductions in the number of ",
+      "stunted children over the past decade (", yr_10_ago, "\u2013", latest_year, ").\n",
+      "Reductions in absolute numbers can result from declining prevalence, changing birth rates, ",
+      "or both. Countries with large population decline in the under-5 cohort may show number ",
+      "reductions even if prevalence has not fallen.\n",
+      "Interpreting number changes alongside prevalence changes provides a fuller picture of progress."
+    ))
 
-  pptx <- pptx %>%
-    add_slide(layout = "Title Only", master = "UNICEF") %>%
-    ph_with(value = paste0("Biggest reduction in stunted numbers: ", yr_20_ago, "\u2013", latest_year),
-            location = ph_location_type(type = "title")) %>%
-    ph_with(value = dml(ggobj = p_improve_20_num),
-            location = ph_location(left = 0.7, top = 1.5, width = 11.3, height = 5.3))
+  pptx <- add_chart_slide(pptx,
+    title   = paste0("Biggest reduction in stunted numbers: ", yr_20_ago, "\u2013", latest_year),
+    chart   = p_improve_20_num,
+    source_text = jme_source,
+    notes   = paste0(
+      "This chart extends the analysis to 20 years (", yr_20_ago, "\u2013", latest_year,
+      "), showing countries with the largest absolute reductions in stunted children.\n",
+      "Long-term trends in absolute numbers are influenced by demographic transitions as well as ",
+      "nutritional improvements. Countries appearing here demonstrate cumulative gains from sustained ",
+      "nutrition investments.\n",
+      "These data support the case for long-term, predictable funding for nutrition programming."
+    ))
 }
 
 # =========================================================================
