@@ -1,18 +1,22 @@
 # Further Transformation System Runbook
 
-Last updated: 2026-04-15
+Last updated: 2026-04-16
 
 ## Scope
 
-This runbook covers the active workflow under:
+This runbook covers the active workflows under:
 - further_transformation_system/projections_progress_class/
+- further_transformation_system/animated_scatterplots/
 
-Main code folder:
+Main code folders:
 - further_transformation_system/projections_progress_class/012_codes/
+- further_transformation_system/animated_scatterplots/02_codes/
 
 ## Pipeline Goal
 
-Generate nutrition projections and progress classifications for key indicator groups and produce consolidated final outputs for downstream use.
+Generate nutrition projections, progress classifications, and animated
+visualizations for key indicator groups, producing consolidated outputs
+for downstream use.
 
 Legacy manuals, especially the overall CND manual and IYCF/birthweight/vitamin A instructions, frame this layer as downstream of standardized warehouse/CMRS outputs. The current repo structure keeps that same intent, but narrows it to nutrition-owned transformation logic.
 
@@ -88,6 +92,52 @@ Behavior:
 - Some business rules are intentionally hardcoded for nutrition-team requested classifications.
 - Any change to output filenames should be treated as a breaking interface change and documented before merge.
 - The legacy documentation set consistently treats projections/reporting outputs as dependent on curated upstream indicator inputs, so upstream interface assumptions should remain explicit whenever this workflow changes.
+
+---
+
+## Animated Scatterplots Pipeline
+
+### Pipeline Goal
+
+Produce animated GIF and MP4 visualizations of regional stunting trends
+(prevalence × number of affected children) using country-level modeled series
+from analysis_datasets, aggregated to UNICEF reporting regions via population
+weighting.
+
+### Entrypoint
+
+- further_transformation_system/animated_scatterplots/02_codes/1_execute.r
+
+### Execution Order
+
+1. 1_execute.r — loads libraries, resolves paths, sources worker
+2. animated_scatterplot_stunting.R — reads parquet, aggregates, renders animations
+
+### Input Sources
+
+- **Country series**: `cmrs2_series_accepted.parquet` from `analysisDatasetsInputDir`
+  (indicator `ANT_HAZ_NE2_MOD`, proportion 0–1 scale, converted to percent)
+- **Crosswalk**: `groups_for_agg.csv` from DW-Production `interdir`
+- **Population**: `base_population_1990_2030.csv` from DW-Production `inputdir`
+
+### Output Location
+
+- `{nutritionRoot}/github/animated_scatterplots/`
+
+### Output Files
+
+- stunting_regions_bubble.gif — base animated scatterplot
+- stunting_regions_bubble.mp4 — MP4 version
+- stunting_filler_loops_UNICEFblue_slide.gif — looped version with UNICEF panel overlays
+- stunting_filler_loops_UNICEFblue_slide.mp4 — MP4 of looped version
+- stunting_frames_unicef/ — individual frame PNGs
+
+### Dependencies
+
+R packages: arrow, dplyr, readr, ggplot2, gganimate, scales, grid,
+RColorBrewer, av, magick, gifski, ragg, yaml
+
+---
 
 ## Dependencies
 
