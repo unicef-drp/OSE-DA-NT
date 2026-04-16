@@ -28,6 +28,7 @@ source(file.path(codes_dir_ppt, "00_pptx_title_slide.r"))
 source(file.path(codes_dir_ppt, "00_pptx_bullet_slide.r"))
 source(file.path(codes_dir_ppt, "00_pptx_section_slide.r"))
 source(file.path(codes_dir_ppt, "00_pptx_stat_slide.r"))
+source(file.path(codes_dir_ppt, "00_pptx_photo_stat_slide.r"))
 
 # --- Paths ----------------------------------------------------------------
 if (!exists("projectFolder", envir = .GlobalEnv)) {
@@ -218,10 +219,11 @@ subtitle_text <- "Executive Director briefing"
 
 title_variant <- pick_title_variant(title_text)
 thankyou_variant <- sample(71:76, 1)
+photo_stat_variant <- 57L   # full-bleed photo stat slide (57-59 available)
 
 pptx <- read_pptx(template_path)
 n_template_slides <- length(pptx)
-keep_slides <- c(17, title_variant, thankyou_variant)
+keep_slides <- c(17, title_variant, thankyou_variant, photo_stat_variant)
 if (n_template_slides > 0) {
   for (i in seq(n_template_slides, 1)) {
     if (!(i %in% keep_slides)) {
@@ -229,9 +231,18 @@ if (n_template_slides > 0) {
     }
   }
 }
-# Track position of thank-you slide among retained template slides
+# After removal, retained slides are in ascending template-index order:
+#   pos 1 = title_variant (1-11)
+#   pos 2 = slide 17 (branded divider)
+#   pos 3 = photo_stat_variant (57)
+#   pos 4 = thankyou (71-76)
+# Content slides are appended at pos 5+.
+# Track position of retained template slides.
 # After removal, slides are in original template order:
-#   position 1 = title_variant (1-11), position 2 = slide 17, position 3 = thank-you
+#   position 1 = title_variant (1-11)
+#   position 2 = slide 17 (divider)
+#   position 3 = photo_stat_variant (57)
+#   position 4 = thank-you (71-76)
 # Apply title text at position 1 (where the title variant naturally sits).
 pptx <- apply_title_text(
   pptx, slide_index = 1,
@@ -242,7 +253,8 @@ pptx <- apply_title_text(
 )
 
 # Slide 1 is the title (title_variant), slide 2 is the branded divider (17),
-# slide 3 is the thank-you.  New slides are appended after slide 3.
+# slide 3 is the photo stat (57), slide 4 is the thank-you.
+# New slides are appended after slide 4.
 # After the deck is built we post-process the PPTX zip to reorder slides
 # (see below) because officer::move_slide is non-functional in this version.
 
@@ -334,6 +346,19 @@ if (has_numbers) {
 pptx <- add_stat_slide(pptx, stats = glance_stats,
                        title = "At a Glance",
                        source_text = jme_source)
+
+# Record slide count so the reorder logic can place the photo stat after this
+photo_stat_after_pos <- length(pptx)  # internal position of at-a-glance (last slide added)
+
+# --- Photo stat slide: dramatic visual callout ----------------------------
+# Apply text to the retained photo slide (internal position 3)
+pptx <- apply_photo_stat_text(
+  pptx, slide_index = 3L,
+  value       = sprintf("%.1f%%", top_high_prev),
+  description = paste0(top_high_country, " has the highest\nstunting prevalence among\nchildren under 5 (", latest_year, ")"),
+  credit      = NULL,   # keep original photo credit
+  caption     = NULL    # keep original photo caption
+)
 
 # =========================================================================
 # SECTION A: Prevalence
@@ -575,10 +600,25 @@ print(pptx, target = pptx_path)
 }
 
 # Build the reorder map:
-# Internal positions: 1=title, 2=divider, 3=thankyou, 4..N=content slides
-# Desired: divider(2), title(1), content(4..N), thankyou(3)
+# Internal positions: 1=title, 2=divider, 3=photo_stat, 4=thankyou, 5..N=content
+# Content starts at position 5 (n_kept + 1 where n_kept = 4).
+# photo_stat_after_pos records the internal position of the at-a-glance slide,
+# so the photo stat (pos 3) goes right after it in the final order.
+# Desired: divider(2), title(1), content_before_photo(5..K),
+#          photo_stat(3), content_after_photo(K+1..N), thankyou(4)
 n_slides <- length(pptx)
-new_order <- c(2L, 1L, seq(4L, n_slides), 3L)
+n_kept <- 4L  # title, divider, photo_stat, thankyou
+content_start <- n_kept + 1L
+new_order <- c(
+  2L,                                                       # divider
+  1L,                                                       # title
+  seq(content_start, photo_stat_after_pos),                 # content before photo
+  3L,                                                       # photo stat
+  if (photo_stat_after_pos < n_slides)
+    seq(photo_stat_after_pos + 1L, n_slides) else integer(0), # remaining content
+  4L                                                        # thank-you
+)
+stopifnot(length(new_order) == n_slides)
 .reorder_pptx_slides(pptx_path, new_order)
 message("PowerPoint saved: ", pptx_path)
 

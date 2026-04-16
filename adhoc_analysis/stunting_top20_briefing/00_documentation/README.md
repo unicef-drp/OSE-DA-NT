@@ -23,7 +23,7 @@ Run scripts from the **repository root** (so `profile_OSE-DA-NT.R` resolves):
 | `02_codes/1_execute_conductor.r` | **Entrypoint.** Sources all steps below in order. |
 | `02_codes/2_prepare_inputs.r` | Copies stunting modeled estimates (ANT_HAZ_NE2_MOD) from `analysisDatasetsOutputDir` into `01_inputs/`. Filters to national-level totals. |
 | `02_codes/3_stunting_rankings.r` | Computes three top-20 rankings: highest prevalence, biggest 10-year improvers, biggest 20-year improvers. Writes CSV and RDS to `03_outputs/`. |
-| `02_codes/4_create_ppt.r` | Generates a UNICEF-branded PowerPoint (`stunting_top20_briefing.pptx`) that keeps template cover/thank-you slides and adds analysis charts plus narrative. Includes statistic callout slides (1, 2, and 4 stats per slide) for key metrics. Also produces an Excel companion workbook (`stunting_top20_briefing_data.xlsx`) with one sheet per figure slide so data can be reviewed or charts recreated in Excel. |
+| `02_codes/4_create_ppt.r` | Generates a UNICEF-branded PowerPoint (`stunting_top20_briefing.pptx`) that keeps template cover/thank-you/photo-stat slides and adds analysis charts plus narrative. Includes statistic callout slides (1, 2, and 4 stats per slide) for key metrics, plus a full-bleed photo stat slide retained from the template. Also produces an Excel companion workbook (`stunting_top20_briefing_data.xlsx`) with one sheet per figure slide so data can be reviewed or charts recreated in Excel. |
 
 ## Data Source
 
@@ -37,7 +37,7 @@ Run scripts from the **repository root** (so `profile_OSE-DA-NT.R` resolves):
 |------|-------------|
 | `stunting_rankings.csv` | Combined human-readable rankings with baseline/current values and change. |
 | `stunting_rankings.rds` | R list object with three data frames + metadata (for PPT script). |
-| `stunting_top20_briefing.pptx` | PowerPoint opening with a full-bleed branded photo cover, followed by a title slide, chart slides, narrative bullet slides, and a thank-you closing slide. |
+| `stunting_top20_briefing.pptx` | PowerPoint opening with a full-bleed branded photo cover, followed by a title slide, stat callout slides, a photo stat slide (retained template slide with text overlay), chart slides, narrative bullet slides, and a thank-you closing slide. |
 | `stunting_top20_briefing_data.xlsx` | Excel workbook with one sheet per figure slide (7 sheets when burden data exist). Columns match the chart data so figures can be recreated in Excel. |
 
 ## Dependencies
@@ -74,6 +74,8 @@ To extract additional icons, inspect slides 65–70 of the template PPTX (icons 
 | `02_codes/00_pptx_design_tokens.r` | UNICEF brand colours, font specs, text-box constraints. All slide modules consume this. |
 | `02_codes/00_pptx_title_slide.r` | Title slide generation: variant selection (excluding slide 9), text replacement with auto-fit and auto-width, multi-line support via `\n`, vertical spacing adjustments. |
 | `02_codes/00_pptx_bullet_slide.r` | Full-width numbered bullet slides using layout "8_Title and Content". Supports sub-bullets (level 2), automatic pagination with "(continued)", continued numbering across slides, and configurable spacing between top-level bullet groups. |
+| `02_codes/00_pptx_stat_slide.r` | Statistic callout slides (1, 2, or 4 stats) on "Title Only" layout with absolute positioning, rich formatting via `block_list`/`fpar`/`ftext`, and a source-text footer. |
+| `02_codes/00_pptx_photo_stat_slide.r` | Full-bleed photo stat slides (template slides 57–59). Retains the embedded photo and layout; replaces the stat value, description, credit, and caption text via XML mutation. Shapes are identified by font size (≥ 100 pt for stat value), name pattern (`"^Shape"` for description), and rotation (270° for credit, 180° for caption) to handle name variation across the three template variants. |
 | `02_codes/00_pptx_section_slide.r` | Overview and section break slides using layouts "Title and Content" / "2_Title and Content" (template slides 30–31 design). Left side: title + body text; right side: empty picture placeholder for the user to insert their own photo in PowerPoint. Used for the presentation overview and as section dividers between content blocks. |
 
 ## Notes
