@@ -8,6 +8,25 @@ if (!exists("projectFolder", envir = .GlobalEnv)) {
   source(file.path(getwd(), "profile_OSE-DA-NT.R"))
 }
 
+# --- Libraries (centralised for all child scripts) ------------------------
+suppressPackageStartupMessages({
+  library(arrow)
+  library(dplyr)
+  library(tidyr)
+  library(readr)
+  library(ggplot2)
+  library(scales)
+  library(xml2)
+})
+
+for (pkg in c("countrycode", "officer", "rvg", "openxlsx")) {
+  if (!requireNamespace(pkg, quietly = TRUE)) install.packages(pkg)
+}
+library(countrycode)
+library(officer)
+library(rvg)
+library(openxlsx)
+
 # Use getwd() for within-repo paths (supports alternate clone folder names)
 codes_dir <- file.path(getwd(), "adhoc_analysis", "stunting_top20_briefing", "02_codes")
 

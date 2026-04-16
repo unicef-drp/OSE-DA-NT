@@ -27,15 +27,6 @@
 #   - reference_data_manager/indicators/reference_disaggregations.csv
 # ---------------------------------------------------------------------------
 
-suppressPackageStartupMessages({
-  library(dplyr)
-  library(stringr)
-  library(readr)
-  library(arrow)
-  library(haven)
-  library(tibble)
-})
-
 if (!exists("projectFolder", envir = .GlobalEnv) ||
     !exists("cmrsInputDir", envir = .GlobalEnv) ||
     !exists("analysisDatasetsOutputDir", envir = .GlobalEnv)) {

@@ -20,11 +20,6 @@ if (file.exists(profile_path)) {
   stop("Cannot find profile_OSE-DA-NT.R. Run from the repo root or set analysisDatasetsOutputDir manually.")
 }
 
-suppressPackageStartupMessages({
-  library(arrow)
-  library(dplyr)
-})
-
 # --- Paths ----------------------------------------------------------------
 source_parquet <- file.path(analysisDatasetsOutputDir, "cmrs2_series_accepted.parquet")
 if (!file.exists(source_parquet)) {

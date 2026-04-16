@@ -9,17 +9,6 @@
 #          03_outputs/stunting_rankings.csv   (combined, human-readable)
 # ---------------------------------------------------------------------------
 
-suppressPackageStartupMessages({
-
-  library(arrow)
-  library(dplyr)
-  library(tidyr)
-  library(readr)
-})
-
-if (!requireNamespace("countrycode", quietly = TRUE)) install.packages("countrycode")
-library(countrycode)
-
 # --- Paths ----------------------------------------------------------------
 if (!exists("projectFolder", envir = .GlobalEnv)) {
   source(file.path(getwd(), "profile_OSE-DA-NT.R"))

@@ -29,6 +29,7 @@ Always read:
 - Avoid hardcoded absolute user paths unless already entrenched and required for compatibility.
 - Preserve script entrypoint names and output filenames unless a change is explicitly requested.
 - Keep hardcoded business rules intact unless instructed otherwise.
+- Load all `library()` calls in the conductor (`1_execute*.r`) only. Child scripts must not load libraries themselves.
 
 ## Documentation Rules
 
