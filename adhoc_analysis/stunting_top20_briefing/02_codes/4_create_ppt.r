@@ -27,6 +27,7 @@ source(file.path(codes_dir_ppt, "00_pptx_design_tokens.r"))
 source(file.path(codes_dir_ppt, "00_pptx_title_slide.r"))
 source(file.path(codes_dir_ppt, "00_pptx_bullet_slide.r"))
 source(file.path(codes_dir_ppt, "00_pptx_section_slide.r"))
+source(file.path(codes_dir_ppt, "00_pptx_stat_slide.r"))
 
 # --- Paths ----------------------------------------------------------------
 if (!exists("projectFolder", envir = .GlobalEnv)) {
@@ -83,12 +84,21 @@ if (is.na(template_path) || !nzchar(template_path)) {
   )
 }
 
-# Workaround: R's zip library cannot handle very long paths (common with
-# OneDrive/Teams sync folders). Copy to a temp file for read_pptx().
-if (nchar(template_path) > 200) {
+# Workaround: R's zip library and file.copy cannot handle very long paths,
+# paths with spaces, or OneDrive-locked files. Use PowerShell Copy-Item.
+if (nchar(template_path) > 200 || grepl(" ", template_path)) {
   tmp_template <- file.path(tempdir(), "unicef_template_tmp.pptx")
-  file.copy(template_path, tmp_template, overwrite = TRUE)
-  message("Copied template to temp path for long-path compatibility: ", tmp_template)
+  src_win <- normalizePath(template_path, winslash = "\\")
+  dst_win <- normalizePath(tmp_template, winslash = "\\", mustWork = FALSE)
+  ps_cmd <- paste0(
+    "powershell -Command \"Copy-Item -LiteralPath '", src_win,
+    "' -Destination '", dst_win, "' -Force\""
+  )
+  system(ps_cmd)
+  if (!file.exists(tmp_template) || file.size(tmp_template) == 0) {
+    stop("Failed to copy template to temp path: ", tmp_template)
+  }
+  message("Copied template to temp path: ", tmp_template)
   template_path <- tmp_template
 }
 
@@ -298,6 +308,33 @@ pptx <- add_bullet_slides(pptx, "What this briefing shows",
                           bullets = summary_bullets, levels = summary_levels,
                           style = bullet_style, footer_title = title_text)
 
+# --- At-a-Glance stat slide (4-stat or 2-stat) ---------------------------
+jme_source <- "Source: UNICEF/WHO/World Bank Joint Malnutrition Estimates"
+
+glance_stats <- list(
+  list(value = sprintf("%.1f%%", top_high_prev),
+       label = paste0("Highest prevalence\n", top_high_country, " (", latest_year, ")"),
+       color = unicef_dark),
+  list(value = sprintf("%.1fpp", top_10_drop),
+       label = paste0("Largest 10-year reduction\n", top_10_country,
+                      " (", yr_10_ago, "\u2013", latest_year, ")"),
+       color = unicef_green)
+)
+if (has_numbers) {
+  glance_stats <- c(glance_stats, list(
+    list(value = sprintf("%.1fpp", top_20_drop),
+         label = paste0("Largest 20-year reduction\n", top_20_country,
+                        " (", yr_20_ago, "\u2013", latest_year, ")"),
+         color = unicef_dark),
+    list(value = sprintf("%.1fM", top_num_val / 1000),
+         label = paste0("Children stunted\n", top_num_country, " (", latest_year, ")"),
+         color = unicef_magenta)
+  ))
+}
+pptx <- add_stat_slide(pptx, stats = glance_stats,
+                       title = "At a Glance",
+                       source_text = jme_source)
+
 # =========================================================================
 # SECTION A: Prevalence
 # =========================================================================
@@ -308,6 +345,19 @@ pptx <- add_section_slide(pptx, title = "Stunting prevalence",
                           section_number = section_num,
                           style = bullet_style, footer_title = title_text,
                           icon_path = icon_prevalence)
+
+# --- Prevalence highlight (2-stat) ----------------------------------------
+pptx <- add_stat_slide(pptx,
+  stats = list(
+    list(value = sprintf("%.1f%%", top_high_prev),
+         label = paste0(top_high_country, " has the highest stunting\nprevalence among children under 5 (", latest_year, ")"),
+         color = unicef_dark),
+    list(value = sprintf("%.1fpp", top_10_drop),
+         label = paste0(top_10_country, " achieved the largest\n10-year reduction (", yr_10_ago, "\u2013", latest_year, ")"),
+         color = unicef_green)
+  ),
+  title = "Stunting prevalence: key metrics",
+  source_text = jme_source)
 
 pptx <- pptx %>%
   add_slide(layout = "Title Only", master = "UNICEF") %>%
@@ -406,6 +456,16 @@ if (has_numbers) {
                             section_number = section_num,
                             style = bullet_style, footer_title = title_text,
                             icon_path = icon_burden)
+
+  # --- Burden highlight (1-stat) -------------------------------------------
+  pptx <- add_stat_slide(pptx,
+    stats = list(
+      list(value = sprintf("%.1f million", top_num_val / 1000),
+           label = paste0(top_num_country, " has the highest number of stunted\nchildren under 5 in ", latest_year),
+           color = unicef_magenta)
+    ),
+    title = "Stunting burden",
+    source_text = jme_source)
 
   pptx <- pptx %>%
     add_slide(layout = "Title Only", master = "UNICEF") %>%

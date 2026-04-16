@@ -29,6 +29,8 @@ Apply this skill when:
   00_pptx_design_tokens.r   ← shared brand constants (unicef_tokens)
   00_pptx_title_slide.r     ← title slide module (retain-and-replace)
   00_pptx_bullet_slide.r    ← bullet slide module (add-from-layout)
+  00_pptx_section_slide.r   ← section/overview slide module
+  00_pptx_stat_slide.r      ← statistic callout slide module (1/2/4 stats)
   00_pptx_<type>_slide.r    ← future modules follow same pattern
   4_create_ppt.r            ← orchestrator: sources modules, builds deck
 ```
@@ -280,6 +282,58 @@ Split layout used by `add_section_slide()` for overview and section breaks.
 - **Icon support**: Pass `icon_path = "path/to/icon.png"` to `add_section_slide()`
   to insert a branded icon into Picture Placeholder 2. If NULL, the
   placeholder remains empty for user photos.
+
+### Statistic callout slides (`add_stat_slide()`)
+
+Module `00_pptx_stat_slide.r` creates number-emphasis slides inspired by
+template slides 53–60 and the `N_Number slide` layouts. Uses "Title Only"
+layout with absolutely-positioned `block_list` stat blocks for full control.
+
+| Stats | Layout | Value font | Description |
+|-------|--------|-----------|-------------|
+| 1 | Centred, full-width | 60pt bold | Single hero stat |
+| 2 | Side-by-side columns | 52pt bold | Comparison pair |
+| 4 | 2×2 grid | 44pt bold | Dashboard summary |
+
+Each stat is a `list(value, label, color)`:
+- `value`: displayed large (e.g. "55.3%", "37.4M")
+- `label`: description below the value (supports `\n`)
+- `color`: optional hex colour (default UNICEF cyan)
+
+```r
+add_stat_slide(pptx,
+  stats = list(
+    list(value = "55.3%", label = "Highest prevalence\nBurundi (2024)",
+         color = "#00AEEF"),
+    list(value = "13.9pp", label = "Largest 10-year reduction\nLibya",
+         color = "#00833D")
+  ),
+  title = "At a Glance",
+  source_text = "Source: UNICEF/WHO/World Bank JME")
+```
+
+Positioning uses `.stat_positions()` with fixed coordinates (inches):
+- 1-stat: left=2.0, top=2.0, width=9.3
+- 2-stat: columns at left=0.8 and left=7.0, width=5.5 each
+- 4-stat: same columns, rows at top=1.6 and top=4.1
+
+### Template Number slide layouts (reference)
+
+The template defines `1_Number slide` through `4_Number slide` layouts
+(master UNICEF). These provide photo placeholder backgrounds and branded
+chrome but use different placeholder positioning strategies per variant:
+
+| Layout | Title position | Placeholders | Notes |
+|--------|---------------|--------------|-------|
+| `1_Number slide` | (0.76, 0.89) top | Title + idx 11/12/13 | Full-width, top-aligned |
+| `2_Number slide` | (0.76, 0.94) top-left | Title + idx 11/12/13 | Left-half only; right stat manual |
+| `3_Number slide` | (0.76, 4.62) lower | Title + idx 11/13 | Title at bottom half |
+| `4_Number slide` | (0.76, 5.04) bottom | Title + idx 11 | Title near bottom; all stats manual |
+
+Template sample slides 53–55 use slideLayout25 (not a Number layout) with
+manually placed textboxes. Slides 56–59 use "UNICEF Photo slide" layout.
+The `add_stat_slide()` module bypasses these layouts in favour of absolute
+positioning for reliable automation.
 
 ### Template Icon Library (slides 65–70)
 

@@ -23,7 +23,7 @@ Run scripts from the **repository root** (so `profile_OSE-DA-NT.R` resolves):
 | `02_codes/1_execute_conductor.r` | **Entrypoint.** Sources all steps below in order. |
 | `02_codes/2_prepare_inputs.r` | Copies stunting modeled estimates (ANT_HAZ_NE2_MOD) from `analysisDatasetsOutputDir` into `01_inputs/`. Filters to national-level totals. |
 | `02_codes/3_stunting_rankings.r` | Computes three top-20 rankings: highest prevalence, biggest 10-year improvers, biggest 20-year improvers. Writes CSV and RDS to `03_outputs/`. |
-| `02_codes/4_create_ppt.r` | Generates a UNICEF-branded PowerPoint (`stunting_top20_briefing.pptx`) that keeps template cover/thank-you slides and adds analysis charts plus narrative. Also produces an Excel companion workbook (`stunting_top20_briefing_data.xlsx`) with one sheet per figure slide so data can be reviewed or charts recreated in Excel. |
+| `02_codes/4_create_ppt.r` | Generates a UNICEF-branded PowerPoint (`stunting_top20_briefing.pptx`) that keeps template cover/thank-you slides and adds analysis charts plus narrative. Includes statistic callout slides (1, 2, and 4 stats per slide) for key metrics. Also produces an Excel companion workbook (`stunting_top20_briefing_data.xlsx`) with one sheet per figure slide so data can be reviewed or charts recreated in Excel. |
 
 ## Data Source
 
