@@ -25,6 +25,7 @@ library(rvg)
 codes_dir_ppt <- dirname(sys.frame(1)$ofile %||% ".")
 source(file.path(codes_dir_ppt, "00_pptx_design_tokens.r"))
 source(file.path(codes_dir_ppt, "00_pptx_title_slide.r"))
+source(file.path(codes_dir_ppt, "00_pptx_bullet_slide.r"))
 
 # --- Paths ----------------------------------------------------------------
 if (!exists("projectFolder", envir = .GlobalEnv)) {
@@ -200,15 +201,16 @@ p_dot_10 <- results$improve_10yr %>%
 
 # --- Build PowerPoint using UNICEF branded template -----------------------
 # Pick a random title-slide variant (1-11) based on the title text hash,
-# keep the branded divider (slide 17) and thank-you slide (slide 71).
+# keep the branded divider (slide 17) and a random thank-you slide (71-76).
 title_text    <- "Stunting: Current Levels and Trends Over Two Decades"
 subtitle_text <- "Executive Director briefing"
 
 title_variant <- pick_title_variant(title_text)
+thankyou_variant <- sample(71:76, 1)
 
 pptx <- read_pptx(template_path)
 n_template_slides <- length(pptx)
-keep_slides <- c(title_variant, 17, 71)
+keep_slides <- c(title_variant, 17, thankyou_variant)
 if (n_template_slides > 0) {
   for (i in seq(n_template_slides, 1)) {
     if (!(i %in% keep_slides)) {
@@ -216,6 +218,8 @@ if (n_template_slides > 0) {
     }
   }
 }
+# Track position of thank-you slide among retained template slides
+thankyou_pos <- which(sort(keep_slides) == thankyou_variant)
 
 # --- Slide 1: Replace title/subtitle using the title-slide module ---------
 apply_title_text(
@@ -236,57 +240,32 @@ top_10_drop <- abs(results$improve_10yr$change_pp[1])
 top_20_country <- results$improve_20yr$country_name[1]
 top_20_drop <- abs(results$improve_20yr$change_pp[1])
 
-summary_lines <- list(
-  fpar(ftext(
-    "This briefing presents country rankings based on modelled stunting estimates for children under 5 years, covering both prevalence and the number of children affected.",
-    prop = fp_text(font.size = 22, font.family = brand_font, color = unicef_black)
-  )),
-  fpar(ftext("", prop = fp_text(font.size = 10, font.family = brand_font))),
-  fpar(ftext(paste0(
-    "Highest current prevalence: ", top_high_country, " at ",
-    sprintf("%.1f", top_high_prev), " per cent in ", latest_year, "."),
-    prop = fp_text(font.size = 20, font.family = brand_font, color = unicef_dark, bold = TRUE)
-  )),
-  fpar(ftext(paste0(
-    "Fastest 10-year reduction: ", top_10_country, " with a decline of ",
-    sprintf("%.1f", top_10_drop), " percentage points (", yr_10_ago, "\u2013", latest_year, ")."),
-    prop = fp_text(font.size = 20, font.family = brand_font, color = unicef_dark, bold = TRUE)
-  )),
-  fpar(ftext(paste0(
-    "Fastest 20-year reduction: ", top_20_country, " with a decline of ",
-    sprintf("%.1f", top_20_drop), " percentage points (", yr_20_ago, "\u2013", latest_year, ")."),
-    prop = fp_text(font.size = 20, font.family = brand_font, color = unicef_dark, bold = TRUE)
-  ))
+bullet_style <- fp_text(font.size = 18, font.family = brand_font, color = unicef_dark)
+
+summary_bullets <- c(
+  "This briefing presents country rankings based on modelled stunting estimates for children under 5 years, covering both prevalence and the number of children affected.",
+  paste0("Highest current prevalence: ", top_high_country, " at ",
+         sprintf("%.1f", top_high_prev), " per cent in ", latest_year, "."),
+  paste0("Fastest 10-year reduction: ", top_10_country, " with a decline of ",
+         sprintf("%.1f", top_10_drop), " percentage points (", yr_10_ago, "\u2013", latest_year, ")."),
+  paste0("Fastest 20-year reduction: ", top_20_country, " with a decline of ",
+         sprintf("%.1f", top_20_drop), " percentage points (", yr_20_ago, "\u2013", latest_year, ").")
 )
+summary_levels <- c(1, 2, 2, 2)
 
 if (has_numbers) {
   top_num_country <- results$highest_number$country_name[1]
   top_num_val <- results$highest_number$number_thousands[1]
-  summary_lines <- c(summary_lines, list(
-    fpar(ftext(paste0(
-      "Highest burden: ", top_num_country, " with an estimated ",
-      sprintf("%.1f", top_num_val / 1000), " million stunted children in ", latest_year, "."),
-      prop = fp_text(font.size = 20, font.family = brand_font, color = unicef_dark, bold = TRUE)
-    ))
-  ))
+  summary_bullets <- c(summary_bullets,
+    paste0("Highest burden: ", top_num_country, " with an estimated ",
+           sprintf("%.1f", top_num_val / 1000), " million stunted children in ", latest_year, ".")
+  )
+  summary_levels <- c(summary_levels, 2)
 }
 
-summary_lines <- c(summary_lines, list(
-  fpar(ftext("", prop = fp_text(font.size = 10, font.family = brand_font))),
-  fpar(ftext(
-    "Source: UNICEF/WHO/World Bank Joint Malnutrition Estimates.",
-    prop = fp_text(font.size = 14, font.family = brand_font, color = unicef_warmgrey, italic = TRUE)
-  ))
-))
-
-summary_text <- do.call(block_list, summary_lines)
-
-pptx <- pptx %>%
-  add_slide(layout = "Title and Content", master = "UNICEF") %>%
-  ph_with(value = "What this briefing shows",
-          location = ph_location_type(type = "title")) %>%
-  ph_with(value = summary_text,
-          location = ph_location_type(type = "body"))
+pptx <- add_bullet_slides(pptx, "What this briefing shows",
+                          bullets = summary_bullets, levels = summary_levels,
+                          style = bullet_style, footer_title = title_text)
 
 # =========================================================================
 # SECTION A: Prevalence
@@ -432,72 +411,43 @@ top3_improv  <- paste(head(results$improve_10yr$country_name, 3), collapse = ", 
 max_change_10 <- sprintf("%.1f", max(abs(results$improve_10yr$change_pp), na.rm = TRUE))
 max_change_20 <- sprintf("%.1f", max(abs(results$improve_20yr$change_pp), na.rm = TRUE))
 
-body_props   <- fp_text(font.size = 20, color = unicef_black, font.family = brand_font)
-bold_props   <- fp_text(font.size = 20, color = unicef_dark, bold = TRUE, font.family = brand_font)
-source_props <- fp_text(font.size = 14, color = unicef_warmgrey, italic = TRUE, font.family = brand_font)
-
-narrative_items <- list(
-  fpar(
-    ftext("Highest prevalence: ", prop = bold_props),
-    ftext(paste0("As of ", latest_year, ", the countries with the highest stunting prevalence ",
-                 "among children under 5 years include ", top3_highest, ". ",
-                 "These countries continue to carry a large share of the global burden."),
-          prop = body_props)
-  ),
-  fpar(ftext("", prop = body_props)),
-  fpar(
-    ftext("10-year progress: ", prop = bold_props),
-    ftext(paste0("Between ", yr_10_ago, " and ", latest_year, ", ",
-                 top3_improv, " achieved the largest absolute reductions in stunting prevalence, ",
-                 "with the top performer reducing prevalence by ", max_change_10, " percentage points."),
-          prop = body_props)
-  ),
-  fpar(ftext("", prop = body_props)),
-  fpar(
-    ftext("20-year progress: ", prop = bold_props),
-    ftext(paste0("Over the past two decades (", yr_20_ago, "\u2013", latest_year, "), ",
-                 "the most substantial declines reached up to ", max_change_20, " percentage points."),
-          prop = body_props)
-  )
+narrative_bullets <- c(
+  paste0("Highest prevalence: As of ", latest_year, ", the countries with the highest stunting prevalence ",
+         "among children under 5 years include ", top3_highest, ". ",
+         "These countries continue to carry a large share of the global burden."),
+  paste0("10-year progress: Between ", yr_10_ago, " and ", latest_year, ", ",
+         top3_improv, " achieved the largest absolute reductions in stunting prevalence, ",
+         "with the top performer reducing prevalence by ", max_change_10, " percentage points."),
+  paste0("20-year progress: Over the past two decades (", yr_20_ago, "\u2013", latest_year, "), ",
+         "the most substantial declines reached up to ", max_change_20, " percentage points.")
 )
+narrative_levels <- c(1, 1, 1)
 
 if (has_numbers) {
   top3_num <- paste(head(results$highest_number$country_name, 3), collapse = ", ")
   top_num_val_m <- sprintf("%.1f", results$highest_number$number_thousands[1] / 1000)
-  narrative_items <- c(narrative_items, list(
-    fpar(ftext("", prop = body_props)),
-    fpar(
-      ftext("Absolute burden: ", prop = bold_props),
-      ftext(paste0("By number of children affected, ", top3_num,
-                   " bear the greatest burden, with ", results$highest_number$country_name[1],
-                   " alone accounting for an estimated ", top_num_val_m,
-                   " million stunted children in ", latest_year, "."),
-            prop = body_props)
-    )
-  ))
+  narrative_bullets <- c(narrative_bullets,
+    paste0("Absolute burden: By number of children affected, ", top3_num,
+           " bear the greatest burden, with ", results$highest_number$country_name[1],
+           " alone accounting for an estimated ", top_num_val_m,
+           " million stunted children in ", latest_year, ".")
+  )
+  narrative_levels <- c(narrative_levels, 1)
 }
 
-narrative_items <- c(narrative_items, list(
-  fpar(ftext("", prop = body_props)),
-  fpar(
-    ftext("Note: Estimates are based on UNICEF/WHO/World Bank Joint Malnutrition Estimates (JME) ",
-          prop = source_props),
-    ftext("modelled country series. Improvement is measured as absolute reduction in prevalence (percentage points) or number of children affected (thousands).",
-          prop = source_props)
-  )
-))
+narrative_bullets <- c(narrative_bullets,
+  paste0("Note: Estimates are based on UNICEF/WHO/World Bank Joint Malnutrition Estimates (JME) ",
+         "modelled country series. Improvement is measured as absolute reduction in prevalence ",
+         "(percentage points) or number of children affected (thousands).")
+)
+narrative_levels <- c(narrative_levels, 1)
 
-narrative_block <- do.call(block_list, narrative_items)
-
-pptx <- pptx %>%
-  add_slide(layout = "Title and Content", master = "UNICEF") %>%
-  ph_with(value = "Key findings and programme implications",
-          location = ph_location_type(type = "title")) %>%
-  ph_with(value = narrative_block,
-          location = ph_location_type(type = "body"))
+pptx <- add_bullet_slides(pptx, "Key findings and programme implications",
+                          bullets = narrative_bullets, levels = narrative_levels,
+                          style = bullet_style, footer_title = title_text)
 
 # --- Move retained thank-you slide to the end -----------------------------
-pptx <- move_slide(pptx, index = 3, to = length(pptx))
+pptx <- move_slide(pptx, index = thankyou_pos, to = length(pptx))
 
 # --- Save -----------------------------------------------------------------
 pptx_path <- file.path(output_dir, "stunting_top20_briefing.pptx")

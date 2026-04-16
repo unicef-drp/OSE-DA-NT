@@ -88,6 +88,51 @@ ones preserving the original `<a:endParaRPr>` in each.
 Always escape `&`, `<`, `>` in text content before inserting into XML
 strings. The `.replace_shape_text()` helper does this automatically.
 
+### 2e. Element ordering inside `<a:pPr>`
+
+The OOXML schema enforces a strict child-element order within `<a:pPr>`.
+Key ordering constraints:
+
+```
+<a:pPr>  →  a:spcBef  →  a:spcAft  →  a:buAutoNum / a:buChar / a:buNone  →  …
+```
+
+If `<a:spcAft>` is inserted **after** `<a:buAutoNum>`, PowerPoint silently
+ignores the spacing. Always inject spacing elements before bullet elements.
+
+### 2f. Layout-inherited numbering (`buAutoNum`)
+
+Some layouts (e.g. "8_Title and Content" / slideLayout22.xml) define
+`<a:buAutoNum type="arabicPeriod"/>` at the **shape default-text level**
+(inside `<a:lstStyle>`), not inside individual `<a:pPr>` elements.
+
+Consequences:
+- `ph_with()` + `unordered_list()` produce paragraphs whose `<a:pPr>` is
+  empty or has only `lvl="1"` — no `<a:buAutoNum>` to modify.
+- Searching for `<a:buAutoNum>` inside `<a:pPr>` will always fail.
+- Numbering inherited from the layout always restarts at 1 on each slide.
+
+**Fix for continued numbering across slides:**
+Inject an explicit `<a:buAutoNum type="arabicPeriod" startAt="N"/>` into
+**every** level-0 paragraph's `<a:pPr>` on continuation slides. Setting it
+only on the first paragraph is insufficient — subsequent paragraphs fall back
+to the layout default and restart at 1.
+
+```r
+bu_xml <- xml2::read_xml(paste0(
+  '<a:buAutoNum xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"',
+  ' type="arabicPeriod" startAt="', start_val, '"/>'
+))
+xml2::xml_add_child(pPr, bu_xml)
+```
+
+### 2g. `ph_with()` strips `ph_type`
+
+`officer::ph_with()` removes the `ph_type` attribute from the shape after
+populating it. This means post-processing code cannot use `<p:ph type="body">`
+to locate the content shape. Instead, find the shape by its **name** attribute
+(e.g. `"Content Placeholder 2"`) via `<p:cNvPr name="...">` on the `<p:sp>`.
+
 ---
 
 ## 3. Text-Box Manipulation
@@ -165,6 +210,11 @@ When creating a new slide module (`00_pptx_<type>_slide.r`):
 6. **Add constraints** — Add text-box dimensions to `00_pptx_design_tokens.r`.
 7. **Document** — Update the Slide Modules table in the briefing README.
 
+For modules that post-process XML (spacing, numbering), follow the pattern
+in `00_pptx_bullet_slide.r`: locate the content shape by name (not ph_type),
+inject spacing elements before bullet elements, and re-fetch `<a:pPr>`
+references after any XML modification.
+
 ---
 
 ## 7. Template Structure Reference
@@ -174,8 +224,15 @@ UNICEF Branded Presentation Template (2025 & 2026, identical):
 - Slides 1–11: title variants (Number slide layout). Slide 9 excluded
   (older child, not under-5).
 - Slide 17: branded divider.
-- Slide 71: thank-you / closing.
+- Slides 71–76: thank-you / closing variants.
 - Placeholder names: "Title 1", "Text Placeholder 3" (subtitle),
   "Text Placeholder 4" (section), "Text Placeholder 5" (date).
 - Title slides use `<p:ph type="title">` and `<p:ph type="body">`.
   Distinguish body placeholders by shape name, not placeholder index.
+
+### Layout: "8_Title and Content" (slideLayout22.xml, master UNICEF)
+
+Full-width bullet layout used by `add_bullet_slides()`.
+- Placeholders: "Title 1", "Content Placeholder 2", "Date Placeholder 3" (footer).
+- Has `<a:buAutoNum type="arabicPeriod"/>` at shape `lstStyle` level (inherited, not per-paragraph).
+- `unordered_list()` content works with this layout; numbering is automatic but must be overridden via XML injection for continuation numbering across slides.

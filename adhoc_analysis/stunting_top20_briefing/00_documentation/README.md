@@ -57,6 +57,7 @@ R packages: `arrow`, `dplyr`, `tidyr`, `readr`, `ggplot2`, `countrycode`, `offic
 |--------|----------|
 | `02_codes/00_pptx_design_tokens.r` | UNICEF brand colours, font specs, text-box constraints. All slide modules consume this. |
 | `02_codes/00_pptx_title_slide.r` | Title slide generation: variant selection (excluding slide 9), text replacement with auto-fit and auto-width, multi-line support via `\n`, vertical spacing adjustments. |
+| `02_codes/00_pptx_bullet_slide.r` | Full-width numbered bullet slides using layout "8_Title and Content". Supports sub-bullets (level 2), automatic pagination with "(continued)", continued numbering across slides, and configurable spacing between top-level bullet groups. |
 
 ## Notes
 
