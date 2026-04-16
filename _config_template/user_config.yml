@@ -1,11 +1,49 @@
-# Copy this file to: %USERPROFILE%/.config/user_config.yml
+# ============================================================
+# user_config.yml — Per-user path configuration for OSE-DA-NT
+# ============================================================
 #
-# Preferred structure: a top-level key per username.
-# The profile also supports a flat top-level layout for backwards compatibility.
+# SETUP:
+#   1. Copy this file to:  %USERPROFILE%/.config/user_config.yml
+#      (e.g. C:/Users/jdoe/.config/user_config.yml)
+#   2. Replace the example block below with your own Windows username
+#      as the top-level key.
+#   3. Fill in the three required paths described below.
+#
+# STRUCTURE:
+#   The top-level key MUST match your Windows username (echo %USERNAME%).
+#   Multiple users can coexist in the same file — each gets their own block.
+#
+# REQUIRED KEYS:
+#
+#   githubFolder    Local folder where GitHub repos are cloned.
+#                   The profile expects to find OSE-DA-NT inside this folder.
+#                   Example: C:/Users/jdoe/Documents/GitHub
+#
+#   teamsRoot       Root of the SharePoint / Teams-synced folder for the
+#                   Chief Statistician Office shared document library.
+#                   Used to locate 060.DW-MASTER and related shared assets.
+#                   Example: C:/Users/jdoe/UNICEF/Chief Statistician Office - Documents
+#
+#   nutritionRoot   Root of the SharePoint / Teams-synced folder for the
+#                   Nutrition "Analysis Space" document library.
+#                   Contains "Combined Nutrition Databases/" and the
+#                   "github/" output staging area (created automatically).
+#                   Example: C:/Users/jdoe/UNICEF/Data and Analytics Nutrition - Analysis Space
+#
+# DERIVED PATHS (set automatically — do NOT add manually):
+#   githubOutputRoot  → <nutritionRoot>/github
+#   cmrsInputDir      → <nutritionRoot>/Combined Nutrition Databases/Common Minimum Reporting Standard
+#   teamsFolder       → <teamsRoot>/060.DW-MASTER
+#
+# HOW TO FIND YOUR PATHS:
+#   - Open the synced SharePoint folder in Windows Explorer.
+#   - Copy the path from the address bar and convert backslashes to
+#     forward slashes (C:\... → C:/...).
+#   - Verify the folder exists: dir "C:/Users/jdoe/UNICEF/..."
+#
+# ============================================================
 
 jdoe:
-  githubFolder: C:/Users/jdoe/Documents/GitHub
-  teamsRoot: C:/Users/jdoe/UNICEF/Data and Analytics Nutrition - Analysis Space
-  # Preferred explicit root for nutrition CMRS inputs/outputs.
-  nutritionRoot: C:/Users/jdoe/UNICEF/Data and Analytics Nutrition - Analysis Space
-  # githubOutputRoot is derived automatically as <nutritionRoot>/github — no need to set it here.
+  githubFolder: "C:/Users/jdoe/Documents/GitHub"
+  teamsRoot: "C:/Users/jdoe/UNICEF/Chief Statistician Office - Documents"
+  nutritionRoot: "C:/Users/jdoe/UNICEF/Data and Analytics Nutrition - Analysis Space"
