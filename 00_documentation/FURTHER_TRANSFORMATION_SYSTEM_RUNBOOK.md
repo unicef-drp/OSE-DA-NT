@@ -99,10 +99,14 @@ Behavior:
 
 ### Pipeline Goal
 
-Produce animated GIF and MP4 visualizations of regional stunting trends
-(prevalence × number of affected children) using country-level modeled series
-from analysis_datasets, aggregated to UNICEF reporting regions via population
-weighting.
+Produce animated GIF and MP4 bubble-scatterplots showing regional nutrition
+trends (prevalence vs. number of affected children over time) for stunting,
+overweight, and wasting. Each indicator gets a base animation plus a looped
+version with UNICEF-blue panel overlays carrying headline/subline messages.
+
+See `further_transformation_system/animated_scatterplots/README.md` for the
+full pipeline README including code structure, configurable parameters, and
+instructions for adding new indicators.
 
 ### Entrypoint
 
@@ -110,32 +114,44 @@ weighting.
 
 ### Execution Order
 
-1. 1_execute.r — loads libraries, resolves paths, sources worker
-2. animated_scatterplot_stunting.R — reads parquet, aggregates, renders animations
+1. 1_execute.r — loads libraries, resolves paths, sources shared functions
+2. 0_scatterplot_functions.r — shared data-loading, plotting, and rendering functions
+3. animated_scatterplot_stunting.R — stunting indicator (parquet → regional aggregation)
+4. animated_scatterplot_overweight.R — overweight indicator (parquet → regional aggregation)
+5. animated_scatterplot_wasting.R — wasting indicator (pre-aggregated CSV, special case)
 
 ### Input Sources
 
+**Standard indicators (stunting, overweight):**
 - **Country series**: `cmrs2_series_accepted.parquet` from `analysisDatasetsInputDir`
-  (indicator `ANT_HAZ_NE2_MOD`, proportion 0–1 scale, converted to percent)
+  - `ANT_HAZ_NE2_MOD` (stunting), `ANT_WHZ_PO2_MOD` (overweight)
+  - Proportion 0–1 scale, converted to percent internally
 - **Crosswalk**: `groups_for_agg.csv` from DW-Production `interdir`
 - **Population**: `base_population_1990_2030.csv` from DW-Production `inputdir`
+
+**Wasting (special case):**
+- **Pre-aggregated regional estimates**: `agg_ant_wasting.csv` from `interdir/agg_domain/`
+  - Already aggregated to UNICEF Regions; region names harmonized internally
+  - Population for bubble sizes still computed from country-level data via crosswalk
 
 ### Output Location
 
 - `{nutritionRoot}/github/animated_scatterplots/`
 
-### Output Files
+### Output Files (per indicator)
 
-- stunting_regions_bubble.gif — base animated scatterplot
-- stunting_regions_bubble.mp4 — MP4 version
-- stunting_filler_loops_UNICEFblue_slide.gif — looped version with UNICEF panel overlays
-- stunting_filler_loops_UNICEFblue_slide.mp4 — MP4 of looped version
-- stunting_frames_unicef/ — individual frame PNGs
+- `{indicator}_regions_bubble.gif` — base animated scatterplot (120 frames, 6 fps)
+- `{indicator}_regions_bubble.mp4` — MP4 version (10 fps)
+- `{indicator}_filler_loops_UNICEFblue_slide.gif` — looped version with UNICEF panel overlays
+- `{indicator}_filler_loops_UNICEFblue_slide.mp4` — MP4 of looped version
+- `{indicator}_frames_unicef/` — individual frame PNGs
+
+Indicators: stunting, overweight, wasting
 
 ### Dependencies
 
 R packages: arrow, dplyr, readr, ggplot2, gganimate, scales, grid,
-RColorBrewer, av, magick, gifski, ragg, yaml
+RColorBrewer, ggrepel, av, magick, gifski, ragg, yaml
 
 ---
 

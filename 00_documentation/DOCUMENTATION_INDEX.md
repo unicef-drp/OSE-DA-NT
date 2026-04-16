@@ -45,6 +45,12 @@ Last updated: 2026-04-15
 - 00_ai/SKILLS_ROADMAP.md
   - Draft skill backlog for incremental AI-agent capability in this repo.
 
+## Pipeline READMEs
+
+- further_transformation_system/animated_scatterplots/README.md
+  - Pipeline README for animated regional bubble-scatterplots.
+  - Covers code structure, indicator configs, input sources (including wasting special case), output files, and how to add new indicators.
+
 ## Planned Additions
 
 - reference_data_manager schema notes
