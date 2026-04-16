@@ -1,0 +1,19 @@
+﻿Rscript : Warning message:
+At line:1 char:1
++ Rscript _save_icons.R 2>&1 | Out-File _save_icons_out.txt -Encoding u ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Warning message::String) [], Remo 
+   teException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+package 'xml2' was built under R version 4.5.3 
+Saved: nutrition.png (5866 bytes)
+Saved: food_security.png (6448 bytes)
+Saved: children.png (5636 bytes)
+Saved: infant.png (5178 bytes)
+Saved: breastfeeding.png (5948 bytes)
+Saved: mother_and_baby.png (6212 bytes)
+Saved: baby.png (5302 bytes)
+
+Icons saved to: C:/Users/joelc/Documents/GitHub/OSE-DA-NT/adhoc_analysis/stunting_top20_briefing/01_inputs/icons 
+Files: baby.png, breastfeeding.png, children.png, food_security.png, infant.png, mother_and_baby.png, nutrition.png 

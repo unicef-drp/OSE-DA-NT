@@ -269,12 +269,41 @@ Full-width bullet layout used by `add_bullet_slides()`.
 - Has `<a:buAutoNum type="arabicPeriod"/>` at shape `lstStyle` level (inherited, not per-paragraph).
 - `unordered_list()` content works with this layout; numbering is automatic but must be overridden via XML injection for continuation numbering across slides.
 
-### Layout: "Title and Content" (slideLayout31.xml, master UNICEF)
+### Layout: "Picture with Caption" (master UNICEF)
 
 Split layout used by `add_section_slide()` for overview and section breaks.
-Design matches template slides 30–31.
-- Left ~55%: "Title 1" + "Content Placeholder 2" (body text).
-- Right ~45%: "Picture Placeholder 2" (empty — user inserts own photo).
-- Footer: "Date Placeholder 3".
-- Variant "2_Title and Content" (slideLayout19) is visually identical.
+- Left  ~36%: "Title 1" (offx=0.92, cx=4.30) + "Text Placeholder 3" (body text, cx=4.30)
+- Right ~56%: "Picture Placeholder 2" — accepts an optional `icon_path` PNG
+- Footer: "Footer Placeholder 5"
+- Section number is prepended to the title as "Section N | title".
 - This is an add-from-layout slide: no embedded assets to retain.
+- **Icon support**: Pass `icon_path = "path/to/icon.png"` to `add_section_slide()`
+  to insert a branded icon into Picture Placeholder 2. If NULL, the
+  placeholder remains empty for user photos.
+
+### Template Icon Library (slides 65–70)
+
+The UNICEF Branded Presentation Template contains ~200 programme icons on
+slides 65–70 as individual `p:pic` shapes with descriptive `descr` alt-text.
+Seven nutrition-related icons have been extracted to `01_inputs/icons/`:
+
+| File | Alt-text | Description |
+|------|----------|-------------|
+| `nutrition.png` | Nutrition icon | Smiling face with spoon |
+| `children.png` | Children icon | Two children figures |
+| `infant.png` | Infant icon | Baby figure |
+| `breastfeeding.png` | Breastfeeding icon | Mother breastfeeding |
+| `food_security.png` | Food Security icon | Bowl with wheat |
+| `mother_and_baby.png` | Mother and Baby icon | Mother holding baby |
+| `baby.png` | Baby icon | Crawling baby |
+
+All icons are UNICEF-blue line art in dotted circular frames (~5–6 KB PNGs).
+To extract additional icons, unzip the template and match `p:pic` shapes on
+slides 65–70 by their `descr` attribute, then look up the corresponding
+`rId` → `ppt/media/imageNN.png` mapping.
+
+### Layout: "Title and Content" (slideLayout31.xml, master UNICEF)
+
+Full-width layout used by template slides 30–31 (which add their own
+embedded picture shapes). NOT used for section slides — use
+"Picture with Caption" instead for the native split design.

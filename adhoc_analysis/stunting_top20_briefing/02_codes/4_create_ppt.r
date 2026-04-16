@@ -236,7 +236,19 @@ pptx <- apply_title_text(
 # After the deck is built we post-process the PPTX zip to reorder slides
 # (see below) because officer::move_slide is non-functional in this version.
 
+# --- Section counter (incremented for each section divider) ---------------
+section_num <- 0L
+
+bullet_style <- fp_text(font.size = 18, font.family = brand_font, color = unicef_dark)
+
+# --- Icon paths for section slides ----------------------------------------
+icons_dir <- file.path(dirname(codes_dir_ppt), "01_inputs", "icons")
+icon_overview   <- file.path(icons_dir, "nutrition.png")
+icon_prevalence <- file.path(icons_dir, "children.png")
+icon_burden     <- file.path(icons_dir, "infant.png")
+
 # --- Slide 3: Overview (sections of the briefing) ------------------------
+section_num <- section_num + 1L
 overview_items <- c(
   "What this briefing shows",
   "Stunting prevalence: highest rates and fastest reductions"
@@ -249,8 +261,9 @@ if (has_numbers) {
 overview_items <- c(overview_items, "Key findings and programme implications")
 
 pptx <- add_section_slide(pptx, title = "Overview",
-                          items = overview_items, style = bullet_style,
-                          footer_title = title_text)
+                          items = overview_items, section_number = section_num,
+                          style = bullet_style, footer_title = title_text,
+                          icon_path = icon_overview)
 
 # --- Headline summary -----------------------------------------------------
 top_high_country <- results$highest$country_name[1]
@@ -259,8 +272,6 @@ top_10_country <- results$improve_10yr$country_name[1]
 top_10_drop <- abs(results$improve_10yr$change_pp[1])
 top_20_country <- results$improve_20yr$country_name[1]
 top_20_drop <- abs(results$improve_20yr$change_pp[1])
-
-bullet_style <- fp_text(font.size = 18, font.family = brand_font, color = unicef_dark)
 
 summary_bullets <- c(
   "This briefing presents country rankings based on modelled stunting estimates for children under 5 years, covering both prevalence and the number of children affected.",
@@ -291,9 +302,12 @@ pptx <- add_bullet_slides(pptx, "What this briefing shows",
 # SECTION A: Prevalence
 # =========================================================================
 
+section_num <- section_num + 1L
 pptx <- add_section_slide(pptx, title = "Stunting prevalence",
                           items = c("Countries with the highest rates and fastest reductions"),
-                          style = bullet_style, footer_title = title_text)
+                          section_number = section_num,
+                          style = bullet_style, footer_title = title_text,
+                          icon_path = icon_prevalence)
 
 pptx <- pptx %>%
   add_slide(layout = "Title Only", master = "UNICEF") %>%
@@ -386,9 +400,12 @@ if (has_numbers) {
     theme_unicef
 
   # --- Section divider: Burden ---------------------------------------------
+  section_num <- section_num + 1L
   pptx <- add_section_slide(pptx, title = "Stunting burden: number of children affected",
                             items = c("Countries with the highest absolute numbers and largest reductions"),
-                            style = bullet_style, footer_title = title_text)
+                            section_number = section_num,
+                            style = bullet_style, footer_title = title_text,
+                            icon_path = icon_burden)
 
   pptx <- pptx %>%
     add_slide(layout = "Title Only", master = "UNICEF") %>%

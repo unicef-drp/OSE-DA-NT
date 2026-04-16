@@ -48,6 +48,22 @@ R packages: `arrow`, `dplyr`, `tidyr`, `readr`, `ggplot2`, `countrycode`, `offic
 
 - Brand root (resolved via `nutritionRoot`): `github/documentation/unicef_brand`
 - Global UNICEF guidance/template resources remain in scope and are still used.
+
+## Template Icons
+
+Seven nutrition-related icons were extracted from the UNICEF Branded Presentation Template (slides 65–70 contain ~200 programme icons). These are stored in `01_inputs/icons/` and used on section divider slides:
+
+| File | Description | Used on |
+|------|-------------|---------|
+| `nutrition.png` | Smiling face with spoon in blue circle | Overview section slide |
+| `children.png` | Two children figures in blue circle | Prevalence section slide |
+| `infant.png` | Baby figure in blue circle | Burden section slide |
+| `breastfeeding.png` | Mother breastfeeding baby in blue circle | Available for future use |
+| `food_security.png` | Bowl with wheat/grain in blue circle | Available for future use |
+| `mother_and_baby.png` | Mother holding baby in blue circle | Available for future use |
+| `baby.png` | Crawling baby in blue circle | Available for future use |
+
+To extract additional icons, inspect slides 65–70 of the template PPTX (icons are `p:pic` shapes with descriptive `descr` alt-text attributes).
 - Office-specific resources (Innocenti) in `OneDrive_1_4-15-2026` are complementary and should be used for local office identity assets (e.g., signature, letterhead, office naming), not as a replacement for global UNICEF brand guidance.
 - The PPT script searches for `UNICEF Branded Presentation Template 2026.pptx` (then 2025) in the brand root first, then inside `OneDrive_*` subfolders, with a legacy fallback to `_extracted/template_2026.pptx`.
 
