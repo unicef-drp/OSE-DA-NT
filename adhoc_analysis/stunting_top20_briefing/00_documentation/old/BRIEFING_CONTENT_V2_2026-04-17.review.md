@@ -38,7 +38,9 @@ numbers, and caveats are settled here.
 
 ## Working Headline
 
-Child Stunting: Level and Trends Over Two Decades
+Modeled stunting was highly concentrated in a relatively small set of
+countries, but the countries with the highest prevalence were not identical to
+those carrying the largest burden.
 
 ## Proposed Figures And Tables
 
@@ -52,26 +54,24 @@ Child Stunting: Level and Trends Over Two Decades
 
 ## Section 0 - Executive Summary
 
->>>It is strange to have detailed numbers in the summary and not have the numbers in the body. It should be the opposite. All the detailed numbers should be in the body, with only a few select key statistics in the summary.
-
 Modelled JME estimates for 2024 showed that very high stunting prevalence was
->>> Must spell out acronyms when used for first time
 concentrated in a group of countries headed by Burundi at 55.3 per cent,
 followed by Niger at 48.3 per cent, Eritrea at 48.0 per cent, Angola at
-47.7 per cent, and Papua New Guinea at 47.6 per cent. The burden profile, in terms of the number of stunted children, was
+47.7 per cent, and Papua New Guinea at 47.6 per cent. The burden profile was
 different. India had by far the largest estimated number of stunted children at
 37.4 million, followed by Nigeria at 11.4 million, Pakistan at 10.7 million,
 the Democratic Republic of the Congo at 8.7 million, and Ethiopia at
 6.9 million.
 
-The overlap between high stunting prevalence and high number of stunted children was substantial but not complete. Eleven
-countries appeared in both the worst-20 prevalence and worst-20 burden lists:
+The overlap between the two views was substantial but not complete. Eleven
+countries appeared in both the top-20 prevalence and top-20 burden lists:
 Niger, Angola, Yemen, the Democratic Republic of the Congo, Afghanistan,
-Madagascar, Mozambique, Ethiopia, Sudan, Nigeria, and Pakistan. Identifying countries where stunting
-where the absolute number of affected
-children was driven by population scale as well as high prevalence can enable an equity-focused approach that also achieves impact at scale.
+Madagascar, Mozambique, Ethiopia, Sudan, Nigeria, and Pakistan. This indicated
+that leadership needed to distinguish between countries where stunting
+intensity was most severe and countries where the absolute number of affected
+children was driven by population scale as well as prevalence.
 
-Over the last two decades progress was visible but uneven. From 2014-2024, the largest prevalence
+Progress was visible but uneven. Over 2014-2024, the largest prevalence
 reductions were recorded in Libya at 13.9 percentage points, Comoros at
 11.1 percentage points, and Nepal at 11.0 percentage points. Over 2004-2024,
 the largest reductions were recorded in North Korea at 27.6 percentage points,
@@ -90,9 +90,7 @@ the top 20 burden countries accounted for 77.3 per cent. This showed that the
 burden remained highly concentrated even though the highest-prevalence
 countries were only partly the same as the highest-burden countries.
 
->>>This is not the correct denominator; the global number of stunted children is 150.2 million. Revise using that denominator. Also, re-word the paragraph to make more clear.
-
-## Section 1 - What The 2024 Data Showed
+## Section 1 - What The Current Data Showed
 
 This briefing used modelled national stunting estimates for children under 5.
 The latest year available in the prepared input was 2024. On prevalence,

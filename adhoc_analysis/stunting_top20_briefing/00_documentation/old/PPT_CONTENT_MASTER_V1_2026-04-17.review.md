@@ -1,12 +1,42 @@
-# Stunting Top 20 Briefing - Content V2
+>>> General: Add document-level comments at the top of this file using `>>>`.
+>>> General: To comment on a specific line or paragraph, copy that text here and put one or more `>>>` lines directly below it.
+>>> General: If you want to propose edits, just change the copied text in this review file. The agent should compare this file against the main draft.
+
+# Review File - Stunting Top 20 Briefing - PPT Content Master V1
+
+Use this file to review:
+
+- `PPT_CONTENT_MASTER_V1_2026-04-17.md`
+
+Review syntax:
+
+- document-level comments start with `>>>` at the top of the file
+- copied text from the main file can be followed by `>>>` comment lines
+- edited text in this file counts as a proposed change
+
+---
+
+# Stunting Top 20 Briefing - PPT Content Master V1
 
 Date: 2026-04-17
 
-Status: v2 drafted from review comments
+Status: primary document for review
 
-Purpose: provide a revised content draft for the 1-page brief, 2-page brief,
-and PowerPoint, incorporating review edits and additional approved metrics from
-the current briefing outputs.
+Purpose: make the two-page narrative brief the master content document for
+this workflow. The 1-page brief and PowerPoint should be derived only after
+the two-page brief content, structure, and caveats are settled.
+
+## Sequencing Rule
+
+Document development for this workflow should proceed in this order:
+
+1. Two-page narrative brief (primary review and editing document)
+2. One-page brief derived from the settled two-page brief
+3. PowerPoint derived from the settled two-page brief
+
+Narrative documents are easier to review and edit than slide-structured
+content. Settling the analytical story in prose first avoids drift across
+products and ensures the PPT inherits agreed content rather than driving it.
 
 ## Guardrails
 
@@ -18,154 +48,47 @@ the current briefing outputs.
 - Where a stronger statement would have required additional computation, the
   text stayed descriptive rather than inferring beyond the current outputs.
 
+## What The Two-Page Brief Must Settle
+
+- the analytical story arc (severity, scale, progress, caveats)
+- core claims and approved numbers
+- chart or table requirements
+- methods cautions and source attributions
+- what content flows into the 1-pager and what maps onto PPT slides
+
+## Downstream Product Plan
+
+### One-Page Brief
+
+The one-page brief should be drafted only after the two-page brief is stable.
+It should:
+
+- use the same approved numbers and caveats
+- compress to headline findings only
+- remove supporting detail that is already settled in the two-page brief
+
+### PowerPoint
+
+The PowerPoint should be built only after the two-page brief is stable.
+It should:
+
+- map the settled narrative sections onto slides
+- use approved numbers, caveats, and chart specifications from the brief
+- add speaker notes derived from the brief prose
+- not introduce new analytical claims beyond what the brief contains
+
 ## Working Headline
 
 Modeled stunting was highly concentrated in a relatively small set of
 countries, but the countries with the highest prevalence were not identical to
 those carrying the largest burden.
 
-## Proposed Figures And Tables For Brief Products
-
-### 1-Page Brief
-
-- Mini table: top five countries by prevalence in 2024
-- Mini table: top five countries by number of stunted children in 2024
-- Callout box: overlap between the prevalence and burden top-20 lists
-- Small summary table: strongest prevalence reductions and strongest burden
-  reductions over 10-year and 20-year windows
-
-### 2-Page Brief
-
-- Figure 1: horizontal bar chart of highest stunting prevalence countries
-- Figure 2: horizontal bar chart of highest burden countries
-- Table 1: countries appearing on both top-20 lists
-- Figure 3: 10-year prevalence reduction chart
-- Figure 4: 20-year prevalence reduction chart
-- Figure 5: 10-year reduction in number of stunted children
-- Figure 6: 20-year reduction in number of stunted children
-
-## Draft For 1-Page Brief
-
-### Executive Summary
-
-Modelled JME estimates for 2024 showed that very high stunting prevalence was
-concentrated in a group of countries headed by Burundi at 55.3 per cent,
-followed by Niger at 48.3 per cent, Eritrea at 48.0 per cent, Angola at
-47.7 per cent, and Papua New Guinea at 47.6 per cent. The burden profile was
-different. India had by far the largest estimated number of stunted children at
-37.4 million, followed by Nigeria at 11.4 million, Pakistan at 10.7 million,
-the Democratic Republic of the Congo at 8.7 million, and Ethiopia at
-6.9 million.
-
-The overlap between the two views was substantial but not complete. Eleven
-countries appeared in both the top-20 prevalence and top-20 burden lists:
-Niger, Angola, Yemen, the Democratic Republic of the Congo, Afghanistan,
-Madagascar, Mozambique, Ethiopia, Sudan, Nigeria, and Pakistan. This indicated
-that leadership needed to distinguish between countries where stunting
-intensity was most severe and countries where the absolute number of affected
-children was driven by population scale as well as prevalence.
-
-Progress was visible but uneven. Over 2014-2024, the largest prevalence
-reductions were recorded in Libya at 13.9 percentage points, Comoros at
-11.1 percentage points, and Nepal at 11.0 percentage points. Over 2004-2024,
-the largest reductions were recorded in North Korea at 27.6 percentage points,
-Nepal at 25.3 percentage points, and Tajikistan at 24.9 percentage points. On
-the burden side, the largest 10-year reductions in the number of stunted
-children were recorded in India at 12.6 million, China at 3.6 million,
-Indonesia at 2.9 million, Pakistan at 2.4 million, and Bangladesh at
-1.3 million. Over 2004-2024, the largest reductions were recorded in India at
-27.5 million, China at 9.5 million, Bangladesh at 5.0 million, Indonesia at
-3.9 million, and the Philippines at 1.3 million.
-
-The current 2024 number series summed to 149.2 million stunted children across
-the 162-country comparison universe used in this output. The top five burden
-countries accounted for 75.2 million of those children, or 50.4 per cent, and
-the top 20 burden countries accounted for 77.3 per cent. This showed that the
-burden remained highly concentrated even though the highest-prevalence
-countries were only partly the same as the highest-burden countries.
-
-### Key Messages
-
-- A relatively small set of populous countries carried most of the burden,
-  even though the highest-prevalence countries were partly different.
-- Reductions in the number of stunted children were possible at substantial
-  scale, with India, China, Indonesia, Pakistan, and Bangladesh recording the
-  largest 10-year burden declines in the current output.
-- The fastest observed prevalence reductions were equivalent to about
-  1.4 percentage points per year, suggesting that sustained annual declines of
-  around 1 percentage point had been achievable in some settings represented in
-  this dataset.
-
-### Draft Closing Paragraph
-
-Child stunting had to be viewed through both severity and scale. The
-highest-prevalence countries identified where modeled stunting rates remained
-most extreme, while the burden ranking showed where the largest numbers of
-children were affected. Equity-focused approaches were needed to target the
-countries with the highest prevalence, but there was also a strong case for
-focusing on countries with the highest absolute numbers of stunted children
-when the objective was large-scale impact. The current results also showed that
-strong long-run progress was possible, and that the strongest performers in the
-series had achieved reductions of roughly 1.4 percentage points per year.
-
-## Draft For 2-Page Brief
-
-### Section 1 - What The Current Data Showed
-
-This briefing used modelled national stunting estimates for children under 5.
-The latest year available in the prepared input was 2024. On prevalence,
-Burundi, Niger, Eritrea, Angola, and Papua New Guinea ranked highest in the
-current output. On burden, the picture shifted sharply toward larger-population
-countries, with India, Nigeria, Pakistan, the Democratic Republic of the
-Congo, and Ethiopia accounting for the largest estimated numbers of stunted
-children.
-
-This difference mattered for interpretation. A country could rank very high on
-prevalence without contributing one of the largest absolute burdens, and a
-country could carry a very large burden even when its prevalence was lower than
-that of the most extreme-rate countries. Eleven countries appeared on both
-top-20 lists, which made them particularly important for leadership attention
-because both rate and scale remained high.
-
-### Section 2 - Where Progress Was Strongest
-
-The strongest 10-year prevalence reductions were recorded in Libya,
-Comoros, and Nepal, with declines of 13.9, 11.1, and 11.0 percentage points,
-respectively. The strongest 20-year reductions were recorded in North Korea,
-Nepal, and Tajikistan, with declines of 27.6, 25.3, and 24.9 percentage
-points. At the upper end of the observed distribution, these results implied an
-average annual pace of about 1.4 percentage points per year.
-
-Progress in the number of stunted children also warranted attention. India
-recorded the largest reduction in the estimated number of stunted children over
-both 2014-2024 and 2004-2024, yet it still remained the country with the
-largest burden in 2024. Over 2014-2024, the largest burden reductions were seen
-in India, China, Indonesia, Pakistan, and Bangladesh. Over 2004-2024, the
-largest burden reductions were seen in India, China, Bangladesh, Indonesia,
-and the Philippines. These results showed that large declines in burden were
-possible, but they also showed that some countries remained among the highest
-burden settings even after substantial progress.
-
-### Section 3 - Data Considerations
-
-The modeled series was suitable for trend interpretation, but it was smoothed
-and should not have been read as a direct year-by-year record of change. Rapid
-shocks, including conflict and war, may not have been reflected immediately in
-the modeled series because data were often unavailable from those contexts.
-
-The ranking universes in the prepared inputs included 162 countries for the
-latest-year, 10-year, and 20-year comparisons used here. The current output was
-well suited to describing relative ranking, overlap, concentration, and
-measured change over the selected windows. It did not yet support stronger
-claims about the causes of progress, the role of conflict in specific country
-movements, or the extent to which child population growth offset prevalence
-reductions unless those relationships were computed explicitly.
-
-## PowerPoint Content Aligned To Current Pipeline Design
+## PowerPoint Content Master
 
 ### Slide 1 - Branded Divider
 
 - Slide type: retained template divider slide
+- Role in story: branded opening only
 - On-slide text: template-managed
 - Speaker notes: brief verbal opener only; no substantive analytical text
 - Chart/table: none
@@ -173,6 +96,7 @@ reductions unless those relationships were computed explicitly.
 ### Slide 2 - Title
 
 - Slide type: title slide variant from `00_pptx_title_slide.r`
+- Role in story: define the topic and audience
 - On-slide text:
   Child Stunting: Current Levels and Trends Over Two Decades
 
@@ -186,6 +110,7 @@ reductions unless those relationships were computed explicitly.
 ### Slide 3 - Overview
 
 - Slide type: section slide from `00_pptx_section_slide.r`
+- Role in story: orient the audience to the structure of the deck
 - On-slide text:
   Overview
 
@@ -201,6 +126,7 @@ reductions unless those relationships were computed explicitly.
 ### Slide 4 - What This Briefing Showed
 
 - Slide type: bullet slide from `00_pptx_bullet_slide.r`
+- Role in story: establish the core claims early
 - On-slide text:
   1. Burundi had the highest modeled stunting prevalence in 2024 at
      55.3 per cent.
@@ -219,6 +145,7 @@ reductions unless those relationships were computed explicitly.
 ### Slide 5 - Stunting Prevalence Section
 
 - Slide type: section slide from `00_pptx_section_slide.r`
+- Role in story: shift into the prevalence part of the deck
 - On-slide text:
   Stunting prevalence
 
@@ -231,6 +158,7 @@ reductions unless those relationships were computed explicitly.
 ### Slide 6 - Highest Prevalence Countries
 
 - Slide type: title-only chart slide
+- Role in story: show where severity of stunting rates remained highest
 - On-slide text:
   Highest modeled stunting prevalence in 2024
 - Speaker notes:
@@ -240,9 +168,26 @@ reductions unless those relationships were computed explicitly.
 - Chart/table:
   Horizontal bar chart of the top 15 countries by modeled prevalence in 2024
 
+Proposed figure:
+
+- Chart type: horizontal bar chart
+- Visual purpose: show the countries with the highest modeled stunting rates in
+  2024
+- Sorting: descending by prevalence
+- Preview values:
+
+| Country | Prevalence (%) |
+|---|---:|
+| Burundi | 55.3 |
+| Niger | 48.3 |
+| Eritrea | 48.0 |
+| Angola | 47.7 |
+| Papua New Guinea | 47.6 |
+
 ### Slide 7 - Strongest 10-Year Prevalence Reductions
 
 - Slide type: title-only chart slide
+- Role in story: show shorter-run prevalence progress
 - On-slide text:
   Biggest reduction in stunting: 2014-2024
 - Speaker notes:
@@ -253,9 +198,25 @@ reductions unless those relationships were computed explicitly.
   Horizontal bar chart of the top 15 countries by absolute reduction in
   prevalence, 2014-2024
 
+Proposed figure:
+
+- Chart type: horizontal bar chart
+- Visual purpose: show the largest absolute 10-year prevalence reductions
+- Sorting: descending by absolute percentage-point reduction
+- Preview values:
+
+| Country | 2014 (%) | 2024 (%) | Reduction (pp) |
+|---|---:|---:|---:|
+| Libya | 23.1 | 9.2 | 13.9 |
+| Comoros | 28.5 | 17.4 | 11.1 |
+| Nepal | 37.0 | 26.0 | 11.0 |
+| Bangladesh | 35.6 | 25.1 | 10.5 |
+| Tajikistan | 22.9 | 13.1 | 9.8 |
+
 ### Slide 8 - 10-Year Before-And-After Comparison
 
 - Slide type: title-only chart slide
+- Role in story: show movement from baseline to current values
 - On-slide text:
   Stunting prevalence: before and after, 2014 vs 2024
 - Speaker notes:
@@ -266,9 +227,26 @@ reductions unless those relationships were computed explicitly.
   Before-and-after dot plot for the top 15 countries in the 10-year reduction
   ranking
 
+Proposed figure:
+
+- Chart type: before-and-after dot plot
+- Visual purpose: show baseline and latest values for the strongest 10-year
+  improvers
+- Sorting: ascending by latest-year prevalence in the plotted set
+- Preview values:
+
+| Country | 2014 (%) | 2024 (%) |
+|---|---:|---:|
+| Libya | 23.1 | 9.2 |
+| Tajikistan | 22.9 | 13.1 |
+| Comoros | 28.5 | 17.4 |
+| Bangladesh | 35.6 | 25.1 |
+| Nepal | 37.0 | 26.0 |
+
 ### Slide 9 - Strongest 20-Year Prevalence Reductions
 
 - Slide type: title-only chart slide
+- Role in story: show long-run prevalence progress
 - On-slide text:
   Biggest reduction in stunting: 2004-2024
 - Speaker notes:
@@ -279,9 +257,25 @@ reductions unless those relationships were computed explicitly.
   Horizontal bar chart of the top 15 countries by absolute reduction in
   prevalence, 2004-2024
 
+Proposed figure:
+
+- Chart type: horizontal bar chart
+- Visual purpose: show the largest absolute 20-year prevalence reductions
+- Sorting: descending by absolute percentage-point reduction
+- Preview values:
+
+| Country | 2004 (%) | 2024 (%) | Reduction (pp) |
+|---|---:|---:|---:|
+| North Korea | 44.2 | 16.6 | 27.6 |
+| Nepal | 51.4 | 26.0 | 25.3 |
+| Tajikistan | 38.0 | 13.1 | 24.9 |
+| Bangladesh | 50.0 | 25.1 | 24.9 |
+| Comoros | 42.0 | 17.4 | 24.6 |
+
 ### Slide 10 - Stunting Burden Section
 
 - Slide type: section slide from `00_pptx_section_slide.r`
+- Role in story: shift from rate to scale
 - On-slide text:
   Stunting burden: number of children affected
 
@@ -294,6 +288,7 @@ reductions unless those relationships were computed explicitly.
 ### Slide 11 - Highest Burden Countries
 
 - Slide type: title-only chart slide
+- Role in story: show where the largest numbers of children were affected
 - On-slide text:
   Highest number of stunted children in 2024
 - Speaker notes:
@@ -305,9 +300,26 @@ reductions unless those relationships were computed explicitly.
   Horizontal bar chart of the top 15 countries by number of stunted children in
   2024
 
+Proposed figure:
+
+- Chart type: horizontal bar chart
+- Visual purpose: show where the largest absolute numbers of stunted children
+  were located in 2024
+- Sorting: descending by number of stunted children
+- Preview values:
+
+| Country | Stunted children (millions) |
+|---|---:|
+| India | 37.4 |
+| Nigeria | 11.4 |
+| Pakistan | 10.7 |
+| Congo - Kinshasa | 8.7 |
+| Ethiopia | 6.9 |
+
 ### Slide 12 - Strongest 10-Year Burden Reductions
 
 - Slide type: title-only chart slide
+- Role in story: show shorter-run burden progress
 - On-slide text:
   Biggest reduction in stunted numbers: 2014-2024
 - Speaker notes:
@@ -318,9 +330,26 @@ reductions unless those relationships were computed explicitly.
   Horizontal bar chart of the top 15 countries by reduction in the number of
   stunted children, 2014-2024
 
+Proposed figure:
+
+- Chart type: horizontal bar chart
+- Visual purpose: show the largest absolute 10-year reductions in the number of
+  stunted children
+- Sorting: descending by absolute reduction in millions
+- Preview values:
+
+| Country | 2014 (millions) | 2024 (millions) | Reduction (millions) |
+|---|---:|---:|---:|
+| India | 50.0 | 37.4 | 12.6 |
+| China | 6.0 | 2.4 | 3.6 |
+| Indonesia | 7.9 | 5.0 | 2.9 |
+| Pakistan | 13.1 | 10.7 | 2.4 |
+| Bangladesh | 5.5 | 4.2 | 1.3 |
+
 ### Slide 13 - Strongest 20-Year Burden Reductions
 
 - Slide type: title-only chart slide
+- Role in story: show long-run burden progress
 - On-slide text:
   Biggest reduction in stunted numbers: 2004-2024
 - Speaker notes:
@@ -332,9 +361,26 @@ reductions unless those relationships were computed explicitly.
   Horizontal bar chart of the top 15 countries by reduction in the number of
   stunted children, 2004-2024
 
+Proposed figure:
+
+- Chart type: horizontal bar chart
+- Visual purpose: show the largest absolute 20-year reductions in the number of
+  stunted children
+- Sorting: descending by absolute reduction in millions
+- Preview values:
+
+| Country | 2004 (millions) | 2024 (millions) | Reduction (millions) |
+|---|---:|---:|---:|
+| India | 64.9 | 37.4 | 27.5 |
+| China | 11.8 | 2.4 | 9.5 |
+| Bangladesh | 9.2 | 4.2 | 5.0 |
+| Indonesia | 8.9 | 5.0 | 3.9 |
+| Philippines | 3.9 | 2.5 | 1.3 |
+
 ### Slide 14 - Key Findings And Programme Implications
 
 - Slide type: bullet slide from `00_pptx_bullet_slide.r`
+- Role in story: synthesize the evidence and set the boundaries of the message
 - On-slide text:
   1. Severity and scale did not point to exactly the same country set.
   2. Eleven countries appeared on both the prevalence and burden top-20 lists.
@@ -351,21 +397,47 @@ reductions unless those relationships were computed explicitly.
 - Chart/table:
   Optional companion table in notes or annex listing the 11 overlap countries
 
+Optional companion table preview:
+
+| Overlap countries |
+|---|
+| Niger |
+| Angola |
+| Yemen |
+| Congo - Kinshasa |
+| Afghanistan |
+| Madagascar |
+| Mozambique |
+| Ethiopia |
+| Sudan |
+| Nigeria |
+| Pakistan |
+
 ### Slide 15 - Thank You
 
 - Slide type: retained template closing slide
+- Role in story: close the presentation
 - On-slide text: template-managed
 - Speaker notes: none
 - Chart/table: none
 
-## Items To Tighten Before Final Production
+## Open Questions To Resolve In PPT Review
 
-- Add an approved region-based tabulation if the final brief needs explicit
-  regional clustering language rather than country examples alone.
-- Add a burden-versus-population decomposition if the final brief needs a
-  stronger statement on population growth pressure.
-- Confirm preferred naming conventions for countries such as North Korea and
-  the Democratic Republic of the Congo in final external-facing text.
+- Should the deck add a dedicated overlap slide or keep overlap only in the key
+  findings slide and notes?
+- Should the burden section add a concentration callout beyond the current top
+  five share statement?
+- Should a methods slide be inserted before the closing findings slide, or are
+  the speaker notes sufficient for the current briefing purpose?
+- Which country naming convention should be used in final external-facing text
+  for cases such as North Korea and the Democratic Republic of the Congo?
+
+## What Gets Deferred Until After PPT Approval
+
+- drafting the two-page brief in prose
+- drafting the one-page brief in compressed executive form
+- final compression decisions about which caveats remain visible in shorter
+  products and which move to notes or annexes
 
 ## Source Notes
 

@@ -8,11 +8,26 @@
 
 ```
 stunting_top20_briefing/
-  00_documentation/   ← this README
-  01_inputs/          ← local copy of stunting modeled data (generated at runtime)
-  02_codes/           ← analysis and visualization scripts
-  03_outputs/         ← rankings CSV, RDS, and PowerPoint
+  00_documentation/       ← this README, session learnings, governance docs
+  00_documentation/old/   ← archived content iterations from earlier workflow
+  01_inputs/              ← local copy of stunting modeled data (generated at runtime)
+  02_codes/               ← analysis and product-generation scripts
+  03_outputs/             ← rankings, tables/figures workbook, markdown, PNGs, products
+  03_outputs/figures/     ← PNG figure images from data analysis step
 ```
+
+## Workflow
+
+1. **Data analysis** (script 3): Crunch the data, produce an Excel workbook
+   with summary tables and a `figures/` folder with chart PNGs, plus a markdown
+   file listing all figures with key findings and points of interest.
+2. **Human review**: Iterative review of the markdown and Excel using a review
+   document and track-change document (three-file pattern).
+3. **Content agreement**: Outline the target product (e.g. 2-page brief) with a
+   word/paragraph budget matched to available space.
+4. **Product content**: Draft the narrative for the specific product.
+5. **Product generation**: Run a product script (5*.r) to produce the final
+   output (DOCX, PPTX, etc.).
 
 ## Execution Order
 
@@ -20,10 +35,14 @@ Run scripts from the **repository root** (so `profile_OSE-DA-NT.R` resolves):
 
 | Script | Purpose |
 |--------|---------|
-| `02_codes/1_execute_conductor.r` | **Entrypoint.** Sources all steps below in order. |
+| `02_codes/1_execute_conductor.r` | **Entrypoint.** Sources steps 1–2 below. Product scripts (step 3) are run manually after review. |
 | `02_codes/2_prepare_inputs.r` | Copies stunting modeled estimates (ANT_HAZ_NE2_MOD) from `analysisDatasetsOutputDir` into `01_inputs/`. Filters to national-level totals. |
-| `02_codes/3_stunting_rankings.r` | Computes three top-20 rankings: highest prevalence, biggest 10-year improvers, biggest 20-year improvers. Writes CSV and RDS to `03_outputs/`. |
-| `02_codes/4_create_ppt.r` | Generates a UNICEF-branded PowerPoint (`stunting_top20_briefing.pptx`) that keeps template cover/thank-you slides and adds analysis charts plus narrative. Also produces an Excel companion workbook (`stunting_top20_briefing_data.xlsx`) with one sheet per figure slide so data can be reviewed or charts recreated in Excel. |
+| `02_codes/3_stunting_rankings.r` | Computes top-20 rankings (prevalence and burden), overlap and concentration analysis, generates Excel workbook (`stunting_tables_and_figures.xlsx`), PNG figures (7 charts), and markdown with key findings (`stunting_tables_and_figures.md` + `.review.md`). Also writes RDS and CSV for downstream use. |
+| `02_codes/5_create_ppt.r` | *(secondary, revisit later)* Generates a UNICEF-branded PowerPoint. |
+| `02_codes/5b_create_ppt_from_content_master.r` | *(secondary)* Test PPT from markdown content master. |
+| `02_codes/5c_create_ppt_combined.r` | *(secondary)* Combined PPT with speaker notes. |
+| `02_codes/5d_create_two_pager_brief.r` | *(secondary)* Unstyled two-page briefing document. |
+| `02_codes/5e_create_two_pager_styled.r` | Stylized fixed-layout two-page briefing document. |
 
 ## Data Source
 
@@ -33,12 +52,31 @@ Run scripts from the **repository root** (so `profile_OSE-DA-NT.R` resolves):
 
 ## Outputs
 
+### Data analysis outputs (script 3)
+
 | File | Description |
 |------|-------------|
+| `stunting_rankings.rds` | R list object with all ranking data frames, overlap, concentration, and metadata. |
 | `stunting_rankings.csv` | Combined human-readable rankings with baseline/current values and change. |
-| `stunting_rankings.rds` | R list object with three data frames + metadata (for PPT script). |
-| `stunting_top20_briefing.pptx` | PowerPoint opening with a full-bleed branded photo cover, followed by a title slide, chart slides, narrative bullet slides, and a thank-you closing slide. |
-| `stunting_top20_briefing_data.xlsx` | Excel workbook with one sheet per figure slide (7 sheets when burden data exist). Columns match the chart data so figures can be recreated in Excel. |
+| `stunting_tables_and_figures.xlsx` | Excel workbook with one sheet per summary table (T1–T8). |
+| `stunting_tables_and_figures.md` | Markdown listing all figures, tables, key findings, and points of interest. |
+| `stunting_tables_and_figures.review.md` | Clean review copy for human editing. |
+| `figures/fig1_highest_prevalence.png` | Top-20 highest stunting prevalence bar chart. |
+| `figures/fig2_highest_burden.png` | Top-20 highest number of stunted children bar chart. |
+| `figures/fig3_10yr_prevalence_reduction.png` | Top-20 10-year prevalence reduction bar chart. |
+| `figures/fig4_20yr_prevalence_reduction.png` | Top-20 20-year prevalence reduction bar chart. |
+| `figures/fig5_10yr_burden_reduction.png` | Top-20 10-year burden reduction bar chart. |
+| `figures/fig6_20yr_burden_reduction.png` | Top-20 20-year burden reduction bar chart. |
+| `figures/fig7_before_after_10yr.png` | Before/after dot plot for 10-year prevalence change. |
+
+### Product outputs (scripts 5*.r — run after review)
+
+| File | Description |
+|------|-------------|
+| `stunting_top20_briefing.pptx` | UNICEF-branded PowerPoint (from 5_create_ppt.r). |
+| `stunting_top20_briefing_data.xlsx` | Companion workbook for the PPT. |
+| `stunting_top20_two_pager_v4b_styled.docx` | Stylized two-page briefing document (from 5e). |
+| `stunting_top20_two_pager_v4b_styled_data.xlsx` | Companion workbook for the styled two-pager. |
 
 ## Dependencies
 
@@ -68,6 +106,11 @@ Use these local documents when extending the briefing content:
 - `00_documentation/JME_SOURCE_DISCOVERY_STARTER.md` - starting list of high-priority UNICEF JME background sources for modeled stunting content
 - `00_documentation/SESSION_LEARNINGS_2026-04-17.md` - reusable lessons from the current briefing-development session, including markdown review workflow and tracked-change conventions
 
+Previous content iterations (V1–V4 briefing content, content agreements, PPT
+content masters, figure audit) have been moved to `00_documentation/old/` for
+reference. The current workflow starts from the tables/figures markdown produced
+by script 3.
+
 Working source documents and the source registry for this briefing are stored
 outside the repository in the Analysis Space `github` folder at:
 
@@ -84,3 +127,5 @@ Use that external folder for non-dataset source documents and the active
 - All figure slides show 15 countries (optimal for horizontal bar/dot charts on widescreen slides).
 - The before/after dot plot (slide 7) is sorted by the latest-year value (lowest at top) with a legend ordered to match left-to-right positioning (latest year first, then baseline year).
 - For markdown drafting rounds, prefer a three-file review pattern: clean draft, tracked draft, and clean review copy.
+- For multi-product briefing workflows, settle the two-page narrative brief first; derive the 1-page brief and PowerPoint from it.
+- Content agreements and briefing content drafts must account for the physical space available in the target format from the start. A two-page styled brief has roughly one page of usable text once figures, headers, callouts, and margins are included. Draft word budgets alongside the content outline to avoid overproduction.

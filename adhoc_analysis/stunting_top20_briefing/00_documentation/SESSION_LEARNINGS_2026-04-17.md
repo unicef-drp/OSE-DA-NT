@@ -30,6 +30,19 @@ stunting briefing session so they can be reused in later rounds.
 ## Content Development Learnings
 
 - A content-agreement step is necessary before drafting a brief or PowerPoint.
+- The content agreement and briefing content must account for the physical
+  space available in the target output format from the very beginning. A
+  two-page brief has roughly one page of usable text space once figures,
+  headers, callouts, and margins are accounted for. Content plans that produce
+  more narrative than can fit lead to painful cutting later and risk losing
+  important material. Future content agreements should state the target format
+  and approximate word/paragraph budget alongside the substantive outline.
+- For multi-product outputs, the most comprehensive product should be settled
+  first and should act as the source narrative for shorter derivative products.
+- For this workflow, the preferred sequence was revised to: two-page narrative
+  brief first, then 1-page brief, then PowerPoint. The earlier PPT-first
+  approach was reversed because narrative documents are easier to review and
+  edit than slide content.
 - The briefing content needed to distinguish prevalence from burden rather than
   treating them as interchangeable views.
 - The current outputs supported stronger narrative only after adding overlap,
