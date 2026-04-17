@@ -45,6 +45,10 @@ DW-Production path:
 6. Keep reference assets visible
 - Indicator, survey, country, decision, and disaggregation reference logic should be documented as first-class dependencies, not hidden only in legacy workbooks.
 
+7. Keep GitHub focused on code and small controlled assets
+- Do not use this repository as a storage location for working source-document libraries, briefing packets, or large analytical support files.
+- Store those materials in the external Analysis Space `github` folder under the relevant workflow subfolder.
+
 ## Migration Phases
 
 Phase 1 (active):

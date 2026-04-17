@@ -60,6 +60,22 @@ R packages: `arrow`, `dplyr`, `tidyr`, `readr`, `ggplot2`, `countrycode`, `offic
 | `02_codes/00_pptx_bullet_slide.r` | Full-width numbered bullet slides using layout "8_Title and Content". Supports sub-bullets (level 2), automatic pagination with "(continued)", continued numbering across slides, and configurable spacing between top-level bullet groups. |
 | `02_codes/00_pptx_section_slide.r` | Overview and section break slides using layouts "Title and Content" / "2_Title and Content" (template slides 30–31 design). Left side: title + body text; right side: empty picture placeholder for the user to insert their own photo in PowerPoint. Used for the presentation overview and as section dividers between content blocks. |
 
+## Content Governance
+
+Use these local documents when extending the briefing content:
+
+- `00_documentation/CONTENT_PLAN_AND_SOURCE_GOVERNANCE.md` - analysis roadmap, approved numeric-source rules, and citation requirements
+- `00_documentation/JME_SOURCE_DISCOVERY_STARTER.md` - starting list of high-priority UNICEF JME background sources for modeled stunting content
+- `00_documentation/SESSION_LEARNINGS_2026-04-17.md` - reusable lessons from the current briefing-development session, including markdown review workflow and tracked-change conventions
+
+Working source documents and the source registry for this briefing are stored
+outside the repository in the Analysis Space `github` folder at:
+
+`C:/Users/jconkle/UNICEF/Data and Analytics Nutrition - Analysis Space/github/adhoc_analysis/stunting_top20_briefing/00_documentation/source_library`
+
+Use that external folder for non-dataset source documents and the active
+`source_registry.csv`.
+
 ## Notes
 
 - "Improvement" is measured as absolute reduction in stunting prevalence (percentage points).
@@ -67,3 +83,4 @@ R packages: `arrow`, `dplyr`, `tidyr`, `readr`, `ggplot2`, `countrycode`, `offic
 - Charts use UNICEF colour and typography settings for presentation readability.
 - All figure slides show 15 countries (optimal for horizontal bar/dot charts on widescreen slides).
 - The before/after dot plot (slide 7) is sorted by the latest-year value (lowest at top) with a legend ordered to match left-to-right positioning (latest year first, then baseline year).
+- For markdown drafting rounds, prefer a three-file review pattern: clean draft, tracked draft, and clean review copy.

@@ -46,3 +46,12 @@ These instructions apply to work in this repository.
 
 - If script order or output contracts change, update 00_documentation in the same change.
 - Keep runbooks practical, with entrypoint, order, inputs, outputs, and notes.
+
+## Analysis And Document Production Rules
+
+- Before producing a brief, PowerPoint, or polished narrative output, define the content scope first: audience, questions, approved sources, proposed structure, and open decisions.
+- Keep numeric claims tied to approved datasets unless the user explicitly approves a document-based exception.
+- Do not store working source-document libraries in GitHub; use the external Analysis Space `github` folder instead.
+- When working on child anthropometry narrative or briefing content, review the current UNICEF JME pages before drafting content:
+	- https://data.unicef.org/topic/nutrition/malnutrition/
+	- https://data.unicef.org/resources/jme/
