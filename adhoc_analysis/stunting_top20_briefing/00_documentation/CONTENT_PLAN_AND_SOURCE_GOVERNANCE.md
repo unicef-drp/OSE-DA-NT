@@ -1,6 +1,6 @@
 # Stunting Top 20 Briefing - Content Plan And Source Governance
 
-Last updated: 2026-04-17
+Last updated: 2026-04-18
 
 ## Purpose
 
@@ -167,6 +167,47 @@ high-priority source list.
 Those pages should be used to identify the latest JME report, standard
 methodology, current downloadable tables, and directly relevant anthropometry
 guidance before drafting briefing narrative.
+
+The following stored external documents are now explicitly in scope as context
+sources for this workflow:
+
+- `DOC-015` - SOFI 2025 FAO Knowledge Repository landing page
+- `DOC-016` - SOFI 2025 PDF stored in the external source library
+- `DOC-017` - UN SDG Report 2025 landing page
+- `DOC-018` - UN Secretary-General SDG Report 2025 English PDF stored in the external source library
+
+Word-based storyline documents saved in the external source-library folder are
+also in scope as context sources for this workflow when they are registered in
+`source_registry.csv`. These should be treated as editorial and interpretive
+inputs unless the user explicitly approves numeric use.
+
+These SOFI sources may be used for contextual framing, interpretation, and
+cross-report narrative support, but they remain non-numeric sources unless the
+user explicitly approves numeric use and the registry is updated accordingly.
+
+The UN SDG Report sources follow the same rule: they may be used for context,
+cross-report framing, and narrative support, but not as approved numeric
+sources unless the user explicitly approves numeric use and the registry is
+updated accordingly.
+
+## Population Data Rule
+
+For this briefing, narrative statements about global or regional under-five
+population change must not be back-calculated from prevalence and burden when a
+direct approved population source exists.
+
+Use this approved workbook for regional and global population context:
+
+`C:/Users/jconkle/UNICEF/Chief Statistician Office - Documents/060.DW-MASTER/01_dw_prep/011_rawdata/nt/output/inter/agg_indicator/Regional_Output_NT_ANT_HAZ_NE2_MOD.xlsx`
+
+Use the `basepop_value` variable from that workbook for regional and global
+population references in the two-pager narrative. This rule exists to avoid
+rounding differences introduced by reverse-calculation from prevalence and
+burden values.
+
+If other scripts or systems are consulted for validation, treat them as
+secondary checks unless the user explicitly approves them as a primary numeric
+source.
 
 ## Content Improvement Plan
 

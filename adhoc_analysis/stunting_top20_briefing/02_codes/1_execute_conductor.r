@@ -40,11 +40,10 @@ message("\n--- Step 2: Compute rankings, tables, figures ---")
 source(file.path(codes_dir, "3_stunting_rankings.r"))
 
 # Step 3 (product generation) is run manually after the tables/figures
-# review cycle is complete. Scripts 5*.r are product generators:
-#   5_create_ppt.r            — standalone PPT
-#   5b_create_ppt_from_content_master.r — PPT from content master
+# review cycle is complete. The active on-disk Word generator is:
+source(file.path(codes_dir, "4_create_two_pager.r"))
+
+# moved to old pending review
 #   5c_create_ppt_combined.r  — PPT combined (content + design)
-#   5d_create_two_pager_brief.r — unstyled 2-pager
-#   5e_create_two_pager_styled.r — styled 2-pager
 
 message("\n=== Data analysis complete. Review outputs in 03_outputs/ ===")
