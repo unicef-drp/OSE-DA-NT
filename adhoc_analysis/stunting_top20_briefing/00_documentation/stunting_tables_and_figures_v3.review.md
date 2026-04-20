@@ -1,6 +1,6 @@
 # Stunting Rankings — Tables and Figures (v3)
 
-Generated: 2026-04-18 19:58
+Generated: 2026-04-20 07:36
 Data year: 2024 | 10-year baseline: 2014 | 20-year baseline: 2004
 
 ---

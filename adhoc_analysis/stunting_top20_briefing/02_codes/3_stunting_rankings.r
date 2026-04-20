@@ -618,30 +618,36 @@ if (has_numbers) {
                         units = "in")
 }
 
-# Before/after dot plots — each gets its own sheet
+# Before/after dot plots — each gets its own sheet with data + image
+fig_img_start <- 14  # image starts below the data rows
+
 openxlsx::addWorksheet(wb, "Fig7_prev_10yr")
+openxlsx::writeData(wb, "Fig7_prev_10yr", f7_data)
 openxlsx::insertImage(wb, "Fig7_prev_10yr",
                       file.path(fig_dir, "fig7_before_after_prev_10yr.png"),
-                      startRow = 1, startCol = 1, width = 7, height = 5,
+                      startRow = fig_img_start, startCol = 1, width = 7, height = 5,
                       units = "in")
 
 openxlsx::addWorksheet(wb, "Fig8_prev_20yr")
+openxlsx::writeData(wb, "Fig8_prev_20yr", f8_data)
 openxlsx::insertImage(wb, "Fig8_prev_20yr",
                       file.path(fig_dir, "fig8_before_after_prev_20yr.png"),
-                      startRow = 1, startCol = 1, width = 7, height = 5,
+                      startRow = fig_img_start, startCol = 1, width = 7, height = 5,
                       units = "in")
 
 if (has_numbers) {
   openxlsx::addWorksheet(wb, "Fig9_burden_10yr")
+  openxlsx::writeData(wb, "Fig9_burden_10yr", f9_data)
   openxlsx::insertImage(wb, "Fig9_burden_10yr",
                         file.path(fig_dir, "fig9_before_after_burden_10yr.png"),
-                        startRow = 1, startCol = 1, width = 7, height = 5,
+                        startRow = fig_img_start, startCol = 1, width = 7, height = 5,
                         units = "in")
 
   openxlsx::addWorksheet(wb, "Fig10_burden_20yr")
+  openxlsx::writeData(wb, "Fig10_burden_20yr", f10_data)
   openxlsx::insertImage(wb, "Fig10_burden_20yr",
                         file.path(fig_dir, "fig10_before_after_burden_20yr.png"),
-                        startRow = 1, startCol = 1, width = 7, height = 5,
+                        startRow = fig_img_start, startCol = 1, width = 7, height = 5,
                         units = "in")
 }
 
