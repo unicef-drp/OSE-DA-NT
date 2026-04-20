@@ -17,6 +17,30 @@ load_country_names <- function() {
 }
 
 # ---------------------------------------------------------------------------
+# Prevalence threshold classification (de Onis et al 2018)
+# Very low <2.5%, Low 2.5-<10%, Medium 10-<20%, High 20-<30%, Very high >=30%
+# ---------------------------------------------------------------------------
+threshold_colors <- c(
+  "Very low"  = "#2DC937",
+  "Low"       = "#99C140",
+  "Medium"    = "#E7B416",
+  "High"      = "#DB7B2B",
+  "Very high" = "#CC3232"
+)
+
+threshold_levels <- c("Very low", "Low", "Medium", "High", "Very high")
+
+classify_threshold <- function(prev) {
+  dplyr::case_when(
+    prev < 2.5  ~ "Very low",
+    prev < 10   ~ "Low",
+    prev < 20   ~ "Medium",
+    prev < 30   ~ "High",
+    TRUE        ~ "Very high"
+  )
+}
+
+# ---------------------------------------------------------------------------
 # Load country-level series for one indicator (no regional aggregation)
 # Returns one row per country × year with prevalence, pop, pop_affected,
 # and the UNICEF programming-region assignment.
@@ -58,7 +82,8 @@ load_country_series <- function(indicator_code, crosswalk, population,
 # country_data: data frame from load_country_series (or a region subset)
 # label_top_n : number of countries to label (by latest-year pop_affected)
 #               NULL = label all countries
-# color_by    : "region" (colour bubbles by Region) or "country" (single hue)
+# color_by    : "region" (colour bubbles by Region), "country" (single hue),
+#               or "threshold" (colour by prevalence classification)
 # ---------------------------------------------------------------------------
 build_country_scatterplot <- function(country_data,
                                       y_axis_label,
@@ -66,7 +91,7 @@ build_country_scatterplot <- function(country_data,
                                       plot_subtitle = "Modeled estimates \u2014 Year: {round(frame_along)}",
                                       label_top_n   = NULL,
                                       focus_top_n   = 3,
-                                      color_by      = c("region", "country"),
+                                      color_by      = c("region", "country", "threshold"),
                                       y_limits      = NULL,
                                       overlap_threshold = 1.5,
                                       plot_width     = 900,
@@ -93,6 +118,14 @@ build_country_scatterplot <- function(country_data,
                      with_ties = FALSE) %>%
     dplyr::ungroup() %>%
     dplyr::pull(REF_AREA)
+
+  # Prevalence classification (used when color_by = "threshold") --------
+  if (color_by == "threshold") {
+    country_data <- country_data %>%
+      dplyr::mutate(
+        threshold = factor(classify_threshold(prevalence), levels = threshold_levels)
+      )
+  }
 
   country_data <- country_data %>%
     dplyr::mutate(
@@ -141,11 +174,16 @@ build_country_scatterplot <- function(country_data,
     pal <- RColorBrewer::brewer.pal(max(3, min(8, n_regions)), "Set2")
     base_cols <- pal[seq_len(n_regions)]
     names(base_cols) <- regions
-    color_aes   <- ggplot2::aes(color = Region)
-    color_scale <- ggplot2::scale_color_manual(values = base_cols)
+    color_mapping <- ggplot2::aes(color = Region)
+    color_scale   <- ggplot2::scale_color_manual(values = base_cols)
+  } else if (color_by == "threshold") {
+    color_mapping <- ggplot2::aes(color = threshold)
+    color_scale   <- ggplot2::scale_color_manual(
+      values = threshold_colors, name = "Prevalence\nclassification", drop = FALSE
+    )
   } else {
-    color_aes   <- NULL
-    color_scale <- ggplot2::scale_color_identity()
+    color_mapping <- ggplot2::aes(color = color_val)
+    color_scale   <- ggplot2::scale_color_identity()
     country_data$color_val <- "#1CABE2"
     label_df$color_val     <- "#1CABE2"
     focus_labels$color_val <- "#1CABE2"
@@ -165,12 +203,12 @@ build_country_scatterplot <- function(country_data,
     p <- p +
       ggplot2::geom_path(
         data = nolabel_df,
-        mapping = if (color_by == "region") ggplot2::aes(color = Region) else ggplot2::aes(color = color_val),
+        mapping = color_mapping,
         linewidth = 0.3, alpha = 0.2, show.legend = FALSE
       ) +
       ggplot2::geom_point(
         data = nolabel_df,
-        mapping = if (color_by == "region") ggplot2::aes(color = Region) else ggplot2::aes(color = color_val),
+        mapping = color_mapping,
         alpha = 0.3
       )
   }
@@ -179,12 +217,12 @@ build_country_scatterplot <- function(country_data,
     p <- p +
       ggplot2::geom_path(
         data = other_labels,
-        mapping = if (color_by == "region") ggplot2::aes(color = Region) else ggplot2::aes(color = color_val),
+        mapping = color_mapping,
         linewidth = 0.4, alpha = 0.4, show.legend = FALSE
       ) +
       ggplot2::geom_point(
         data = other_labels,
-        mapping = if (color_by == "region") ggplot2::aes(color = Region) else ggplot2::aes(color = color_val),
+        mapping = color_mapping,
         alpha = 0.7
       )
   }
@@ -192,12 +230,12 @@ build_country_scatterplot <- function(country_data,
   p <- p +
     ggplot2::geom_path(
       data = focus_labels,
-      mapping = if (color_by == "region") ggplot2::aes(color = Region) else ggplot2::aes(color = color_val),
+      mapping = color_mapping,
       linewidth = 0.8, alpha = 0.8, show.legend = FALSE
     ) +
     ggplot2::geom_point(
       data = focus_labels,
-      mapping = if (color_by == "region") ggplot2::aes(color = Region) else ggplot2::aes(color = color_val),
+      mapping = color_mapping,
       alpha = 0.95
     )
 
@@ -304,6 +342,7 @@ render_country_scatterplots <- function(country_data,
                                         label_top_n_all = 15,
                                         focus_top_n = 3,
                                         top_n_per_region = 10,
+                                        color_by = NULL,
                                         y_limits = NULL,
                                         nframes  = 120,
                                         fps_gif  = 6,
@@ -333,7 +372,7 @@ render_country_scatterplots <- function(country_data,
     plot_title   = all_title,
     label_top_n  = label_top_n_all,
     focus_top_n  = focus_top_n,
-    color_by     = "region",
+    color_by     = if (!is.null(color_by)) color_by else "region",
     y_limits     = y_limits,
     plot_width   = plot_width,
     plot_height  = plot_height
@@ -380,7 +419,7 @@ render_country_scatterplots <- function(country_data,
       y_axis_label = y_axis_label,
       plot_title   = region_title_fn(reg),
       focus_top_n  = focus_top_n,
-      color_by     = "country",
+      color_by     = if (!is.null(color_by)) color_by else "country",
       y_limits     = y_limits,
       plot_width   = plot_width,
       plot_height  = plot_height
