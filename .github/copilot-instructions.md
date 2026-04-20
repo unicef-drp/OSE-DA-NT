@@ -2,15 +2,17 @@
 
 ## Project Purpose
 
-OSE-DA-NT is the nutrition pipeline workspace for CMRS-based processing and further transformation.
+OSE-DA-NT is the nutrition pipeline workspace for the UNICEF Combined Nutrition Databases processing and further transformation.
 
-This repository is in migration build-out. Initial priority is the further transformation system.
+The repository name comes from UNICEF Office of Strategy and Evidence, Data and Analytics Section, Nutrition Unit.
+
+This repository is in migration build-out. Initial priority is the further transformation system, ad-hoc analysis, and reference tables.
 
 ## Scope Boundary
 
-- OSE-DA-NT handles nutrition processing, post-processing, and transformation logic.
+- OSE-DA-NT handles post-processing after the production of country-level estimates for nutrition indicators in individual indicator pipelines.
 - DW-Production handles regional aggregation and public data warehouse production outputs.
-- OSE-DA-NT is already nutrition-only, so agents should not enforce nt-folder-only scope constraints.
+- OSE-DA-NT is already nutrition-only, so agents should not enforce nt-folder-only scope constraints like in the DW-Production repository.
 
 Do not move DW publication responsibilities into this repository unless explicitly requested.
 
