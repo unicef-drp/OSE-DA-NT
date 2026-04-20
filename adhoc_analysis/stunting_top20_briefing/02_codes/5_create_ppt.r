@@ -245,6 +245,25 @@ theme_unicef <- theme_minimal(base_size = 16, base_family = brand_font) +
 
 fmt_millions <- function(x) sprintf("%.1f M", x / 1000)
 
+# --- Prevalence threshold classification (de Onis et al 2018) -------------
+threshold_colors <- c(
+  "Very low"  = "#2DC937",
+  "Low"       = "#99C140",
+  "Medium"    = "#E7B416",
+  "High"      = "#DB7B2B",
+  "Very high" = "#CC3232"
+)
+
+classify_threshold <- function(prev) {
+  dplyr::case_when(
+    prev < 2.5  ~ "Very low",
+    prev < 10   ~ "Low",
+    prev < 20   ~ "Medium",
+    prev < 30   ~ "High",
+    TRUE        ~ "Very high"
+  )
+}
+
 # =========================================================================
 # 4. Build charts from rankings data
 # =========================================================================
@@ -254,17 +273,20 @@ n_chart <- 10L
 p_highest <- results$highest %>%
   head(n_chart) %>%
   mutate(label = paste0(country_name, " (", REF_AREA, ")"),
-         label = factor(label, levels = rev(label))) %>%
-  ggplot(aes(x = label, y = prevalence)) +
-  geom_col(fill = unicef_cyan, width = 0.7) +
+         label = factor(label, levels = rev(label)),
+         threshold = classify_threshold(prevalence)) %>%
+  ggplot(aes(x = label, y = prevalence, fill = threshold)) +
+  geom_col(width = 0.7) +
   geom_text(aes(label = sprintf("%.1f%%", prevalence)),
             hjust = -0.1, size = 4.4, colour = unicef_warmgrey,
             family = brand_font) +
   coord_flip(ylim = c(0, max(results$highest$prevalence, na.rm = TRUE) * 1.15)) +
+  scale_fill_manual(values = threshold_colors, name = "Threshold", drop = FALSE) +
   labs(title = NULL, subtitle = NULL, caption = chart_caption,
        x = NULL, y = "Prevalence (%)") +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-  theme_unicef
+  theme_unicef +
+  theme(legend.position = "bottom", legend.text = element_text(size = 11))
 
 p_improve_20 <- results$improve_20yr %>%
   head(n_chart) %>%
@@ -284,21 +306,20 @@ p_dot_20 <- results$improve_20yr %>%
   head(n_chart) %>%
   arrange(desc(baseline_value)) %>%
   mutate(label = paste0(country_name, " (", REF_AREA, ")"),
-         label = factor(label, levels = label)) %>%
+         label = factor(label, levels = label),
+         threshold_baseline = classify_threshold(baseline_value),
+         threshold_current  = classify_threshold(current_value)) %>%
   ggplot(aes(y = label)) +
   geom_segment(aes(x = current_value, xend = baseline_value, yend = label),
                colour = unicef_coolgrey, linewidth = 0.6) +
-  geom_point(aes(x = baseline_value, colour = "baseline"), size = 2.5) +
-  geom_point(aes(x = current_value,  colour = "current"),  size = 2.5) +
+  geom_point(aes(x = baseline_value, fill = threshold_baseline),
+             shape = 21, size = 3, colour = "grey30", stroke = 0.3) +
+  geom_point(aes(x = current_value,  fill = threshold_current),
+             shape = 21, size = 3, colour = "grey30", stroke = 0.3) +
   scale_x_reverse(labels = scales::label_percent(scale = 1)) +
-  scale_colour_manual(
-    values = c("baseline" = unicef_orange, "current" = unicef_dark),
-    labels = setNames(c(as.character(yr_20_ago), as.character(latest_year)),
-                      c("baseline", "current")),
-    breaks = c("baseline", "current")
-  ) +
+  scale_fill_manual(values = threshold_colors, name = "Threshold", drop = FALSE) +
   labs(title = NULL, subtitle = NULL, caption = chart_caption,
-       x = "Prevalence (%)", y = NULL, colour = NULL) +
+       x = "Prevalence (%)", y = NULL, fill = NULL) +
   theme_unicef +
   theme(legend.position = "top", legend.text = element_text(size = 13))
 
@@ -306,17 +327,21 @@ if (has_numbers) {
   p_highest_num <- results$highest_number %>%
     head(n_chart) %>%
     mutate(label = paste0(country_name, " (", REF_AREA, ")"),
-           label = factor(label, levels = rev(label))) %>%
-    ggplot(aes(x = label, y = number_thousands)) +
-    geom_col(fill = unicef_magenta, width = 0.7) +
+           label = factor(label, levels = rev(label)),
+           threshold = classify_threshold(prevalence)) %>%
+    ggplot(aes(x = label, y = number_thousands, fill = threshold)) +
+    geom_col(width = 0.7) +
     geom_text(aes(label = fmt_millions(number_thousands)),
               hjust = -0.1, size = 4.4, colour = unicef_warmgrey,
               family = brand_font) +
     coord_flip(ylim = c(0, max(results$highest_number$number_thousands, na.rm = TRUE) * 1.15)) +
+    scale_fill_manual(values = threshold_colors, name = "Prevalence\nthreshold",
+                      drop = FALSE) +
     labs(title = NULL, subtitle = NULL, caption = chart_caption,
          x = NULL, y = "Stunted children (millions)") +
     scale_y_continuous(labels = function(x) paste0(round(x / 1000, 1), " M")) +
-    theme_unicef
+    theme_unicef +
+    theme(legend.position = "bottom", legend.text = element_text(size = 11))
 
   p_improve_20_num <- results$improve_20yr_number %>%
     head(n_chart) %>%
@@ -337,23 +362,20 @@ if (has_numbers) {
     head(n_chart) %>%
     arrange(desc(baseline_value)) %>%
     mutate(label = paste0(country_name, " (", REF_AREA, ")"),
-           label = factor(label, levels = label)) %>%
+           label = factor(label, levels = label),
+           threshold_baseline = classify_threshold(baseline_prevalence),
+           threshold_current  = classify_threshold(current_prevalence)) %>%
     ggplot(aes(y = label)) +
     geom_segment(aes(x = current_value, xend = baseline_value, yend = label),
                  colour = unicef_coolgrey, linewidth = 0.6) +
-    geom_point(aes(x = baseline_value, colour = "baseline"), size = 2.5) +
-    geom_point(aes(x = current_value,  colour = "current"),  size = 2.5) +
+    geom_point(aes(x = baseline_value, fill = threshold_baseline),
+               shape = 21, size = 3, colour = "grey30", stroke = 0.3) +
+    geom_point(aes(x = current_value,  fill = threshold_current),
+               shape = 21, size = 3, colour = "grey30", stroke = 0.3) +
     scale_x_reverse(labels = function(x) paste0(round(x / 1000, 1), " M")) +
-    scale_colour_manual(
-      values = c("baseline" = unicef_orange, "current" = unicef_dark),
-      labels = setNames(
-        c(as.character(yr_20_ago), as.character(latest_year)),
-        c("baseline", "current")
-      ),
-      breaks = c("baseline", "current")
-    ) +
+    scale_fill_manual(values = threshold_colors, name = "Threshold", drop = FALSE) +
     labs(title = NULL, subtitle = NULL, caption = chart_caption,
-         x = "Stunted children (thousands)", y = NULL, colour = NULL) +
+         x = "Stunted children (thousands)", y = NULL, fill = NULL) +
     theme_unicef +
     theme(legend.position = "top", legend.text = element_text(size = 13))
 }
@@ -657,4 +679,4 @@ note_lines <- unlist(lapply(slides, function(sl) {
 writeLines(note_lines, notes_path)
 message("[5] Speaker notes backup saved: ", notes_path)
 
-message("[5] Done. Three files written to: ", output_dir)
+message("[5] Done. PPTX + Excel + notes written to: ", output_dir)

@@ -1,6 +1,6 @@
 # Stunting Top 20 Briefing Content Skill
 
-Last updated: 2026-04-17
+Last updated: 2026-04-20
 
 ## Purpose
 
@@ -177,3 +177,101 @@ This skill is satisfied only when:
    source
 3. the deck includes method transparency on ranking eligibility and windows
 4. the narrative says no more than the evidence supports
+
+---
+
+## Production Lessons (from April 2026 stunting briefing build-out)
+
+These lessons were learned during the full end-to-end production of the stunting
+top-20 two-pager and PowerPoint. Apply them when building any new briefing.
+
+### Pipeline Architecture
+
+- **Conductor pattern:** One `1_execute_conductor.r` loads ALL libraries and
+  sources child scripts in order. Child scripts must never load libraries
+  themselves.
+- **Script numbering:** `2_prepare_inputs.r` → `3_*_rankings.r` →
+  `4_create_two_pager.r` → `5_create_ppt.r`. Keep PPT out of the conductor
+  (manual run after review).
+- **00-prefixed modules:** Reusable PPTX slide modules (`00_pptx_*.r`) are
+  sourced by script 5 only, not by the conductor.
+- **Output path:** All outputs go to an external `githubOutputRoot` path
+  (outside the git repo) to avoid large files in version control.
+- **Auto-versioned Excel:** Use a filename scan pattern
+  (`stunting_tables_and_figures_vN.xlsx`) to auto-increment version numbers
+  so previous workbooks are never overwritten.
+
+### Content Workflow (sequence matters)
+
+1. **Data analysis first** — produce all tables, figures, and RDS before any
+   narrative drafting.
+2. **Content agreement** — outline the product with a word/paragraph budget
+   matched to physical page space. A two-page brief has ~400 words of usable
+   narrative per page once figures, headers, callout boxes, and margins are
+   accounted for.
+3. **Narrative draft in markdown** — use the `TWO_PAGER_BRIEF_CONTENT_V*.md`
+   pattern with markers (`[[KICKER:]]`, `[[SUBTITLE:]]`, `[[FOOTNOTE:]]`).
+4. **Iterative review** — three-file pattern: clean draft, tracked changes,
+   review copy.
+5. **Product generation** — the R script reads the markdown and figure PNGs.
+
+Brief first, PPT second. The narrative brief is easier to review and acts as
+the source text for derivative products.
+
+### Two-Pager Design Lessons
+
+- **Figure panels:** Build side-by-side panels with `magick` rather than
+  placing individual images. The panel approach fits the narrow page width
+  and ensures consistent alignment.
+- **Figure label convention:** Use compound labels (1a/1b, 2a/2b) when two
+  figures share a conceptual pair. The renderer's figure-path map must accept
+  both compound and legacy numeric labels.
+- **Kicker line:** Dark blue (`#374EA2`) reads better than cyan for the
+  small-text kicker at the top of each page.
+- **Callout box:** Key messages render best with a sky-blue shaded background,
+  left cyan border, and dark-blue text.
+- **Footnote placement:** Country 11-20 footnotes appear directly below the
+  figure panel, above the source footer. Keep them terse.
+- **Safe-save pattern:** Wrap `print(doc, target)` in a tryCatch that detects
+  "is open" errors and writes a timestamped alternate file instead of failing.
+
+### Prevalence Threshold Color Coding
+
+- **Thresholds (de Onis et al 2018):** Very low <2.5%, Low 2.5–<10%,
+  Medium 10–<20%, High 20–<30%, Very high ≥30%.
+- **Colors:** Very low=#2DC937, Low=#99C140, Medium=#E7B416, High=#DB7B2B,
+  Very high=#CC3232.
+- **Bar charts (fig1, fig4):** Use `fill = threshold` with
+  `scale_fill_manual()`. For burden charts, color by the country's prevalence
+  threshold, not by the number metric.
+- **Dot plots (fig7-10):** Use `shape = 21` (filled circle with border) +
+  `fill = threshold_baseline` / `fill = threshold_current` so each dot shows
+  its own threshold category. Requires adding `threshold_baseline` and
+  `threshold_current` columns to the plot data.
+- **Legend:** Include the threshold legend at the bottom of bar charts and top
+  of dot plots. Use `drop = FALSE` so all five categories always appear.
+
+### Content Narrative Lessons
+
+- Always distinguish **prevalence** (rate) from **burden** (number affected).
+  They are not interchangeable and the top-20 lists differ substantially.
+- **Overlap analysis** is a key insight: only ~11 of 40 unique countries
+  appear on both top-20 lists. Move overlap discussion to "Interpreting the
+  Results" section rather than crowding the scale section.
+- **Population change** is central to interpretation. Sub-Saharan Africa's
+  child population grew 20%+ while Southern Asia's declined, which explains
+  divergent burden trajectories even when prevalence improved in both.
+- **Threshold transitions** make the narrative concrete: "Albania moved from
+  high to low prevalence" is more meaningful than "Albania reduced prevalence
+  by 21.1 pp."
+- The >100% reduction concentration metric is not an error — explain it as
+  some countries' burden increasing while others' decreased.
+
+### PowerShell / R Execution Notes
+
+- R warnings sent to stderr cause PowerShell `NativeCommandError` and exit
+  code 1. This is not a real failure; check the actual R output.
+- If Excel files fail to save with "permission denied," the file is open in
+  another process. Not a code bug.
+- `magick` must be installed for the two-pager figure panels.
+- `zip` package is needed by the PPT slide-reorder logic.

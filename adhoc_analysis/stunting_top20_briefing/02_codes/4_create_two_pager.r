@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Script:  5g_create_two_pager_v6.r
+# Script:  4_create_two_pager.r
 # Purpose: Build a UNICEF-branded two-page briefing document from the approved
 #          stunting rankings outputs and the current brief content direction.
 # Inputs:  03_outputs/stunting_rankings.rds
@@ -7,7 +7,7 @@
 #          03_outputs/figures/fig4_highest_burden.png
 #          03_outputs/figures/fig8_before_after_prev_20yr.png
 #          03_outputs/figures/fig10_before_after_burden_20yr.png
-# Outputs: 03_outputs/stunting_top20_two_pager_v6.docx
+# Outputs: 03_outputs/stunting_top20_two_pager_v7.docx
 # Notes:   Supports an optional OSE_BRIEF_OUTPUT_ROOT override for local tests.
 # ---------------------------------------------------------------------------
 
@@ -44,7 +44,7 @@ if (!file.exists(rds_path)) stop("Rankings not found: ", rds_path)
 content_path <- file.path(
   projectFolder,
   "adhoc_analysis", "stunting_top20_briefing", "00_documentation",
-  "TWO_PAGER_BRIEF_CONTENT_V5.md"
+  "TWO_PAGER_BRIEF_CONTENT_V6.md"
 )
 if (!file.exists(content_path)) stop("Brief content markdown not found: ", content_path)
 
@@ -197,7 +197,7 @@ layout <- list(
 )
 
 fp_kicker <- officer::fp_text(
-  font.size = 8.5, bold = TRUE, font.family = "Arial", color = ucol$cyan
+  font.size = 8.5, bold = TRUE, font.family = "Arial", color = ucol$dark_blue
 )
 fp_title <- officer::fp_text(
   font.size = 18, bold = TRUE, font.family = "Arial", color = ucol$dark_blue
@@ -638,15 +638,19 @@ apply_editorial_notes <- function(content, overlap_text) {
 }
 
 figure_path_from_caption <- function(fig_caption, figures_dir) {
-  fig_num <- sub("^Figure\\s+([0-9]+).*$", "\\1", fig_caption)
+  fig_id <- sub("^Figure\\s+([0-9]+[ab]?).*$", "\\1", fig_caption)
   fig_map <- c(
     "1" = "fig1_highest_prevalence.png",
+    "1a" = "fig1_highest_prevalence.png",
+    "1b" = "fig4_highest_burden.png",
     "4" = "fig4_highest_burden.png",
+    "2a" = "fig8_before_after_prev_20yr.png",
+    "2b" = "fig10_before_after_burden_20yr.png",
     "8" = "fig8_before_after_prev_20yr.png",
     "10" = "fig10_before_after_burden_20yr.png"
   )
-  if (!fig_num %in% names(fig_map)) return(NA_character_)
-  file.path(figures_dir, unname(fig_map[[fig_num]]))
+  if (!fig_id %in% names(fig_map)) return(NA_character_)
+  file.path(figures_dir, unname(fig_map[[fig_id]]))
 }
 
 build_figure_panel <- function(fig_captions, figures_dir, panel_name, out_dir) {
@@ -841,7 +845,7 @@ if (length(progress_figs) == 0 && length(page2_figs) > 0) {
 
 doc <- officer::body_set_default_section(doc, page_section)
 
-doc_path <- file.path(output_dir, "stunting_top20_two_pager_v6.docx")
+doc_path <- file.path(output_dir, "stunting_top20_two_pager_v7.docx")
 save_doc <- function(doc, target) {
   tryCatch(
     {

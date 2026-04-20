@@ -5,7 +5,7 @@
 #          and overlap analysis. Produces:
 #            - stunting_rankings.rds (R list for downstream scripts)
 #            - stunting_rankings.csv (combined human-readable)
-#            - stunting_tables_and_figures.xlsx (one sheet per table)
+#            - stunting_tables_and_figures_vN.xlsx (one sheet per table, auto-versioned)
 #            - stunting_tables_and_figures_v2.md (clean v2)
 #            - stunting_tables_and_figures_v2.review.md (review copy v2)
 #            - stunting_tables_and_figures_v2_tracked.md (track changes)
@@ -132,6 +132,15 @@ if (has_numbers) {
   country_lookup <- bind_rows(country_lookup, num_lookup) %>%
     distinct(REF_AREA, .keep_all = TRUE)
 
+  # Prevalence lookups by year (to enrich burden tables)
+  prev_by_year <- stnt %>%
+    distinct(REF_AREA, TIME_PERIOD, .keep_all = TRUE) %>%
+    select(REF_AREA, TIME_PERIOD, prevalence = r)
+
+  prev_current <- prev_by_year %>%
+    filter(TIME_PERIOD == latest_year) %>%
+    select(REF_AREA, prevalence = prevalence)
+
   # Top 20 highest number of stunted children (r in thousands)
   top20_highest_num <- stnt_num %>%
     filter(TIME_PERIOD == latest_year) %>%
@@ -139,7 +148,8 @@ if (has_numbers) {
     head(20) %>%
     add_country_name() %>%
     mutate(rank = row_number()) %>%
-    select(rank, REF_AREA, country_name, year = TIME_PERIOD, number_thousands = r)
+    select(rank, REF_AREA, country_name, year = TIME_PERIOD, number_thousands = r) %>%
+    left_join(prev_current, by = "REF_AREA")
 
   message("\n=== Top 20 highest number of stunted children (", latest_year, ") ===")
   print(top20_highest_num, n = 20)
@@ -167,11 +177,29 @@ if (has_numbers) {
              change_th, pct_change)
   }
 
-  top20_improve_10_num <- compute_improvement_num(stnt_num, yr_10_ago, latest_year)
+  prev_baseline_10 <- prev_by_year %>%
+    filter(TIME_PERIOD == yr_10_ago) %>%
+    select(REF_AREA, baseline_prevalence = prevalence)
+  prev_current_10 <- prev_by_year %>%
+    filter(TIME_PERIOD == latest_year) %>%
+    select(REF_AREA, current_prevalence = prevalence)
+
+  top20_improve_10_num <- compute_improvement_num(stnt_num, yr_10_ago, latest_year) %>%
+    left_join(prev_baseline_10, by = "REF_AREA") %>%
+    left_join(prev_current_10, by = "REF_AREA")
   message("\n=== Top 20 biggest reduction in stunted numbers (", yr_10_ago, "-", latest_year, ") ===")
   print(top20_improve_10_num, n = 20)
 
-  top20_improve_20_num <- compute_improvement_num(stnt_num, yr_20_ago, latest_year)
+  prev_baseline_20 <- prev_by_year %>%
+    filter(TIME_PERIOD == yr_20_ago) %>%
+    select(REF_AREA, baseline_prevalence = prevalence)
+  prev_current_20 <- prev_by_year %>%
+    filter(TIME_PERIOD == latest_year) %>%
+    select(REF_AREA, current_prevalence = prevalence)
+
+  top20_improve_20_num <- compute_improvement_num(stnt_num, yr_20_ago, latest_year) %>%
+    left_join(prev_baseline_20, by = "REF_AREA") %>%
+    left_join(prev_current_20, by = "REF_AREA")
   message("\n=== Top 20 biggest reduction in stunted numbers (", yr_20_ago, "-", latest_year, ") ===")
   print(top20_improve_20_num, n = 20)
 } else {
@@ -329,13 +357,13 @@ if (has_numbers && !is.null(top20_highest_num)) {
     top20_highest_num %>% mutate(ranking = "highest_number",
                                  baseline_value = NA_real_, current_value = number_thousands,
                                  change_pp = NA_real_, pct_change = NA_real_) %>%
-      select(ranking, rank, REF_AREA, country_name, baseline_value, current_value, change_pp, pct_change),
+      select(ranking, rank, REF_AREA, country_name, prevalence, baseline_value, current_value, change_pp, pct_change),
     top20_improve_10_num %>% mutate(ranking = paste0("improve_10yr_number_", yr_10_ago, "_", latest_year)) %>%
       rename(change_pp = change_th) %>%
-      select(ranking, rank, REF_AREA, country_name, baseline_value, current_value, change_pp, pct_change),
+      select(ranking, rank, REF_AREA, country_name, baseline_prevalence, current_prevalence, baseline_value, current_value, change_pp, pct_change),
     top20_improve_20_num %>% mutate(ranking = paste0("improve_20yr_number_", yr_20_ago, "_", latest_year)) %>%
       rename(change_pp = change_th) %>%
-      select(ranking, rank, REF_AREA, country_name, baseline_value, current_value, change_pp, pct_change)
+      select(ranking, rank, REF_AREA, country_name, baseline_prevalence, current_prevalence, baseline_value, current_value, change_pp, pct_change)
   )
   combined_csv <- bind_rows(combined_csv, num_csv)
 }
@@ -375,7 +403,15 @@ if (has_numbers) {
   openxlsx::writeData(wb, "T9_reduction_conc", reduction_concentration)
 }
 
-xlsx_path <- file.path(output_dir, "stunting_tables_and_figures.xlsx")
+# Auto-version: find existing stunting_tables_and_figures_vN.xlsx and increment
+existing_xlsx <- list.files(output_dir, pattern = "^stunting_tables_and_figures_v[0-9]+\\.xlsx$")
+if (length(existing_xlsx) > 0) {
+  existing_versions <- as.integer(sub(".*_v(\\d+)\\.xlsx$", "\\1", existing_xlsx))
+  next_version <- max(existing_versions) + 1L
+} else {
+  next_version <- 1L
+}
+xlsx_path <- file.path(output_dir, sprintf("stunting_tables_and_figures_v%d.xlsx", next_version))
 # saveWorkbook deferred until after figures are generated and embedded
 
 # --- Figures (PNG + SVG) ---------------------------------------------------
@@ -385,24 +421,51 @@ dir.create(fig_dir, recursive = TRUE, showWarnings = FALSE)
 dir.create(svg_dir, recursive = TRUE, showWarnings = FALSE)
 
 make_label <- function(df) {
+
   df %>% mutate(
     label = paste0(country_name, " (", REF_AREA, ")"),
     label = factor(label, levels = rev(label))
   )
 }
 
+# --- Prevalence threshold classification (de Onis et al 2018) -------------
+# Very low <2.5%, Low 2.5-<10%, Medium 10-<20%, High 20-<30%, Very high >=30%
+threshold_colors <- c(
+  "Very low"  = "#2DC937",
+  "Low"       = "#99C140",
+  "Medium"    = "#E7B416",
+
+  "High"      = "#DB7B2B",
+  "Very high" = "#CC3232"
+)
+
+classify_threshold <- function(prev) {
+  dplyr::case_when(
+    prev < 2.5  ~ "Very low",
+    prev < 10   ~ "Low",
+    prev < 20   ~ "Medium",
+    prev < 30   ~ "High",
+    TRUE        ~ "Very high"
+  )
+}
+
 # Figure 1: Highest prevalence (top 10)
-f1_data <- top20_highest %>% head(10) %>% make_label()
-fig1 <- ggplot(f1_data, aes(x = label, y = prevalence)) +
-  geom_col(fill = "#1CABE2", width = 0.7) +
+f1_data <- top20_highest %>% head(10) %>% make_label() %>%
+  mutate(threshold = classify_threshold(prevalence))
+fig1 <- ggplot(f1_data, aes(x = label, y = prevalence, fill = threshold)) +
+  geom_col(width = 0.7) +
   geom_text(aes(label = sprintf("%.1f%%", prevalence)),
             hjust = -0.08, size = 3.0, colour = "#3A3A3A") +
   coord_flip(ylim = c(0, max(f1_data$prevalence, na.rm = TRUE) * 1.15)) +
+  scale_fill_manual(values = threshold_colors, name = "Threshold",
+                    drop = FALSE) +
   labs(title = paste0("Figure 1. Highest stunting prevalence (Top 10, ", latest_year, ")"),
        x = NULL, y = "Prevalence (%)") +
   theme_minimal(base_size = 9) +
   theme(plot.title = element_text(face = "bold", colour = "#003A70", size = 10),
-        panel.grid.major.y = element_blank(), panel.grid.minor = element_blank())
+        panel.grid.major.y = element_blank(), panel.grid.minor = element_blank(),
+        legend.position = "bottom", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8))
 
 ggsave(file.path(fig_dir, "fig1_highest_prevalence.png"), fig1,
        width = 7, height = 6, dpi = 150)
@@ -452,17 +515,22 @@ message("Saved: fig3_20yr_prevalence_reduction.png + .svg")
 
 # Figure 4: Highest burden (top 10)
 if (has_numbers) {
-  f4_data <- top20_highest_num %>% head(10) %>% make_label()
-  fig4 <- ggplot(f4_data, aes(x = label, y = number_thousands)) +
-    geom_col(fill = "#D4508B", width = 0.7) +
+  f4_data <- top20_highest_num %>% head(10) %>% make_label() %>%
+    mutate(threshold = classify_threshold(prevalence))
+  fig4 <- ggplot(f4_data, aes(x = label, y = number_thousands, fill = threshold)) +
+    geom_col(width = 0.7) +
     geom_text(aes(label = sprintf("%.1f M", number_thousands / 1000)),
               hjust = -0.08, size = 3.0, colour = "#3A3A3A") +
     coord_flip(ylim = c(0, max(f4_data$number_thousands, na.rm = TRUE) * 1.15)) +
+    scale_fill_manual(values = threshold_colors, name = "Prevalence\nthreshold",
+                      drop = FALSE) +
     labs(title = paste0("Figure 4. Highest number of stunted children (Top 10, ", latest_year, ")"),
          x = NULL, y = "Children (thousands)") +
     theme_minimal(base_size = 9) +
     theme(plot.title = element_text(face = "bold", colour = "#003A70", size = 10),
-          panel.grid.major.y = element_blank(), panel.grid.minor = element_blank())
+          panel.grid.major.y = element_blank(), panel.grid.minor = element_blank(),
+          legend.position = "bottom", legend.text = element_text(size = 7),
+          legend.title = element_text(size = 8))
 
   ggsave(file.path(fig_dir, "fig4_highest_burden.png"), fig4,
          width = 7, height = 6, dpi = 150)
@@ -526,20 +594,34 @@ dot_theme <- theme_minimal(base_size = 9) +
         panel.grid.major.y = element_blank(), panel.grid.minor = element_blank())
 
 make_dot_plot <- function(data, baseline_yr, current_yr, title_text,
-                          x_lab = "Prevalence (%)", x_fmt = waiver()) {
-  ggplot(data, aes(y = label)) +
+                          x_lab = "Prevalence (%)", x_fmt = waiver(),
+                          color_by_threshold = FALSE) {
+  p <- ggplot(data, aes(y = label)) +
     geom_segment(aes(x = current_value, xend = baseline_value, yend = label),
-                 colour = "#AAAAAA", linewidth = 0.5) +
-    geom_point(aes(x = baseline_value, colour = "baseline"), size = 2.2) +
-    geom_point(aes(x = current_value,  colour = "current"),  size = 2.2) +
-    scale_x_reverse(labels = x_fmt) +
-    scale_colour_manual(
-      values = stats::setNames(c("#E36F1E", "#00A79D"), c("baseline", "current")),
-      labels = stats::setNames(c(as.character(baseline_yr), as.character(current_yr)),
-                               c("baseline", "current")),
-      breaks = c("baseline", "current")
-    ) +
-    labs(title = title_text, x = x_lab, y = NULL, colour = NULL) +
+                 colour = "#AAAAAA", linewidth = 0.5)
+
+  if (color_by_threshold && "threshold_baseline" %in% names(data)) {
+    p <- p +
+      geom_point(aes(x = baseline_value, fill = threshold_baseline),
+                 shape = 21, size = 2.5, colour = "grey30", stroke = 0.3) +
+      geom_point(aes(x = current_value, fill = threshold_current),
+                 shape = 21, size = 2.5, colour = "grey30", stroke = 0.3) +
+      scale_fill_manual(values = threshold_colors, name = "Threshold",
+                        drop = FALSE)
+  } else {
+    p <- p +
+      geom_point(aes(x = baseline_value, colour = "baseline"), size = 2.2) +
+      geom_point(aes(x = current_value,  colour = "current"),  size = 2.2) +
+      scale_colour_manual(
+        values = stats::setNames(c("#E36F1E", "#00A79D"), c("baseline", "current")),
+        labels = stats::setNames(c(as.character(baseline_yr), as.character(current_yr)),
+                                 c("baseline", "current")),
+        breaks = c("baseline", "current")
+      )
+  }
+
+  p + scale_x_reverse(labels = x_fmt) +
+    labs(title = title_text, x = x_lab, y = NULL, colour = NULL, fill = NULL) +
     dot_theme
 }
 
@@ -547,10 +629,13 @@ make_dot_plot <- function(data, baseline_yr, current_yr, title_text,
 f7_data <- top20_improve_10 %>%
   head(10) %>%
   arrange(desc(baseline_value)) %>%
-  make_label()
+  make_label() %>%
+  mutate(threshold_baseline = classify_threshold(baseline_value),
+         threshold_current  = classify_threshold(current_value))
 
 fig7 <- make_dot_plot(f7_data, yr_10_ago, latest_year,
-  title_text = paste0("Figure 7. Stunting prevalence before and after (", yr_10_ago, " vs ", latest_year, ")"))
+  title_text = paste0("Figure 7. Stunting prevalence before and after (", yr_10_ago, " vs ", latest_year, ")"),
+  color_by_threshold = TRUE)
 
 ggsave(file.path(fig_dir, "fig7_before_after_prev_10yr.png"), fig7,
        width = 7, height = 5, dpi = 150)
@@ -562,10 +647,13 @@ message("Saved: fig7_before_after_prev_10yr.png + .svg")
 f8_data <- top20_improve_20 %>%
   head(10) %>%
   arrange(desc(baseline_value)) %>%
-  make_label()
+  make_label() %>%
+  mutate(threshold_baseline = classify_threshold(baseline_value),
+         threshold_current  = classify_threshold(current_value))
 
 fig8 <- make_dot_plot(f8_data, yr_20_ago, latest_year,
-  title_text = paste0("Figure 8. Stunting prevalence before and after (", yr_20_ago, " vs ", latest_year, ")"))
+  title_text = paste0("Figure 8. Stunting prevalence before and after (", yr_20_ago, " vs ", latest_year, ")"),
+  color_by_threshold = TRUE)
 
 ggsave(file.path(fig_dir, "fig8_before_after_prev_20yr.png"), fig8,
        width = 7, height = 5, dpi = 150)
@@ -578,12 +666,15 @@ if (has_numbers) {
   f9_data <- top20_improve_10_num %>%
     head(10) %>%
     arrange(desc(baseline_value)) %>%
-    make_label()
+    make_label() %>%
+    mutate(threshold_baseline = classify_threshold(baseline_prevalence),
+           threshold_current  = classify_threshold(current_prevalence))
 
   fig9 <- make_dot_plot(f9_data, yr_10_ago, latest_year,
     title_text = paste0("Figure 9. Stunted children before and after (", yr_10_ago, " vs ", latest_year, ")"),
     x_lab = "Children (thousands)",
-    x_fmt = function(x) sprintf("%.1f M", x / 1000))
+    x_fmt = function(x) sprintf("%.1f M", x / 1000),
+    color_by_threshold = TRUE)
 
   ggsave(file.path(fig_dir, "fig9_before_after_burden_10yr.png"), fig9,
          width = 7, height = 5, dpi = 150)
@@ -597,12 +688,15 @@ if (has_numbers) {
   f10_data <- top20_improve_20_num %>%
     head(10) %>%
     arrange(desc(baseline_value)) %>%
-    make_label()
+    make_label() %>%
+    mutate(threshold_baseline = classify_threshold(baseline_prevalence),
+           threshold_current  = classify_threshold(current_prevalence))
 
   fig10 <- make_dot_plot(f10_data, yr_20_ago, latest_year,
     title_text = paste0("Figure 10. Stunted children before and after (", yr_20_ago, " vs ", latest_year, ")"),
     x_lab = "Children (thousands)",
-    x_fmt = function(x) sprintf("%.1f M", x / 1000))
+    x_fmt = function(x) sprintf("%.1f M", x / 1000),
+    color_by_threshold = TRUE)
 
   ggsave(file.path(fig_dir, "fig10_before_after_burden_20yr.png"), fig10,
          width = 7, height = 5, dpi = 150)
