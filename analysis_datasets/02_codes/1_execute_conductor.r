@@ -25,6 +25,16 @@ if (!exists("projectFolder", envir = .GlobalEnv) || !exists("analysisCodes", env
   source(file.path(getwd(), "profile_OSE-DA-NT.R"))
 }
 
+# --- Libraries (centralised for all child scripts) ------------------------
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(stringr)
+  library(readr)
+  library(arrow)
+  library(haven)
+  library(tibble)
+})
+
 source(file.path(analysisCodes, "2_build_cmrs2_bw.r"))
 source(file.path(analysisCodes, "3_preferred_bw.r"))
 

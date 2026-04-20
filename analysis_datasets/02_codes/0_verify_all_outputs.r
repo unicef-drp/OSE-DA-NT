@@ -44,12 +44,6 @@
 # Exit:    Prints PASS or FAIL summary at the end.
 # ---------------------------------------------------------------------------
 
-suppressPackageStartupMessages({
-  library(arrow)
-  library(dplyr)
-  library(haven)
-})
-
 # --- Determine which datasets to verify ---
 # Priority: verify_targets variable > command-line args > all
 valid_targets <- c("series", "ant", "bw", "iod", "iycf")

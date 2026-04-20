@@ -8,19 +8,6 @@
 # Dependencies: officer, rvg, ggplot2, scales
 # ---------------------------------------------------------------------------
 
-suppressPackageStartupMessages({
-  library(dplyr)
-  library(ggplot2)
-  library(scales)
-  library(xml2)
-})
-
-for (pkg in c("officer", "rvg")) {
-  if (!requireNamespace(pkg, quietly = TRUE)) install.packages(pkg)
-}
-library(officer)
-library(rvg)
-
 # --- Load slide modules ---------------------------------------------------
 codes_dir_ppt <- dirname(sys.frame(1)$ofile %||% ".")
 source(file.path(codes_dir_ppt, "00_pptx_design_tokens.r"))
@@ -675,9 +662,6 @@ stopifnot(length(new_order) == n_slides)
 message("PowerPoint saved: ", pptx_path)
 
 # --- Excel workbook with one sheet per figure slide -----------------------
-if (!requireNamespace("openxlsx", quietly = TRUE)) install.packages("openxlsx")
-library(openxlsx)
-
 wb <- createWorkbook()
 
 # Sheet 1: Highest prevalence (slide 5)

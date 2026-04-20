@@ -1,6 +1,6 @@
 # Animated Scatterplots Pipeline
 
-Last updated: 2026-04-16
+Last updated: 2025-07-15
 
 ## Purpose
 
@@ -8,6 +8,10 @@ Produce animated GIF and MP4 bubble-scatterplots showing regional nutrition
 trends (prevalence vs. number of affected children over time). Each indicator
 gets a base animation plus a looped version with UNICEF-blue panel overlays
 carrying headline/subline text messages.
+
+Country-level scatterplots show individual countries within UNICEF programme
+regions, with bubble size representing population-affected and animated over
+time.
 
 ## Entrypoint
 
@@ -27,6 +31,7 @@ shared functions, loads reference data once, then sources each indicator script.
 | `animated_scatterplot_stunting.R` | Stunting indicator config and render calls |
 | `animated_scatterplot_overweight.R` | Overweight indicator config and render calls |
 | `animated_scatterplot_wasting.R` | Wasting indicator config and render calls |
+| `animated_scatterplot_stunting_countries.R` | Country-level stunting scatterplots (all + per-region) |
 
 ### Shared Functions (`0_scatterplot_functions.r`)
 
@@ -39,6 +44,10 @@ shared functions, loads reference data once, then sources each indicator script.
 | `build_scatterplot()` | Builds the animated ggplot with focus-region highlighting, ggrepel labels |
 | `render_base_animations()` | Renders base GIF (6 fps) and MP4 (10 fps) at 900×600 |
 | `render_looped_panel_version()` | Creates multi-loop version with UNICEF-blue slide-in panels, exports GIF + frames + MP4 |
+| `load_country_names()` | Reads raw `groups_for_agg.csv` to get ISO3→Country name mapping |
+| `load_country_series()` | Reads parquet, joins with crosswalk and population, returns country×year data |
+| `build_country_scatterplot()` | Builds animated ggplot for country-level data (color by region or uniform) |
+| `render_country_scatterplots()` | Renders all-countries + per-region GIF/MP4 outputs |
 
 ## Indicator Scripts
 
@@ -56,6 +65,33 @@ Each indicator script is a thin configuration file that:
 | `focus_colors` | Named color overrides for focus regions | `c("South Asia" = "#0072B2")` |
 | `y_limits` | Fixed y-axis range (NULL = auto) | `c(0, 25)` for overweight |
 | `headlines` / `sublines` | Text pairs for UNICEF-blue panel overlays in filler loops | 3 pairs per indicator |
+
+## Country-Level Scatterplots
+
+Country-level animated scatterplots show individual countries as bubbles on a
+prevalence (%) vs. children affected scatter, animated over time. Each country
+is assigned to exactly one UNICEF Programme Region via the `UNICEF_PROG_REG_GLOBAL`
+classification in the crosswalk.
+
+### Output Structure
+
+For each indicator, `render_country_scatterplots()` produces:
+
+1. **All-countries plot** — 154 countries colored by region, top 15 labeled by
+   children affected. Output: `{indicator}_countries_all.{gif,mp4}`
+2. **Per-region plots** — One plot per UNICEF Programme Region (7 regions),
+   all countries in UNICEF blue, all labeled (unless >25 countries in a region).
+   Output: `{indicator}_countries_{region_slug}.{gif,mp4}`
+
+Region slugs are lowercase, spaces→underscores (e.g., `east_asia_and_pacific`).
+
+### Output Location
+
+```
+{nutritionRoot}/github/animated_scatterplots/stunting_countries/
+```
+
+16 files total: 8 GIF + 8 MP4 (1 all + 7 regions × 2 formats).
 
 ## Input Sources
 
@@ -114,8 +150,17 @@ RColorBrewer, ggrepel, av, magick, gifski, ragg, yaml
 
 ## Adding a New Indicator
 
+### Regional-level
+
 1. Create `animated_scatterplot_{name}.R` following the pattern of existing scripts.
 2. If the indicator exists in `cmrs2_series_accepted.parquet`, use `load_regional_series()`.
    If it uses a different data source, add a loader function to `0_scatterplot_functions.r`.
 3. Add a `source()` line to `1_execute.r` in the worker scripts section.
 4. Choose focus regions, colors, y-axis limits, and write headline/subline text.
+
+### Country-level
+
+1. Create `animated_scatterplot_{name}_countries.R` following `animated_scatterplot_stunting_countries.R`.
+2. Call `load_country_series()` with the indicator code, then `render_country_scatterplots()`.
+3. Add a `source()` line to `1_execute.r`.
+4. Set indicator-specific labels, y-axis limits, and output subfolder name.

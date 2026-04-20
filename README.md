@@ -38,6 +38,23 @@ External production repository:
 - 00_documentation/: project documentation for workflow, scope, and AI guidance.
 - 00_ai/: AI-oriented notes and skill roadmap for future repository automation.
 
+## GitHub Storage Rule
+
+This repository is not intended to be a storage space for working documents,
+reference packets, briefing source libraries, or other large support files.
+
+Use GitHub for:
+- scripts
+- code modules
+- runbooks and instructions
+- small reference tables needed by code
+
+Use the external Analysis Space `github` folder for:
+- working outputs
+- document source libraries
+- large reference assets
+- briefing support materials that are not appropriate for version control
+
 ## Execution Entry Points (Current)
 
 Primary scripts currently in use:

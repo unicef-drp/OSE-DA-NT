@@ -45,6 +45,10 @@ DW-Production path:
 6. Keep reference assets visible
 - Indicator, survey, country, decision, and disaggregation reference logic should be documented as first-class dependencies, not hidden only in legacy workbooks.
 
+7. Keep GitHub focused on code and small controlled assets
+- Do not use this repository as a storage location for working source-document libraries, briefing packets, or large analytical support files.
+- Store those materials in the external Analysis Space `github` folder under the relevant workflow subfolder.
+
 ## Migration Phases
 
 Phase 1 (active):
@@ -55,6 +59,17 @@ Phase 2 (planned):
 
 Phase 3 (planned):
 - Validation checklists and reproducibility checks for handoff to production consumers.
+
+## Country Name Sourcing Rule
+
+Country names displayed in outputs (charts, tables, markdown, slide decks, briefs) must always be drawn from the UNICEF datasets that serve as primary inputs to each pipeline. Acceptable sources include:
+
+- The `CountryName` column in CMRS-based parquet files (e.g. `cmrs2_series_accepted.parquet`).
+- The `Country` column in `groups_for_agg.csv` from DW-Production reference data.
+
+Do not use the `countrycode` R package or any other external name-mapping library. This ensures names in outputs are consistent with the upstream data and avoids discrepancies introduced by third-party lookup tables.
+
+When a script needs country names, build a lookup table from the source data early in the pipeline and join it onto derived data frames.
 
 ## Working Agreement
 

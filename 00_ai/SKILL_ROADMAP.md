@@ -85,6 +85,27 @@ Define practical, repository-specific AI skill modules that improve consistency 
 - Key rule: `0_` and `00_` scripts are never sourced by the conductor. `00_` is for self-contained modules with public APIs; `0_` is for general helpers.
 - Trigger: creating, renaming, or reordering scripts in any codes folder.
 
+12. Stunting Briefing Content And Source Governance Skill
+- Purpose: improve the analytical content of the stunting top-20 briefing while enforcing dataset-only numeric sourcing and citation discipline for any document-derived context.
+- Skill file: `00_ai/stunting_top20_briefing/STUNTING_TOP20_BRIEFING_CONTENT_SKILL.md`
+- Key rule: numeric claims must come from approved `analysis_datasets` or in-scope `DW-Production` outputs unless the user explicitly approves an exception.
+- Key rule: any document used for context must be stored locally if external and registered in the briefing source registry before it is cited.
+- Trigger: extending `adhoc_analysis/stunting_top20_briefing/`, adding new analysis or slide text, or using external documents for ideas or framing.
+
+13. Source Discovery And Content Agreement Skill
+- Purpose: define analytical content before document production, separate data sources from context sources, and guide source discovery for analysis-backed briefs and decks.
+- Skill file: `00_ai/skill_SOURCE_DISCOVERY_AND_CONTENT_AGREEMENT.md`
+- Key rule: before producing a polished brief or PowerPoint, create a content-agreement note covering audience, questions, approved sources, structure, and unresolved decisions.
+- Key rule: external working source libraries belong in the external Analysis Space `github` folder, not in this repository.
+- Trigger: any analysis task that is expected to end in a brief, presentation, or narrative output.
+
+14. Markdown Review And Tracked Changes Skill
+- Purpose: manage iterative markdown review using a paired `.review.md` workflow plus a visible `.tracked.md` file and a fresh next-round review copy.
+- Skill file: `00_ai/skill_MARKDOWN_REVIEW_AND_TRACKED_CHANGES.md`
+- Key rule: review copies should preserve the full document text and use sparse `>>>` comments only where needed.
+- Key rule: tracked markdown should use a clear red/green add-delete scheme in Markdown Preview, closer to Word track changes than plain `<mark>`/`~~` styling.
+- Trigger: any markdown-based document review workflow where the user wants both editable review copies and visible tracked changes.
+
 ## Definition Of Done For A Skill
 
 - Clear trigger condition.
