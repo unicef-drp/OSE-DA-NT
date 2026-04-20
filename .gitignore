@@ -1,0 +1,16 @@
+# R session artifacts
+.Rhistory
+.RData
+.Rproj.user/
+
+# Temporary files
+*.tmp
+tmp_*/
+~$*
+
+# OS artifacts
+Thumbs.db
+.DS_Store
+
+# User config (contains local paths)
+~/.config/user_config.yml

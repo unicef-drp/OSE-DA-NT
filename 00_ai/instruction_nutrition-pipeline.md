@@ -22,7 +22,8 @@ These instructions apply to work in this repository.
 - analysis_datasets/02_codes/: CMRS2 build and validation scripts.
 - further_transformation_system/projections_progress_class/012_codes/: projections and progress classification workflow.
 - reference_data_manager/indicators/: indicator and disaggregation reference files.
-- 00_documentation/: runbooks and migration docs.
+- 00_documentation/: cross-pipeline docs (scope, schema, index).
+- Pipeline-specific docs live in each pipeline's own 00_documentation/ folder.
 
 ## Safety Rules
 

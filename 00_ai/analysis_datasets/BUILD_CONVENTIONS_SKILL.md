@@ -179,7 +179,7 @@ passing to downstream scripts removes surveys needed for AARR regression.
 
 ## Checklist: Adding a New Hardcoded Correction
 
-1. Identify the upstream CMRS issue and document it in `00_documentation/UPSTREAM_SOURCE_DATA_FLAGS.md`.
+1. Identify the upstream CMRS issue and document it in `analysis_datasets/00_documentation/UPSTREAM_SOURCE_DATA_FLAGS.md`.
 2. Implement correction in `build_layer2_dataset()` in `0_layer2_utils.r` with a clear comment and message.
 3. If the correction marks rows confidential, use the `DataSourceDecision` field (not `DataSourceDecisionCategory`).
 4. Rebuild affected dataset: `Rscript analysis_datasets/02_codes/2_build_cmrs2_*.r`.

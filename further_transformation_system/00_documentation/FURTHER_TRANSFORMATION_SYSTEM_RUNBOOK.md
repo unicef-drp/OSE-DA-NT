@@ -116,9 +116,9 @@ instructions for adding new indicators.
 
 1. 1_execute.r — loads libraries, resolves paths, sources shared functions
 2. 0_scatterplot_functions.r — shared data-loading, plotting, and rendering functions
-3. animated_scatterplot_stunting.R — stunting indicator (parquet → regional aggregation)
-4. animated_scatterplot_overweight.R — overweight indicator (parquet → regional aggregation)
-5. animated_scatterplot_wasting.R — wasting indicator (pre-aggregated CSV, special case)
+3. animated_scatterplot_stunting.r — stunting indicator (parquet → regional aggregation)
+4. animated_scatterplot_overweight.r — overweight indicator (parquet → regional aggregation)
+5. animated_scatterplot_wasting.r — wasting indicator (pre-aggregated CSV, special case)
 
 ### Input Sources
 

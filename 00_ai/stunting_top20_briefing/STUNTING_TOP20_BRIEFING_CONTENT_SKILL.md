@@ -31,7 +31,7 @@ Read these files before changing the briefing content:
 2. `adhoc_analysis/stunting_top20_briefing/00_documentation/CONTENT_PLAN_AND_SOURCE_GOVERNANCE.md`
 3. the external source-library README for this workflow in the Analysis Space `github` folder
 4. the external `source_registry.csv` for this workflow in the Analysis Space `github` folder
-5. `00_documentation/ANALYSIS_DATASETS_RUNBOOK.md`
+5. `analysis_datasets/00_documentation/ANALYSIS_DATASETS_RUNBOOK.md`
 6. `00_ai/analysis_datasets/BUILD_CONVENTIONS_SKILL.md`
 7. `00_ai/skill_PPTX_GENERATION.md` when editing slide-generation code
 8. https://data.unicef.org/topic/nutrition/malnutrition/ for current JME-linked resources

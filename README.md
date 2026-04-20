@@ -111,8 +111,8 @@ Brand resources (external analysis space, not in repo):
 
 Core docs:
 - 00_documentation/REPO_SCOPE_AND_BOUNDARIES.md
-- 00_documentation/ANALYSIS_DATASETS_RUNBOOK.md
-- 00_documentation/FURTHER_TRANSFORMATION_SYSTEM_RUNBOOK.md
+- analysis_datasets/00_documentation/ANALYSIS_DATASETS_RUNBOOK.md
+- further_transformation_system/00_documentation/FURTHER_TRANSFORMATION_SYSTEM_RUNBOOK.md
 - 00_documentation/COMBINED_NUTRITION_DATABASE_SCHEMA.md
 - 00_documentation/LEGACY_DOCUMENTATION_CROSSWALK.md
 

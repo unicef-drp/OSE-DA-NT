@@ -136,9 +136,9 @@ These documents are the minimum briefing background set.
 
 - `README.md`
 - `00_documentation/REPO_SCOPE_AND_BOUNDARIES.md`
-- `00_documentation/ANALYSIS_DATASETS_RUNBOOK.md`
+- `analysis_datasets/00_documentation/ANALYSIS_DATASETS_RUNBOOK.md`
 - `00_documentation/COMBINED_NUTRITION_DATABASE_SCHEMA.md`
-- `00_documentation/UPSTREAM_SOURCE_DATA_FLAGS.md`
+- `analysis_datasets/00_documentation/UPSTREAM_SOURCE_DATA_FLAGS.md`
 - `adhoc_analysis/stunting_top20_briefing/00_documentation/README.md`
 - this document
 - the external `source_registry.csv` stored in the Analysis Space source-library folder for this workflow
