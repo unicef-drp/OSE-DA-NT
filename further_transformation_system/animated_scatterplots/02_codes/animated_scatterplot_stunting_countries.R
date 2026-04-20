@@ -20,8 +20,7 @@ render_country_scatterplots(
   all_title       = "Child stunting by country: prevalence and number of children affected",
   region_title_fn = function(r) paste0("Child stunting in ", r),
   output_dir      = outdir_stunting_countries,
-  label_top_n_all = 15,
-  max_countries_per_plot = 25
+  label_top_n_all = 15
 )
 
 message("Country-level stunting animated scatterplots complete.")
