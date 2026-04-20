@@ -1,6 +1,6 @@
 # OSE-DA-NT AI Skills Roadmap
 
-Last updated: 2026-04-14
+Last updated: 2026-04-16
 
 ## Goal
 
@@ -74,6 +74,9 @@ Define practical, repository-specific AI skill modules that improve consistency 
 - Skill file: `00_ai/PPTX_GENERATION_SKILL.md`
 - Key constraint: `<a:endParaRPr>` must be the last child of `<a:p>` — inserting `<a:r>` after it causes invisible text.
 - Key constraint: UNICEF template title slides have empty placeholders (no `<a:r>`, only `<a:endParaRPr>`). Must clone font props and insert run before endParaRPr.
+- Key constraint: Freeform text boxes (`ph_location()`) do NOT render OOXML bullets (`buChar`/`buAutoNum`). Use literal Unicode bullet characters as `ftext()` runs.
+- Key constraint: `<a:buNone/>` and `<a:buChar>` are mutually exclusive — having both corrupts the PPTX.
+- Key constraint: "Title Only" layout has blue background — bullet/overlay text must be white.
 - Trigger: building a new slide-type module, editing existing `00_pptx_*.r` modules, or debugging missing text in generated PPTX.
 
 11. Codes Naming Convention Skill

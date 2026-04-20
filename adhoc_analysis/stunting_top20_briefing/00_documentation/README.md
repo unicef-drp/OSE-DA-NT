@@ -98,14 +98,33 @@ Country names are sourced from the `CountryName` column in the input CMRS parque
 - The PowerPoint script searches for `UNICEF Branded Presentation Template 2026.pptx` (then 2025) in the brand root first, then inside `OneDrive_*` subfolders, with a legacy fallback to `_extracted/template_2026.pptx`.
 - The Word brief scripts use the UNICEF A4 fact-sheet template when it is available in the brand folder.
 
+## Template Icons
+
+Seven nutrition-related icons were extracted from the UNICEF Branded Presentation Template (slides 65–70 contain ~200 programme icons). These are stored in `01_inputs/icons/` and used on section divider slides:
+
+| File | Description | Used on |
+|------|-------------|---------|
+| `nutrition.png` | Smiling face with spoon in blue circle | Overview section slide |
+| `children.png` | Two children figures in blue circle | Prevalence section slide |
+| `infant.png` | Baby figure in blue circle | Burden section slide |
+| `breastfeeding.png` | Mother breastfeeding baby in blue circle | Available for future use |
+| `food_security.png` | Bowl with wheat/grain in blue circle | Available for future use |
+| `mother_and_baby.png` | Mother holding baby in blue circle | Available for future use |
+| `baby.png` | Crawling baby in blue circle | Available for future use |
+
+To extract additional icons, inspect slides 65–70 of the template PPTX (icons are `p:pic` shapes with descriptive `descr` alt-text attributes).
+
 ## Slide Modules
 
 | Module | Purpose |
 |--------|---------|
-| `02_codes/00_pptx_design_tokens.r` | UNICEF brand colours, font specs, and text-box constraints. |
-| `02_codes/00_pptx_title_slide.r` | Title slide generation with variant selection, text replacement, auto-fit, and multiline support. |
-| `02_codes/00_pptx_bullet_slide.r` | Full-width numbered bullet slides with sub-bullets, pagination, and continued numbering. |
-| `02_codes/00_pptx_section_slide.r` | Overview and section-break slides with text on the left and an empty photo placeholder on the right. |
+| `02_codes/00_pptx_design_tokens.r` | UNICEF brand colours, font specs, and text-box constraints. All slide modules consume this. |
+| `02_codes/00_pptx_title_slide.r` | Title slide generation: variant selection (excluding slide 9), text replacement with auto-fit and auto-width, multi-line support via `\n`, vertical spacing adjustments. |
+| `02_codes/00_pptx_bullet_slide.r` | Full-width numbered bullet slides using layout "8_Title and Content". Supports sub-bullets (level 2), automatic pagination with "(continued)", continued numbering across slides, and configurable spacing between top-level bullet groups. |
+| `02_codes/00_pptx_stat_slide.r` | Statistic callout slides (1, 2, or 4 stats) on "Title Only" layout with absolute positioning, rich formatting via `block_list`/`fpar`/`ftext`, and a source-text footer. |
+| `02_codes/00_pptx_photo_stat_slide.r` | Full-bleed photo stat slides (template slides 57–59). Retains the embedded photo and layout; replaces the stat value, description, credit, and caption text via XML mutation. Shapes are identified by font size (≥ 100 pt for stat value), name pattern (`"^Shape"` for description), and rotation (270° for credit, 180° for caption) to handle name variation across the three template variants. |
+| `02_codes/00_pptx_section_slide.r` | Overview and section break slides using layouts "Title and Content" / "2_Title and Content" (template slides 30–31 design). Left side: title + body text; right side: empty picture placeholder for the user to insert their own photo in PowerPoint. Used for the presentation overview and as section dividers between content blocks. |
+| `02_codes/00_pptx_chart_slide.r` | Data chart slides with two variants: `add_chart_slide()` for full-width charts and `add_chart_bullet_slide()` for charts with 2–3 short talking-point bullets on the right. Both use "Title Only" layout with absolute positioning, render ggplot objects as editable vector graphics via `dml()`, add an italic source-text footer, and attach detailed speaker notes for presentation interpretation. |
 
 ## Content Governance
 
