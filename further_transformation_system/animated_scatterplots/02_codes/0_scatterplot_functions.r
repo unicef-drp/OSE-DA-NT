@@ -65,8 +65,10 @@ build_country_scatterplot <- function(country_data,
                                       plot_title,
                                       plot_subtitle = "Modeled estimates \u2014 Year: {round(frame_along)}",
                                       label_top_n   = NULL,
+                                      focus_top_n   = 3,
                                       color_by      = c("region", "country"),
                                       y_limits      = NULL,
+                                      overlap_threshold = 1.5,
                                       plot_width     = 900,
                                       plot_height    = 600) {
 
@@ -84,11 +86,53 @@ build_country_scatterplot <- function(country_data,
     label_isos <- ranked$REF_AREA
   }
 
-  country_data <- country_data %>%
-    dplyr::mutate(show_label = REF_AREA %in% label_isos)
+  # Determine focus countries (top N by burden per region) --------------
+  focus_isos <- ranked %>%
+    dplyr::group_by(Region) %>%
+    dplyr::slice_max(order_by = pop_affected, n = focus_top_n,
+                     with_ties = FALSE) %>%
+    dplyr::ungroup() %>%
+    dplyr::pull(REF_AREA)
 
-  label_df   <- country_data %>% dplyr::filter(show_label)
+  country_data <- country_data %>%
+    dplyr::mutate(
+      show_label = REF_AREA %in% label_isos,
+      is_focus   = REF_AREA %in% focus_isos
+    )
+
   nolabel_df <- country_data %>% dplyr::filter(!show_label)
+
+  # Per-frame overlap detection: dim non-focus labels near focus labels -
+  label_df <- country_data %>%
+    dplyr::filter(show_label) %>%
+    dplyr::group_by(year) %>%
+    dplyr::group_modify(~{
+      df <- .x
+      focus_idx <- which(df$is_focus)
+      overlap_focus <- rep(FALSE, nrow(df))
+      if (length(focus_idx) > 0) {
+        for (i in seq_len(nrow(df))) {
+          if (!df$is_focus[i]) {
+            overlap_focus[i] <- any(
+              abs(df$prevalence[i] - df$prevalence[focus_idx]) < overlap_threshold
+            )
+          }
+        }
+      }
+      df$overlap_focus <- overlap_focus
+      df
+    }) %>%
+    dplyr::ungroup() %>%
+    dplyr::mutate(
+      label_alpha = dplyr::case_when(
+        is_focus      ~ 1,
+        overlap_focus ~ 0.1,
+        TRUE          ~ 0.5
+      )
+    )
+
+  focus_labels <- label_df %>% dplyr::filter(is_focus)
+  other_labels <- label_df %>% dplyr::filter(!is_focus)
 
   # Colour palette ------------------------------------------------------
   if (color_by == "region") {
@@ -104,6 +148,8 @@ build_country_scatterplot <- function(country_data,
     color_scale <- ggplot2::scale_color_identity()
     country_data$color_val <- "#1CABE2"
     label_df$color_val     <- "#1CABE2"
+    focus_labels$color_val <- "#1CABE2"
+    other_labels$color_val <- "#1CABE2"
     nolabel_df$color_val   <- "#1CABE2"
   }
 
@@ -114,52 +160,90 @@ build_country_scatterplot <- function(country_data,
                  group = country_name)
   )
 
-  # Paths + points (unlabelled countries = fainter) ---------------------
+  # Paths + points: unlabelled (faintest), non-focus labelled, focus ----
   if (nrow(nolabel_df) > 0) {
     p <- p +
       ggplot2::geom_path(
         data = nolabel_df,
         mapping = if (color_by == "region") ggplot2::aes(color = Region) else ggplot2::aes(color = color_val),
-        linewidth = 0.3, alpha = 0.25, show.legend = FALSE
+        linewidth = 0.3, alpha = 0.2, show.legend = FALSE
       ) +
       ggplot2::geom_point(
         data = nolabel_df,
         mapping = if (color_by == "region") ggplot2::aes(color = Region) else ggplot2::aes(color = color_val),
-        alpha = 0.35
+        alpha = 0.3
+      )
+  }
+
+  if (nrow(other_labels) > 0) {
+    p <- p +
+      ggplot2::geom_path(
+        data = other_labels,
+        mapping = if (color_by == "region") ggplot2::aes(color = Region) else ggplot2::aes(color = color_val),
+        linewidth = 0.4, alpha = 0.4, show.legend = FALSE
+      ) +
+      ggplot2::geom_point(
+        data = other_labels,
+        mapping = if (color_by == "region") ggplot2::aes(color = Region) else ggplot2::aes(color = color_val),
+        alpha = 0.7
       )
   }
 
   p <- p +
     ggplot2::geom_path(
-      data = label_df,
+      data = focus_labels,
       mapping = if (color_by == "region") ggplot2::aes(color = Region) else ggplot2::aes(color = color_val),
-      linewidth = 0.5, alpha = 0.6, show.legend = FALSE
+      linewidth = 0.8, alpha = 0.8, show.legend = FALSE
     ) +
     ggplot2::geom_point(
-      data = label_df,
+      data = focus_labels,
       mapping = if (color_by == "region") ggplot2::aes(color = Region) else ggplot2::aes(color = color_val),
-      alpha = 0.85
+      alpha = 0.95
     )
 
-  # Labels (ggrepel) ---------------------------------------------------
+  # Labels (ggrepel) — two layers: focus (bold) and non-focus (dimmed) --
+  if (nrow(other_labels) > 0) {
+    p <- p +
+      ggrepel::geom_text_repel(
+        data          = other_labels,
+        ggplot2::aes(label = country_name, alpha = label_alpha),
+        size               = 3,
+        fontface           = "plain",
+        color              = "black",
+        point.padding      = 0.15,
+        box.padding        = 0.2,
+        force              = 0.3,
+        force_pull         = 1.5,
+        direction          = "y",
+        min.segment.length = 0.1,
+        segment.color      = "grey60",
+        segment.size       = 0.3,
+        max.overlaps       = Inf,
+        seed               = 42,
+        show.legend        = FALSE
+      )
+  }
+
   p <- p +
     ggrepel::geom_text_repel(
-      data          = label_df,
+      data          = focus_labels,
       ggplot2::aes(label = country_name),
-      size               = 3,
-      fontface           = "plain",
+      size               = 4,
+      fontface           = "bold",
       color              = "black",
       point.padding      = 0.15,
       box.padding        = 0.2,
       force              = 0.3,
       force_pull         = 1.5,
+      direction          = "y",
       min.segment.length = 0.1,
       segment.color      = "grey60",
       segment.size       = 0.3,
-      max.overlaps       = 20,
+      max.overlaps       = Inf,
       seed               = 42,
       show.legend        = FALSE
-    )
+    ) +
+    ggplot2::scale_alpha(range = c(0.1, 1), guide = "none")
 
   # Scales + theme -----------------------------------------------------
   p <- p +
@@ -218,7 +302,8 @@ render_country_scatterplots <- function(country_data,
                                         region_title_fn = function(r) paste0(r, ": country trends"),
                                         output_dir,
                                         label_top_n_all = 15,
-                                        max_countries_per_plot = 25,
+                                        focus_top_n = 3,
+                                        top_n_per_region = 10,
                                         y_limits = NULL,
                                         nframes  = 120,
                                         fps_gif  = 6,
@@ -229,13 +314,25 @@ render_country_scatterplots <- function(country_data,
   dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   out_files <- character(0)
 
-  # --- 1. All countries ------------------------------------------------
-  message("  Building all-countries plot for ", indicator_label)
+  # --- 1. All countries (top N per region by burden) --------------------
+  latest_year_all <- max(country_data$year, na.rm = TRUE)
+  top_isos_all <- country_data %>%
+    dplyr::filter(year == latest_year_all) %>%
+    dplyr::group_by(Region) %>%
+    dplyr::slice_max(order_by = pop_affected, n = top_n_per_region,
+                     with_ties = FALSE) %>%
+    dplyr::ungroup() %>%
+    dplyr::pull(REF_AREA)
+  all_data <- country_data %>% dplyr::filter(REF_AREA %in% top_isos_all)
+
+  message("  Building all-countries plot for ", indicator_label,
+          " (top ", length(top_isos_all), " countries)")
   p_all <- build_country_scatterplot(
-    country_data,
+    all_data,
     y_axis_label = y_axis_label,
     plot_title   = all_title,
     label_top_n  = label_top_n_all,
+    focus_top_n  = focus_top_n,
     color_by     = "region",
     y_limits     = y_limits,
     plot_width   = plot_width,
@@ -262,19 +359,27 @@ render_country_scatterplots <- function(country_data,
   message("  Saved: ", gif_all)
 
   # --- 2. Per-region ---------------------------------------------------
+  latest_year <- max(country_data$year, na.rm = TRUE)
   regions <- sort(unique(country_data$Region))
   for (reg in regions) {
-    reg_data <- country_data %>% dplyr::filter(Region == reg)
-    n_countries <- length(unique(reg_data$REF_AREA))
-    message("  Building ", reg, " (", n_countries, " countries)")
+    reg_all <- country_data %>% dplyr::filter(Region == reg)
+    n_total <- length(unique(reg_all$REF_AREA))
 
-    label_n <- if (n_countries > max_countries_per_plot) max_countries_per_plot else NULL
+    # Keep only top N countries by burden in the latest year
+    top_isos <- reg_all %>%
+      dplyr::filter(year == latest_year) %>%
+      dplyr::slice_max(order_by = pop_affected, n = top_n_per_region,
+                       with_ties = FALSE) %>%
+      dplyr::pull(REF_AREA)
+    reg_data <- reg_all %>% dplyr::filter(REF_AREA %in% top_isos)
+    n_countries <- length(unique(reg_data$REF_AREA))
+    message("  Building ", reg, " (top ", n_countries, " of ", n_total, " countries)")
 
     p_reg <- build_country_scatterplot(
       reg_data,
       y_axis_label = y_axis_label,
       plot_title   = region_title_fn(reg),
-      label_top_n  = label_n,
+      focus_top_n  = focus_top_n,
       color_by     = "country",
       y_limits     = y_limits,
       plot_width   = plot_width,
