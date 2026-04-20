@@ -19,10 +19,9 @@ suppressPackageStartupMessages({
   library(xml2)
 })
 
-for (pkg in c("countrycode", "officer", "rvg", "openxlsx")) {
+for (pkg in c("officer", "rvg", "openxlsx")) {
   if (!requireNamespace(pkg, quietly = TRUE)) install.packages(pkg)
 }
-library(countrycode)
 library(officer)
 library(rvg)
 library(openxlsx)

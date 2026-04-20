@@ -30,6 +30,7 @@ Always read:
 - Preserve script entrypoint names and output filenames unless a change is explicitly requested.
 - Keep hardcoded business rules intact unless instructed otherwise.
 - Load all `library()` calls in the conductor (`1_execute*.r`) only. Child scripts must not load libraries themselves.
+- Country names must come from the UNICEF datasets that are the primary input files (e.g. the `CountryName` column in CMRS parquets, or `groups_for_agg.csv`). Do not use the `countrycode` R package or any other external name-mapping source.
 
 ## Documentation Rules
 

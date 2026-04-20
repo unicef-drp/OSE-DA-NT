@@ -52,12 +52,13 @@ message("Latest year in data: ", latest_year)
 message("10-year baseline:    ", yr_10_ago)
 message("20-year baseline:    ", yr_20_ago)
 
-# --- Country name lookup --------------------------------------------------
+# --- Country name lookup (from source data, not external packages) --------
+country_lookup <- stnt %>%
+  distinct(REF_AREA, CountryName) %>%
+  rename(country_name = CountryName)
+
 add_country_name <- function(df) {
-  df %>% mutate(
-    country_name = countrycode(REF_AREA, origin = "iso3c", destination = "country.name",
-                               warn = FALSE)
-  )
+  df %>% left_join(country_lookup, by = "REF_AREA")
 }
 
 # --- 1. Top 20 highest current prevalence ---------------------------------
@@ -123,6 +124,13 @@ if (has_numbers) {
     ) %>%
     filter(!is.na(REF_AREA), !is.na(TIME_PERIOD), !is.na(r))
   message("\nNumber data: ", nrow(stnt_num), " rows")
+
+  # Extend country lookup with any codes only in the numbers data
+  num_lookup <- stnt_num %>%
+    distinct(REF_AREA, CountryName) %>%
+    rename(country_name = CountryName)
+  country_lookup <- bind_rows(country_lookup, num_lookup) %>%
+    distinct(REF_AREA, .keep_all = TRUE)
 
   # Top 20 highest number of stunted children (r in thousands)
   top20_highest_num <- stnt_num %>%
@@ -370,9 +378,11 @@ if (has_numbers) {
 xlsx_path <- file.path(output_dir, "stunting_tables_and_figures.xlsx")
 # saveWorkbook deferred until after figures are generated and embedded
 
-# --- Figures (PNG) --------------------------------------------------------
+# --- Figures (PNG + SVG) ---------------------------------------------------
 fig_dir <- file.path(output_dir, "figures")
+svg_dir <- file.path(fig_dir, "svg")
 dir.create(fig_dir, recursive = TRUE, showWarnings = FALSE)
+dir.create(svg_dir, recursive = TRUE, showWarnings = FALSE)
 
 make_label <- function(df) {
   df %>% mutate(
@@ -396,7 +406,9 @@ fig1 <- ggplot(f1_data, aes(x = label, y = prevalence)) +
 
 ggsave(file.path(fig_dir, "fig1_highest_prevalence.png"), fig1,
        width = 7, height = 6, dpi = 150)
-message("Saved: fig1_highest_prevalence.png")
+ggsave(file.path(svg_dir, "fig1_highest_prevalence.svg"), fig1,
+       width = 7, height = 6, device = "svg")
+message("Saved: fig1_highest_prevalence.png + .svg")
 
 # Figure 2: 10-year prevalence reduction (top 10)
 f2_data <- top20_improve_10 %>% head(10) %>%
@@ -414,7 +426,9 @@ fig2 <- ggplot(f2_data, aes(x = label, y = reduction)) +
 
 ggsave(file.path(fig_dir, "fig2_10yr_prevalence_reduction.png"), fig2,
        width = 7, height = 6, dpi = 150)
-message("Saved: fig2_10yr_prevalence_reduction.png")
+ggsave(file.path(svg_dir, "fig2_10yr_prevalence_reduction.svg"), fig2,
+       width = 7, height = 6, device = "svg")
+message("Saved: fig2_10yr_prevalence_reduction.png + .svg")
 
 # Figure 3: 20-year prevalence reduction (top 10)
 f3_data <- top20_improve_20 %>% head(10) %>%
@@ -432,7 +446,9 @@ fig3 <- ggplot(f3_data, aes(x = label, y = reduction)) +
 
 ggsave(file.path(fig_dir, "fig3_20yr_prevalence_reduction.png"), fig3,
        width = 7, height = 6, dpi = 150)
-message("Saved: fig3_20yr_prevalence_reduction.png")
+ggsave(file.path(svg_dir, "fig3_20yr_prevalence_reduction.svg"), fig3,
+       width = 7, height = 6, device = "svg")
+message("Saved: fig3_20yr_prevalence_reduction.png + .svg")
 
 # Figure 4: Highest burden (top 10)
 if (has_numbers) {
@@ -450,7 +466,9 @@ if (has_numbers) {
 
   ggsave(file.path(fig_dir, "fig4_highest_burden.png"), fig4,
          width = 7, height = 6, dpi = 150)
-  message("Saved: fig4_highest_burden.png")
+  ggsave(file.path(svg_dir, "fig4_highest_burden.svg"), fig4,
+         width = 7, height = 6, device = "svg")
+  message("Saved: fig4_highest_burden.png + .svg")
 }
 
 # Figure 5: 10-year burden reduction (top 10)
@@ -472,7 +490,9 @@ if (has_numbers) {
 
   ggsave(file.path(fig_dir, "fig5_10yr_burden_reduction.png"), fig5,
          width = 7, height = 6, dpi = 150)
-  message("Saved: fig5_10yr_burden_reduction.png")
+  ggsave(file.path(svg_dir, "fig5_10yr_burden_reduction.svg"), fig5,
+         width = 7, height = 6, device = "svg")
+  message("Saved: fig5_10yr_burden_reduction.png + .svg")
 }
 
 # Figure 6: 20-year burden reduction (top 10)
@@ -494,7 +514,9 @@ if (has_numbers) {
 
   ggsave(file.path(fig_dir, "fig6_20yr_burden_reduction.png"), fig6,
          width = 7, height = 6, dpi = 150)
-  message("Saved: fig6_20yr_burden_reduction.png")
+  ggsave(file.path(svg_dir, "fig6_20yr_burden_reduction.svg"), fig6,
+         width = 7, height = 6, device = "svg")
+  message("Saved: fig6_20yr_burden_reduction.png + .svg")
 }
 
 # --- Dot plot helper (shared theme for Figures 7-10) ----------------------
@@ -532,7 +554,9 @@ fig7 <- make_dot_plot(f7_data, yr_10_ago, latest_year,
 
 ggsave(file.path(fig_dir, "fig7_before_after_prev_10yr.png"), fig7,
        width = 7, height = 5, dpi = 150)
-message("Saved: fig7_before_after_prev_10yr.png")
+ggsave(file.path(svg_dir, "fig7_before_after_prev_10yr.svg"), fig7,
+       width = 7, height = 5, device = "svg")
+message("Saved: fig7_before_after_prev_10yr.png + .svg")
 
 # Figure 8: Before/after dot plot — 20-year prevalence
 f8_data <- top20_improve_20 %>%
@@ -545,7 +569,9 @@ fig8 <- make_dot_plot(f8_data, yr_20_ago, latest_year,
 
 ggsave(file.path(fig_dir, "fig8_before_after_prev_20yr.png"), fig8,
        width = 7, height = 5, dpi = 150)
-message("Saved: fig8_before_after_prev_20yr.png")
+ggsave(file.path(svg_dir, "fig8_before_after_prev_20yr.svg"), fig8,
+       width = 7, height = 5, device = "svg")
+message("Saved: fig8_before_after_prev_20yr.png + .svg")
 
 # Figure 9: Before/after dot plot — 10-year burden
 if (has_numbers) {
@@ -561,7 +587,9 @@ if (has_numbers) {
 
   ggsave(file.path(fig_dir, "fig9_before_after_burden_10yr.png"), fig9,
          width = 7, height = 5, dpi = 150)
-  message("Saved: fig9_before_after_burden_10yr.png")
+  ggsave(file.path(svg_dir, "fig9_before_after_burden_10yr.svg"), fig9,
+         width = 7, height = 5, device = "svg")
+  message("Saved: fig9_before_after_burden_10yr.png + .svg")
 }
 
 # Figure 10: Before/after dot plot — 20-year burden
@@ -578,7 +606,9 @@ if (has_numbers) {
 
   ggsave(file.path(fig_dir, "fig10_before_after_burden_20yr.png"), fig10,
          width = 7, height = 5, dpi = 150)
-  message("Saved: fig10_before_after_burden_20yr.png")
+  ggsave(file.path(svg_dir, "fig10_before_after_burden_20yr.svg"), fig10,
+         width = 7, height = 5, device = "svg")
+  message("Saved: fig10_before_after_burden_20yr.png + .svg")
 }
 
 # --- Embed figures into Excel sheets --------------------------------------

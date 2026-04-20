@@ -1,6 +1,6 @@
 # Stunting Rankings — Tables and Figures (v3)
 
-Generated: 2026-04-20 07:36
+Generated: 2026-04-20 11:05
 Data year: 2024 | 10-year baseline: 2014 | 20-year baseline: 2004
 
 ---
@@ -29,7 +29,7 @@ Data year: 2024 | 10-year baseline: 2014 | 20-year baseline: 2004
 
 **Figure:** `fig3_20yr_prevalence_reduction.png` (top 10)
 
-**Key finding:** The largest reduction over two decades was North Korea with 27.6 percentage points (2004–2024).
+**Key finding:** The largest reduction over two decades was Democratic People's Republic of Korea with 27.6 percentage points (2004–2024).
 
 **Points of interest:** Several countries appear in both the 10-year and 20-year top improver lists, suggesting sustained long-run progress.
 
@@ -39,7 +39,7 @@ Data year: 2024 | 10-year baseline: 2014 | 20-year baseline: 2004
 
 **Figure:** `fig4_highest_burden.png` (top 10)
 
-**Key finding:** India had the largest estimated number of stunted children (37.4 million). The top five were India, Nigeria, Pakistan, Congo - Kinshasa, Ethiopia.
+**Key finding:** India had the largest estimated number of stunted children (37.4 million). The top five were India, Nigeria, Pakistan, Democratic Republic of the Congo, Ethiopia.
 
 **Points of interest:** The highest-burden countries span South Asia and sub-Saharan Africa. Countries with the largest burden reductions (e.g. India) can still remain the largest-burden country.
 
@@ -69,7 +69,7 @@ Data year: 2024 | 10-year baseline: 2014 | 20-year baseline: 2004
 
 **Figure:** none (table only)
 
-**Key finding:** 11 countries appeared in both the top-20 prevalence and top-20 burden lists: Afghanistan, Angola, Congo - Kinshasa, Ethiopia, Madagascar, Mozambique, Niger, Nigeria, Pakistan, Sudan, Yemen.
+**Key finding:** 11 countries appeared in both the top-20 prevalence and top-20 burden lists: Afghanistan, Angola, Democratic Republic of the Congo, Ethiopia, Madagascar, Mozambique, Niger, Nigeria, Pakistan, Sudan, Yemen.
 
 **Points of interest:** Targeting these overlap countries can enable an equity-focused approach while also targeting settings where absolute impact can be largest.
 

@@ -86,7 +86,9 @@ For detailed rendering rules, see `00_documentation/TWO_PAGER_MARKDOWN_RENDER_SP
 
 ## Dependencies
 
-R packages: `arrow`, `dplyr`, `tidyr`, `readr`, `ggplot2`, `countrycode`, `officer`, `rvg`, `openxlsx`, `magick`.
+R packages: `arrow`, `dplyr`, `tidyr`, `readr`, `ggplot2`, `officer`, `rvg`, `openxlsx`, `magick`.
+
+Country names are sourced from the `CountryName` column in the input CMRS parquet files, not from external packages. See `00_documentation/REPO_SCOPE_AND_BOUNDARIES.md` for the repo-wide rule.
 
 ## Brand Assets
 

@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------------
-# Script:  4c_create_ppt_combined.r
+# Script:  5_create_ppt.r
 # Purpose: Generate a UNICEF-branded PowerPoint by combining:
-#          (a) narrative content parsed from the markdown PPT content master
+#          (a) narrative content parsed from PPT_CONTENT_MASTER_V2.md
+#              (derived from the approved TWO_PAGER_BRIEF_CONTENT_V1.md)
 #          (b) chart and design logic from the existing slide modules
 #          Speaker notes from the content master are written directly into
 #          PowerPoint slides (not only to a companion text file).
 # Inputs:  03_outputs/stunting_rankings.rds
-#          00_documentation/PPT_CONTENT_MASTER_V1_2026-04-17.md
+#          00_documentation/PPT_CONTENT_MASTER_V2.md
 # Outputs: 03_outputs/stunting_top20_briefing_combined.pptx
 #          03_outputs/stunting_top20_briefing_combined_data.xlsx
 #          03_outputs/stunting_top20_briefing_combined_notes.txt
@@ -35,7 +36,7 @@ rds_path    <- file.path(output_dir, "stunting_rankings.rds")
 content_path <- file.path(
   projectFolder,
   "adhoc_analysis", "stunting_top20_briefing", "00_documentation",
-  "PPT_CONTENT_MASTER_V1_2026-04-17.md"
+  "PPT_CONTENT_MASTER_V2.md"
 )
 
 if (!file.exists(rds_path))    stop("Rankings not found: ", rds_path)
@@ -248,8 +249,10 @@ fmt_millions <- function(x) sprintf("%.1f M", x / 1000)
 # 4. Build charts from rankings data
 # =========================================================================
 
+n_chart <- 10L
+
 p_highest <- results$highest %>%
-  head(15) %>%
+  head(n_chart) %>%
   mutate(label = paste0(country_name, " (", REF_AREA, ")"),
          label = factor(label, levels = rev(label))) %>%
   ggplot(aes(x = label, y = prevalence)) +
@@ -263,44 +266,8 @@ p_highest <- results$highest %>%
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   theme_unicef
 
-p_improve_10 <- results$improve_10yr %>%
-  head(15) %>%
-  mutate(label = paste0(country_name, " (", REF_AREA, ")"),
-         label = factor(label, levels = rev(label))) %>%
-  ggplot(aes(x = label, y = abs(change_pp))) +
-  geom_col(fill = unicef_green, width = 0.7) +
-  geom_text(aes(label = sprintf("-%.1f pp", abs(change_pp))),
-            hjust = -0.1, size = 4.4, colour = unicef_warmgrey,
-            family = brand_font) +
-  coord_flip(ylim = c(0, max(abs(results$improve_10yr$change_pp), na.rm = TRUE) * 1.15)) +
-  labs(title = NULL, subtitle = NULL, caption = chart_caption,
-       x = NULL, y = "Reduction (pp)") +
-  theme_unicef
-
-p_dot_10 <- results$improve_10yr %>%
-  head(15) %>%
-  arrange(current_value) %>%
-  mutate(label = paste0(country_name, " (", REF_AREA, ")"),
-         label = factor(label, levels = rev(label))) %>%
-  ggplot(aes(y = label)) +
-  geom_segment(aes(x = current_value, xend = baseline_value, yend = label),
-               colour = unicef_coolgrey, linewidth = 0.6) +
-  geom_point(aes(x = current_value,  colour = "current"),  size = 2.5) +
-  geom_point(aes(x = baseline_value, colour = "baseline"), size = 2.5) +
-  scale_colour_manual(
-    values = c("current" = unicef_green, "baseline" = unicef_orange),
-    labels = setNames(c(as.character(latest_year), as.character(yr_10_ago)),
-                      c("current", "baseline")),
-    breaks = c("current", "baseline")
-  ) +
-  labs(title = NULL, subtitle = NULL, caption = chart_caption,
-       x = "Prevalence (%)", y = NULL, colour = NULL) +
-  scale_x_continuous(labels = scales::label_percent(scale = 1)) +
-  theme_unicef +
-  theme(legend.position = "top", legend.text = element_text(size = 13))
-
 p_improve_20 <- results$improve_20yr %>%
-  head(15) %>%
+  head(n_chart) %>%
   mutate(label = paste0(country_name, " (", REF_AREA, ")"),
          label = factor(label, levels = rev(label))) %>%
   ggplot(aes(x = label, y = abs(change_pp))) +
@@ -313,9 +280,31 @@ p_improve_20 <- results$improve_20yr %>%
        x = NULL, y = "Reduction (pp)") +
   theme_unicef
 
+p_dot_20 <- results$improve_20yr %>%
+  head(n_chart) %>%
+  arrange(desc(baseline_value)) %>%
+  mutate(label = paste0(country_name, " (", REF_AREA, ")"),
+         label = factor(label, levels = label)) %>%
+  ggplot(aes(y = label)) +
+  geom_segment(aes(x = current_value, xend = baseline_value, yend = label),
+               colour = unicef_coolgrey, linewidth = 0.6) +
+  geom_point(aes(x = baseline_value, colour = "baseline"), size = 2.5) +
+  geom_point(aes(x = current_value,  colour = "current"),  size = 2.5) +
+  scale_x_reverse(labels = scales::label_percent(scale = 1)) +
+  scale_colour_manual(
+    values = c("baseline" = unicef_orange, "current" = unicef_dark),
+    labels = setNames(c(as.character(yr_20_ago), as.character(latest_year)),
+                      c("baseline", "current")),
+    breaks = c("baseline", "current")
+  ) +
+  labs(title = NULL, subtitle = NULL, caption = chart_caption,
+       x = "Prevalence (%)", y = NULL, colour = NULL) +
+  theme_unicef +
+  theme(legend.position = "top", legend.text = element_text(size = 13))
+
 if (has_numbers) {
   p_highest_num <- results$highest_number %>%
-    head(15) %>%
+    head(n_chart) %>%
     mutate(label = paste0(country_name, " (", REF_AREA, ")"),
            label = factor(label, levels = rev(label))) %>%
     ggplot(aes(x = label, y = number_thousands)) +
@@ -329,23 +318,8 @@ if (has_numbers) {
     scale_y_continuous(labels = function(x) paste0(round(x / 1000, 1), " M")) +
     theme_unicef
 
-  p_improve_10_num <- results$improve_10yr_number %>%
-    head(15) %>%
-    mutate(label = paste0(country_name, " (", REF_AREA, ")"),
-           label = factor(label, levels = rev(label))) %>%
-    ggplot(aes(x = label, y = abs(change_th))) +
-    geom_col(fill = unicef_green, width = 0.7) +
-    geom_text(aes(label = sprintf("-%.1f M", abs(change_th) / 1000)),
-              hjust = -0.1, size = 4.4, colour = unicef_warmgrey,
-              family = brand_font) +
-    coord_flip(ylim = c(0, max(abs(results$improve_10yr_number$change_th), na.rm = TRUE) * 1.15)) +
-    labs(title = NULL, subtitle = NULL, caption = chart_caption,
-         x = NULL, y = "Reduction (millions)") +
-    scale_y_continuous(labels = function(x) paste0(round(x / 1000, 1), " M")) +
-    theme_unicef
-
   p_improve_20_num <- results$improve_20yr_number %>%
-    head(15) %>%
+    head(n_chart) %>%
     mutate(label = paste0(country_name, " (", REF_AREA, ")"),
            label = factor(label, levels = rev(label))) %>%
     ggplot(aes(x = label, y = abs(change_th))) +
@@ -358,9 +332,33 @@ if (has_numbers) {
          x = NULL, y = "Reduction (millions)") +
     scale_y_continuous(labels = function(x) paste0(round(x / 1000, 1), " M")) +
     theme_unicef
+
+  p_dot_20_num <- results$improve_20yr_number %>%
+    head(n_chart) %>%
+    arrange(desc(baseline_value)) %>%
+    mutate(label = paste0(country_name, " (", REF_AREA, ")"),
+           label = factor(label, levels = label)) %>%
+    ggplot(aes(y = label)) +
+    geom_segment(aes(x = current_value, xend = baseline_value, yend = label),
+                 colour = unicef_coolgrey, linewidth = 0.6) +
+    geom_point(aes(x = baseline_value, colour = "baseline"), size = 2.5) +
+    geom_point(aes(x = current_value,  colour = "current"),  size = 2.5) +
+    scale_x_reverse(labels = function(x) paste0(round(x / 1000, 1), " M")) +
+    scale_colour_manual(
+      values = c("baseline" = unicef_orange, "current" = unicef_dark),
+      labels = setNames(
+        c(as.character(yr_20_ago), as.character(latest_year)),
+        c("baseline", "current")
+      ),
+      breaks = c("baseline", "current")
+    ) +
+    labs(title = NULL, subtitle = NULL, caption = chart_caption,
+         x = "Stunted children (thousands)", y = NULL, colour = NULL) +
+    theme_unicef +
+    theme(legend.position = "top", legend.text = element_text(size = 13))
 }
 
-message("[4c] Built chart objects from rankings data")
+message("[5] Built chart objects from rankings data")
 
 # =========================================================================
 # 5. Build PowerPoint
@@ -369,20 +367,19 @@ message("[4c] Built chart objects from rankings data")
 # Map chart slides to their ggplot objects
 chart_map <- list(
   "6"  = p_highest,
-  "7"  = p_improve_10,
-  "8"  = p_dot_10,
-  "9"  = p_improve_20
+  "10" = p_improve_20,
+  "11" = p_dot_20
 )
 if (has_numbers) {
-  chart_map[["11"]] <- p_highest_num
-  chart_map[["12"]] <- p_improve_10_num
-  chart_map[["13"]] <- p_improve_20_num
+  chart_map[["7"]]  <- p_highest_num
+  chart_map[["12"]] <- p_improve_20_num
+  chart_map[["13"]] <- p_dot_20_num
 }
 
 # --- Initialise template --------------------------------------------------
 title_lines <- .nonempty(slides[["2"]]$on_slide)
 title_text    <- if (length(title_lines) >= 1) trimws(title_lines[1]) else "Child Stunting"
-subtitle_text <- if (length(title_lines) >= 2) trimws(title_lines[2]) else "Executive Director briefing"
+subtitle_text <- if (length(title_lines) >= 2) trimws(title_lines[2]) else "JME modeled estimates"
 
 title_variant   <- pick_title_variant(title_text)
 thankyou_variant <- sample(71:76, 1)
@@ -447,7 +444,7 @@ pptx <- add_section_slide(
 pptx <- .add_notes(pptx, .notes_text(slides[["3"]]$speaker_notes))
 emitted_order <- c(emitted_order, "3")
 
-# --- Slide 4: What this briefing showed (bullets) -------------------------
+# --- Slide 4: Key Messages (bullets) -------------------------------------
 s4_bullets <- .numbered_bullets(slides[["4"]]$on_slide)
 pptx <- add_bullet_slides(
   pptx,
@@ -461,7 +458,7 @@ pptx <- add_bullet_slides(
 pptx <- .add_notes(pptx, .notes_text(slides[["4"]]$speaker_notes))
 emitted_order <- c(emitted_order, "4")
 
-# --- Slide 5: Prevalence section divider ----------------------------------
+# --- Slide 5: Current Scale section divider -------------------------------
 pptx <- add_section_slide(
   pptx,
   title = .title_from(slides[["5"]]),
@@ -472,35 +469,64 @@ pptx <- add_section_slide(
 pptx <- .add_notes(pptx, .notes_text(slides[["5"]]$speaker_notes))
 emitted_order <- c(emitted_order, "5")
 
-# --- Slides 6-9: Prevalence charts ---------------------------------------
-for (sn in c("6", "7", "8", "9")) {
-  pptx <- .add_chart_slide(pptx, .title_from(slides[[sn]]), chart_map[[sn]])
-  pptx <- .add_notes(pptx, .notes_text(slides[[sn]]$speaker_notes))
-  emitted_order <- c(emitted_order, sn)
-}
+# --- Slide 6: Highest prevalence chart ------------------------------------
+pptx <- .add_chart_slide(pptx, .title_from(slides[["6"]]), chart_map[["6"]])
+pptx <- .add_notes(pptx, .notes_text(slides[["6"]]$speaker_notes))
+emitted_order <- c(emitted_order, "6")
 
-# --- Slides 10-13: Burden section (conditional) ---------------------------
+# --- Slide 7: Highest burden chart (conditional) --------------------------
 if (has_numbers) {
-  # Slide 10: section divider
-  pptx <- add_section_slide(
-    pptx,
-    title = .title_from(slides[["10"]]),
-    items = .items_from(slides[["10"]]),
-    style = bullet_style,
-    footer_title = title_text
-  )
-  pptx <- .add_notes(pptx, .notes_text(slides[["10"]]$speaker_notes))
-  emitted_order <- c(emitted_order, "10")
-
-  # Slides 11-13: burden charts
-  for (sn in c("11", "12", "13")) {
-    pptx <- .add_chart_slide(pptx, .title_from(slides[[sn]]), chart_map[[sn]])
-    pptx <- .add_notes(pptx, .notes_text(slides[[sn]]$speaker_notes))
-    emitted_order <- c(emitted_order, sn)
-  }
+  pptx <- .add_chart_slide(pptx, .title_from(slides[["7"]]), chart_map[["7"]])
+  pptx <- .add_notes(pptx, .notes_text(slides[["7"]]$speaker_notes))
+  emitted_order <- c(emitted_order, "7")
 }
 
-# --- Slide 14: Key findings (bullets) ------------------------------------
+# --- Slide 8: Concentration & overlap (bullets) ---------------------------
+s8_bullets <- .numbered_bullets(slides[["8"]]$on_slide)
+pptx <- add_bullet_slides(
+  pptx,
+  title   = slides[["8"]]$label,
+  bullets = s8_bullets,
+  levels  = rep(1L, length(s8_bullets)),
+  style   = bullet_style,
+  footer_title = title_text,
+  max_groups   = 3
+)
+pptx <- .add_notes(pptx, .notes_text(slides[["8"]]$speaker_notes))
+emitted_order <- c(emitted_order, "8")
+
+# --- Slide 9: Progress section divider ------------------------------------
+pptx <- add_section_slide(
+  pptx,
+  title = .title_from(slides[["9"]]),
+  items = .items_from(slides[["9"]]),
+  style = bullet_style,
+  footer_title = title_text
+)
+pptx <- .add_notes(pptx, .notes_text(slides[["9"]]$speaker_notes))
+emitted_order <- c(emitted_order, "9")
+
+# --- Slides 10-11: 20-year prevalence charts ------------------------------
+pptx <- .add_chart_slide(pptx, .title_from(slides[["10"]]), chart_map[["10"]])
+pptx <- .add_notes(pptx, .notes_text(slides[["10"]]$speaker_notes))
+emitted_order <- c(emitted_order, "10")
+
+pptx <- .add_chart_slide(pptx, .title_from(slides[["11"]]), chart_map[["11"]])
+pptx <- .add_notes(pptx, .notes_text(slides[["11"]]$speaker_notes))
+emitted_order <- c(emitted_order, "11")
+
+# --- Slides 12-13: 20-year burden charts (conditional) --------------------
+if (has_numbers) {
+  pptx <- .add_chart_slide(pptx, .title_from(slides[["12"]]), chart_map[["12"]])
+  pptx <- .add_notes(pptx, .notes_text(slides[["12"]]$speaker_notes))
+  emitted_order <- c(emitted_order, "12")
+
+  pptx <- .add_chart_slide(pptx, .title_from(slides[["13"]]), chart_map[["13"]])
+  pptx <- .add_notes(pptx, .notes_text(slides[["13"]]$speaker_notes))
+  emitted_order <- c(emitted_order, "13")
+}
+
+# --- Slide 14: Reduction concentration (bullets) --------------------------
 s14_bullets <- .numbered_bullets(slides[["14"]]$on_slide)
 pptx <- add_bullet_slides(
   pptx,
@@ -509,12 +535,26 @@ pptx <- add_bullet_slides(
   levels  = rep(1L, length(s14_bullets)),
   style   = bullet_style,
   footer_title = title_text,
-  max_groups   = 4
+  max_groups   = 3
 )
 pptx <- .add_notes(pptx, .notes_text(slides[["14"]]$speaker_notes))
 emitted_order <- c(emitted_order, "14")
 
-message("[4c] Built slide content: ", length(pptx), " slides in memory")
+# --- Slide 15: Limitations (bullets) --------------------------------------
+s15_bullets <- .numbered_bullets(slides[["15"]]$on_slide)
+pptx <- add_bullet_slides(
+  pptx,
+  title   = slides[["15"]]$label,
+  bullets = s15_bullets,
+  levels  = rep(1L, length(s15_bullets)),
+  style   = bullet_style,
+  footer_title = title_text,
+  max_groups   = 2
+)
+pptx <- .add_notes(pptx, .notes_text(slides[["15"]]$speaker_notes))
+emitted_order <- c(emitted_order, "15")
+
+message("[5] Built slide content: ", length(pptx), " slides in memory")
 
 # =========================================================================
 # 6. Save, reorder slides, write companions
@@ -522,7 +562,7 @@ message("[4c] Built slide content: ", length(pptx), " slides in memory")
 
 pptx_path <- file.path(output_dir, "stunting_top20_briefing_combined.pptx")
 print(pptx, target = pptx_path)
-message("[4c] Wrote PPTX (before reorder): ", pptx_path)
+message("[5] Wrote PPTX (before reorder): ", pptx_path)
 
 # --- Slide reorder --------------------------------------------------------
 # Internal order after removal + appends:
@@ -559,57 +599,52 @@ message("[4c] Wrote PPTX (before reorder): ", pptx_path)
 n_slides  <- length(pptx)
 new_order <- c(2L, 1L, seq(4L, n_slides), 3L)
 .reorder_pptx_slides(pptx_path, new_order)
-message("[4c] PowerPoint saved (reordered): ", pptx_path)
+message("[5] PowerPoint saved (reordered): ", pptx_path)
 
 # --- Excel workbook -------------------------------------------------------
 wb <- createWorkbook()
 
 addWorksheet(wb, "Highest prevalence")
 writeData(wb, "Highest prevalence",
-          results$highest %>% head(15) %>%
+          results$highest %>% head(n_chart) %>%
             select(rank, REF_AREA, country_name, year, prevalence))
 
-addWorksheet(wb, "10yr improvement")
-writeData(wb, "10yr improvement",
-          results$improve_10yr %>% head(15) %>%
+addWorksheet(wb, "20yr prevalence reduction")
+writeData(wb, "20yr prevalence reduction",
+          results$improve_20yr %>% head(n_chart) %>%
             select(rank, REF_AREA, country_name, baseline_value,
                    current_value, change_pp, pct_change))
 
-addWorksheet(wb, "10yr before-after")
-writeData(wb, "10yr before-after",
-          results$improve_10yr %>% head(15) %>%
+addWorksheet(wb, "20yr prevalence before-after")
+writeData(wb, "20yr prevalence before-after",
+          results$improve_20yr %>% head(n_chart) %>%
             arrange(current_value) %>%
             select(rank, REF_AREA, country_name, baseline_value,
                    current_value, change_pp))
 
-addWorksheet(wb, "20yr improvement")
-writeData(wb, "20yr improvement",
-          results$improve_20yr %>% head(15) %>%
-            select(rank, REF_AREA, country_name, baseline_value,
-                   current_value, change_pp, pct_change))
-
 if (has_numbers) {
   addWorksheet(wb, "Highest number")
   writeData(wb, "Highest number",
-            results$highest_number %>% head(15) %>%
+            results$highest_number %>% head(n_chart) %>%
               select(rank, REF_AREA, country_name, year, number_thousands))
-
-  addWorksheet(wb, "10yr number reduction")
-  writeData(wb, "10yr number reduction",
-            results$improve_10yr_number %>% head(15) %>%
-              select(rank, REF_AREA, country_name, baseline_value,
-                     current_value, change_th, pct_change))
 
   addWorksheet(wb, "20yr number reduction")
   writeData(wb, "20yr number reduction",
-            results$improve_20yr_number %>% head(15) %>%
+            results$improve_20yr_number %>% head(n_chart) %>%
               select(rank, REF_AREA, country_name, baseline_value,
                      current_value, change_th, pct_change))
+
+  addWorksheet(wb, "20yr number before-after")
+  writeData(wb, "20yr number before-after",
+            results$improve_20yr_number %>% head(n_chart) %>%
+              arrange(current_value) %>%
+              select(rank, REF_AREA, country_name, baseline_value,
+                     current_value, change_th))
 }
 
 xlsx_path <- file.path(output_dir, "stunting_top20_briefing_combined_data.xlsx")
 saveWorkbook(wb, xlsx_path, overwrite = TRUE)
-message("[4c] Excel data saved: ", xlsx_path)
+message("[5] Excel data saved: ", xlsx_path)
 
 # --- Speaker notes text backup --------------------------------------------
 notes_path <- file.path(output_dir, "stunting_top20_briefing_combined_notes.txt")
@@ -620,6 +655,6 @@ note_lines <- unlist(lapply(slides, function(sl) {
     "")
 }), use.names = FALSE)
 writeLines(note_lines, notes_path)
-message("[4c] Speaker notes backup saved: ", notes_path)
+message("[5] Speaker notes backup saved: ", notes_path)
 
-message("[4c] Done. Three files written to: ", output_dir)
+message("[5] Done. Three files written to: ", output_dir)
