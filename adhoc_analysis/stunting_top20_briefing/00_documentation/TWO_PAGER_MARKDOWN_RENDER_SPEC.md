@@ -1,6 +1,6 @@
 # Two-Pager Markdown Render Spec
 
-Last updated: 2026-04-18
+Last updated: 2026-04-20
 
 ## Purpose
 
@@ -15,7 +15,7 @@ It exists so content editing and script behavior stay aligned.
 
 The active content source for the Word brief pipeline is currently:
 
-`00_documentation/TWO_PAGER_BRIEF_CONTENT_V5.md`
+`00_documentation/TWO_PAGER_BRIEF_CONTENT_V6.md`
 
 Future content versions should keep this same marker pattern unless the render
 scripts are updated in parallel.
@@ -23,6 +23,17 @@ scripts are updated in parallel.
 The active on-disk renderer is currently:
 
 `02_codes/4_create_two_pager.r`
+
+## Figure Label Convention
+
+The V6 content and renderer support compound figure labels:
+
+- `Figure 1a` / `Figure 1b` for the page-1 pair (prevalence + burden)
+- `Figure 2a` / `Figure 2b` for the page-2 pair (prevalence improvers + burden reducers)
+
+The figure-path resolver in `4_create_two_pager.r` maps these labels to PNG
+filenames via a lookup that also accepts the legacy numeric-only labels (1, 4,
+8, 10) for backward compatibility.
 
 ## Supported Markers
 

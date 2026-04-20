@@ -2,15 +2,17 @@
 
 ## Project Purpose
 
-OSE-DA-NT is the nutrition pipeline workspace for CMRS-based processing and further transformation.
+OSE-DA-NT is the nutrition pipeline workspace for the UNICEF Combined Nutrition Databases processing and further transformation.
 
-This repository is in migration build-out. Initial priority is the further transformation system.
+The repository name comes from UNICEF Office of Strategy and Evidence, Data and Analytics Section, Nutrition Unit.
+
+This repository is in migration build-out. Initial priority is the further transformation system, ad-hoc analysis, and reference tables.
 
 ## Scope Boundary
 
-- OSE-DA-NT handles nutrition processing, post-processing, and transformation logic.
+- OSE-DA-NT handles post-processing after the production of country-level estimates for nutrition indicators in individual indicator pipelines.
 - DW-Production handles regional aggregation and public data warehouse production outputs.
-- OSE-DA-NT is already nutrition-only, so agents should not enforce nt-folder-only scope constraints.
+- OSE-DA-NT is already nutrition-only, so agents should not enforce nt-folder-only scope constraints like in the DW-Production repository.
 
 Do not move DW publication responsibilities into this repository unless explicitly requested.
 
@@ -19,7 +21,7 @@ Do not move DW publication responsibilities into this repository unless explicit
 Always read:
 1. README.md
 2. 00_documentation/REPO_SCOPE_AND_BOUNDARIES.md
-3. 00_documentation/FURTHER_TRANSFORMATION_SYSTEM_RUNBOOK.md
+3. further_transformation_system/00_documentation/FURTHER_TRANSFORMATION_SYSTEM_RUNBOOK.md
 4. Any local README in the target folder being edited
 5. 00_ai agent instructions and skills in this folder and subfolders for specific pipelines
 
@@ -31,6 +33,30 @@ Always read:
 - Keep hardcoded business rules intact unless instructed otherwise.
 - Load all `library()` calls in the conductor (`1_execute*.r`) only. Child scripts must not load libraries themselves.
 - Country names must come from the UNICEF datasets that are the primary input files (e.g. the `CountryName` column in CMRS parquets, or `groups_for_agg.csv`). Do not use the `countrycode` R package or any other external name-mapping source.
+
+## File Naming Rules
+
+- R scripts: lowercase `.r` extension, numbered prefix, lowercase_snake_case (`3_preferred_ant.r`).
+- Documentation: `UPPER_SNAKE_CASE.md` for standalone docs, `README.md` for overviews.
+- Data files: `lowercase_snake_case` (`cmrs_fields.xlsx`, `directory_indicator.csv`).
+- No spaces in filenames, no double underscores, no uppercase in script or data names.
+- Full rules: `00_documentation/REPO_SCOPE_AND_BOUNDARIES.md` → File Naming Rules.
+
+## SharePoint / Analysis Space
+
+The external SharePoint folder (`githubOutputRoot` in `profile_OSE-DA-NT.R`) stores all large and binary files:
+- Large inputs (parquet, source CSVs), generated outputs (xlsx, docx, pptx, png, rds, gif, mp4)
+- Source library documents, brand assets, templates, briefing packets
+
+The repo stores only: R scripts, small reference CSVs, AI instructions/skills, and documentation about the repo itself.
+If a file is too large to diff meaningfully in git or is a binary pipeline artifact, it belongs on SharePoint.
+
+## Repository Root Rules
+
+- **Do not create files in the repository root** unless they are cross-cutting configuration that applies to the entire repo (e.g. `profile_OSE-DA-NT.R`, `README.md`, `.gitignore`).
+- Scratch scripts, temporary outputs, one-off utilities, and test files must go inside the relevant pipeline folder (e.g. `adhoc_analysis/*/02_codes/`), not in the root.
+- If a file does not clearly belong to an existing folder, ask before creating it. Do not default to the root.
+- The root should contain only: `profile_OSE-DA-NT.R`, `README.md`, `_config_template/`, and the standard top-level folders (`00_ai/`, `00_documentation/`, `00_functions/`, `adhoc_analysis/`, `analysis_datasets/`, `further_transformation_system/`, `reference_data_manager/`).
 
 ## Documentation Rules
 

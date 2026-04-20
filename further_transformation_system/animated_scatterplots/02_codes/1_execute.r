@@ -179,7 +179,7 @@ source(file.path(dwCodesScatterplots, "0_scatterplot_functions.r"))
 #------------------------------------------------------------------------------
 # Source worker scripts
 #------------------------------------------------------------------------------
-#source(file.path(dwCodesScatterplots, "animated_scatterplot_stunting.R"))
-#source(file.path(dwCodesScatterplots, "animated_scatterplot_overweight.R"))
-#source(file.path(dwCodesScatterplots, "animated_scatterplot_wasting.R"))
-source(file.path(dwCodesScatterplots, "animated_scatterplot_stunting_countries.R"))
+#source(file.path(dwCodesScatterplots, "animated_scatterplot_stunting.r"))
+#source(file.path(dwCodesScatterplots, "animated_scatterplot_overweight.r"))
+#source(file.path(dwCodesScatterplots, "animated_scatterplot_wasting.r"))
+#source(file.path(dwCodesScatterplots, "animated_scatterplot_stunting_countries.r"))

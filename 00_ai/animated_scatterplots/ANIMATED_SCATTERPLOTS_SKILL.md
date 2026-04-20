@@ -127,7 +127,7 @@ parameter produces a warning. The many-to-many relationship is intentional.
 1. Determine whether data is in the parquet or requires a special loader.
 2. If parquet: identify the `IndicatorCode` (without `NT_` prefix).
    If CSV: add a loader function to `0_scatterplot_functions.r` with region name harmonization.
-3. Create `animated_scatterplot_{name}.R` following the existing pattern.
+3. Create `animated_scatterplot_{name}.r` following the existing pattern.
 4. Choose `focus_regions`, `focus_colors`, `y_limits`, and headline/subline text.
 5. Add `source()` line to `1_execute.r`.
 6. Test by uncommenting only the new indicator's source line.

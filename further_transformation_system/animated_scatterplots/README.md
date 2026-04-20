@@ -28,10 +28,10 @@ shared functions, loads reference data once, then sources each indicator script.
 |------|------|
 | `1_execute.r` | Pipeline orchestrator — libraries, paths, reference data, sources workers |
 | `0_scatterplot_functions.r` | Shared functions used by all indicator scripts |
-| `animated_scatterplot_stunting.R` | Stunting indicator config and render calls |
-| `animated_scatterplot_overweight.R` | Overweight indicator config and render calls |
-| `animated_scatterplot_wasting.R` | Wasting indicator config and render calls |
-| `animated_scatterplot_stunting_countries.R` | Country-level stunting scatterplots (all + per-region) |
+| `animated_scatterplot_stunting.r` | Stunting indicator config and render calls |
+| `animated_scatterplot_overweight.r` | Overweight indicator config and render calls |
+| `animated_scatterplot_wasting.r` | Wasting indicator config and render calls |
+| `animated_scatterplot_stunting_countries.r` | Country-level stunting scatterplots (all + per-region) |
 
 ### Shared Functions (`0_scatterplot_functions.r`)
 
@@ -152,7 +152,7 @@ RColorBrewer, ggrepel, av, magick, gifski, ragg, yaml
 
 ### Regional-level
 
-1. Create `animated_scatterplot_{name}.R` following the pattern of existing scripts.
+1. Create `animated_scatterplot_{name}.r` following the pattern of existing scripts.
 2. If the indicator exists in `cmrs2_series_accepted.parquet`, use `load_regional_series()`.
    If it uses a different data source, add a loader function to `0_scatterplot_functions.r`.
 3. Add a `source()` line to `1_execute.r` in the worker scripts section.
@@ -160,7 +160,7 @@ RColorBrewer, ggrepel, av, magick, gifski, ragg, yaml
 
 ### Country-level
 
-1. Create `animated_scatterplot_{name}_countries.R` following `animated_scatterplot_stunting_countries.R`.
+1. Create `animated_scatterplot_{name}_countries.r` following `animated_scatterplot_stunting_countries.r`.
 2. Call `load_country_series()` with the indicator code, then `render_country_scatterplots()`.
 3. Add a `source()` line to `1_execute.r`.
 4. Set indicator-specific labels, y-axis limits, and output subfolder name.

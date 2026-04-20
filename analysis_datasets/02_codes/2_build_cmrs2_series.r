@@ -30,7 +30,7 @@ all_data <- run_combined_datasets(series_files, output_file = "cmrs2_series.parq
 # "Accepted" (so the rows remain in the accepted subset) but
 # DataSourceDecision is set to "Accepted and Confidential".
 # These compensate for upstream data issues that should eventually be fixed
-# in CMRS production (see 00_documentation/UPSTREAM_SOURCE_DATA_FLAGS.md).
+# in CMRS production (see analysis_datasets/00_documentation/UPSTREAM_SOURCE_DATA_FLAGS.md).
 # ---------------------------------------------------------------------------
 conf_idx <- rep(FALSE, nrow(all_data))
 
