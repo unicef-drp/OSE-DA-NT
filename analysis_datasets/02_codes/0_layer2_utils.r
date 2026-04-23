@@ -24,7 +24,7 @@
 #
 # Dependencies:
 #   - profile_OSE-DA-NT.R  (provides path variables)
-#   - reference_data_manager/indicators/reference_disaggregations.csv
+#   - reference_data_manager/reference_tables/reference_disaggregations.csv
 # ---------------------------------------------------------------------------
 
 if (!exists("projectFolder", envir = .GlobalEnv) ||
@@ -34,7 +34,7 @@ if (!exists("projectFolder", envir = .GlobalEnv) ||
 }
 
 cmrs_input_dir <- cmrsInputDir
-disagg_map_path <- file.path(projectFolder, "reference_data_manager", "indicators", "reference_disaggregations.csv")
+disagg_map_path <- file.path(projectFolder, "reference_data_manager", "reference_tables", "reference_disaggregations.csv")
 layer2_output_dir <- analysisDatasetsOutputDir
 
 if (!dir.exists(layer2_output_dir)) {

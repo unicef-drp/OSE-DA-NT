@@ -104,6 +104,20 @@ analysisConductor <- file.path(analysisCodes, "1_execute_conductor.r")
 projectionCodes <- file.path(projectFolder, "further_transformation_system", "projections_progress_class", "012_codes")
 projectionExecute <- file.path(projectionCodes, "1_execute.r")
 
+# reference_data_manager paths.
+# Inputs are the editable CSVs in the repo. Outputs (computed wide crosswalk
+# and legacy-named xlsx mirrors) go to githubOutputRoot. The legacy SharePoint
+# Export folder is mirrored when accessible for back-compatibility.
+rdmInputDir       <- file.path(projectFolder, "reference_data_manager")
+rdmCodes          <- file.path(rdmInputDir, "02_codes")
+rdmConductor      <- file.path(rdmCodes, "1_execute_conductor.r")
+rdmOutputDir      <- file.path(githubOutputRoot, "reference_data_manager")
+if (!dir.exists(rdmOutputDir)) dir.create(rdmOutputDir, recursive = TRUE, showWarnings = FALSE)
+refSharepointDir  <- file.path(nutritionRoot, "Combined Nutrition Databases",
+                               "Post-Processing System",
+                               "2 - Reference Data Manager",
+                               "Sharepoint Export")
+
 # Export variables into global env for downstream scripts.
 assign("username", username, envir = .GlobalEnv)
 assign("userprofile", userprofile, envir = .GlobalEnv)
@@ -120,6 +134,11 @@ assign("analysisCodes", analysisCodes, envir = .GlobalEnv)
 assign("analysisConductor", analysisConductor, envir = .GlobalEnv)
 assign("projectionCodes", projectionCodes, envir = .GlobalEnv)
 assign("projectionExecute", projectionExecute, envir = .GlobalEnv)
+assign("rdmInputDir", rdmInputDir, envir = .GlobalEnv)
+assign("rdmCodes", rdmCodes, envir = .GlobalEnv)
+assign("rdmConductor", rdmConductor, envir = .GlobalEnv)
+assign("rdmOutputDir", rdmOutputDir, envir = .GlobalEnv)
+assign("refSharepointDir", refSharepointDir, envir = .GlobalEnv)
 
 assign("profile_OSE_DA_NT", TRUE, envir = .GlobalEnv)
 

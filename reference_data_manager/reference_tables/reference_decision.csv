@@ -1,0 +1,14 @@
+ID,Data Source Decision Code,Data Source Decision,Data Source Decision Description,Compliance Asset Id,Data Source Decision Category,Data Source Decision Category:Data Source Decision Category
+1,PRELI,Preliminary,Only the preliminary material is available​. Review cannot be conducted,,Preliminary,Preliminary
+2,PENDR,Pending Review,​The data source is awaiting data quality review,,Pending Review,Pending Review
+3,FLACC,Follow-up (Awaiting Country Context),The data source has been reviewed but we are awaiting some additional country context to explain levels or trends observed​,,Follow-up,Follow-up
+4,FLAAD,Follow-up (Awaiting Additional Documents),"The data source has been reviewed but any further action is contigent on the acquisition of some additional documents (e.g. questionnaires, sampling documents etc)​",,Follow-up,Follow-up
+5,FLDFC,Follow-up (Dataset for Confirmation),​The data source has been reviewed but any further action is contigent on the acquisition of microdata,,Follow-up,Follow-up
+6,FLOTH,Follow-up (Other),The data source has been reviewed and will be follow-up on in a later round​,,Follow-up,Follow-up
+7,ACCPT,Accepted and Free from Confidentiality,"​​Data source has been accepted, the value can be disseminated publicly​​​",,Accepted,Accepted
+8,ACCAF,Accepted and Confidential,Data source has been accepted but the value cannot be shared publicly​,,Accepted,Accepted
+9,REJDQ,Rejected (Data Quality),,,Rejected,Rejected
+10,REJOT,Rejected (Other),,,Rejected,Rejected
+11,REJNR,Rejected (Not Nationally Representative),,,Rejected,Rejected
+12,NF,Indicator Not Found,Indicator not found in the data source​,,Indicator Not Found,Indicator Not Found
+13,FILED,Filed,Data source has been filed and substituted with a derivative (either an aggregation or an extract),,Filed,Filed

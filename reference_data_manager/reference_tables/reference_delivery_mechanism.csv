@@ -1,0 +1,9 @@
+ID,Delivery Mechanism,Delivery Mechanism Modality,Delivery Mechanism Description,Compliance Asset Id
+1,Polio NIDs/SNIDs,Campaign,,
+2,Routine,Routine,,
+3,Vitamin A Campaign,Campaign,,
+4,"Child Health Event (Day Week, etc)",Campaign,,
+5,Measles SIA,Campaign,,
+6,No Distribution,No Distribution,,
+7,No Data,No Data,,
+8,Other,Other,,

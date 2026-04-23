@@ -1,0 +1,1289 @@
+ID,Country,Country Specific Survey Type,Country Specific Survey Type (Original Language),Country Specific Survey Type (Abbreviation),Compliance Asset Id,Country:ISO_Code,Data Source Type (Global) - If Nested,Data Source Type (Global) - If Nested:Survey Type (Expanded) (li,Data Source Type (Global) - If Nested:Survey Type
+1,India,India Rapid Survey on Swachhta Status,स्वच्छता स्स्ितत रिपोर्ट,,,IND,,,
+2,Jamaica,Jamaica Survey of Living Conditions,,JSLC,,JAM,,,
+3,Namibia,Namibia Household Income and Expenditure Survey,,NHIES,,NAM,,,
+4,Namibia,Namibia Labour Force Survey,,,,NAM,,,
+5,Namibia,Namibia Inter-censal Demographic Survey,,,,NAM,Intercensal Survey,Intercensal Survey,Intercensal Survey
+6,Lao People's Democratic Republic,Lao Social Indicator Survey,,LSIS,,LAO,,,
+7,Peru,Peru Demographic and Health Survey,Peru Encuesta Demográfica y de Salud Familiar,ENDES,,PER,,,
+8,Morocco,Morocco National Population and Family Health Survey,Morocco Enquête Nationale sur la Population et la Santé Familiale,ENPSF,,MAR,,,
+9,Mozambique,Mozambique Household Budget Survey,Mozambique Inquérito ao Orçamento Familiar,IOF,,MOZ,,,
+10,Jamaica,Jamaica Economic & Social Survey,,,,JAM,,,
+11,Oman,Oman Annual Health Report,,,,OMN,Statistical Yearbook,Statistical Yearbook,Statistical Yearbook
+12,South Africa,South Africa General Household Survey,,GHS,,ZAF,,,
+13,South Africa,South Africa National Income Dynamics Study,,NIDS,,ZAF,,,
+14,Tunisia,"Tunisia National Household Budget, Consumption and Livelihood Survey",Tunisia  Enquête Nationale sur le Budget la Consommation et le Niveau de Vie des Ménages,EBCNV,,TUN,,,
+15,Tunisia,Tunisia National Survey on Population and Employment,Tunisia Enquête Nationale sur la Population et l'Emploi,ENPE,,TUN,,,
+16,Afghanistan,Afghanistan Mortality Survey,,,,AFG,,,
+17,Afghanistan,Afghanistan Health Survey,,AHS,,AFG,,,
+18,Afghanistan,Survey of the Afghan People,,,,AFG,,,
+19,Afghanistan,Afghanistan Living Conditions Survey,,ALCS,,AFG,,,
+20,Argentina,Argentina Permanent Household Survey,Argentina Encuesta Permanente de Hogares,EPH,,ARG,,,
+21,Argentina,Argentina National Survey of Risk Factors for Non-Communicable Diseases,Argentina Encuesta Nacional de Factores de Riesgo para Enfermedades No Transmisibles,ENFR,,ARG,,,
+22,Nepal,Nepal National Micronutrient Status Survey,,NNMSS,,NPL,,,
+23,Rwanda,Rwanda Integrated Household Living Conditions Survey,"Enquête Intégrale sur les Conditions de Vie des ménages, Rwanda",EICV,,RWA,,,
+24,Nigeria,Nigeria National Nutrition and Health Survey,,NNHS,,NGA,,,
+25,Nicaragua,Nicaragua Demographic and Health Survey,Encuesta Nicaragüense de Demografía y Salud,ENDESA,,NIC,,,
+26,Nicaragua,Nicaragua Living Standard Measurement Survey,Nicaragua Encuesta de Medición de Nivel de Vida,ENMV,,NIC,,,
+27,Argentina,Argentina Annual Urban Household Survey,Argentina Encuesta Anual de Hogares urbanos,EAHU,,ARG,,,
+28,Argentina,Argentina National Nutrition and Health Survey,Argentina Encuesta Nacional de Nutrición y Salud,ENNyS,,ARG,,,
+29,Argentina,Argentina National Household Expenditure Survey,Argentina Encuesta Nacional de Gastos de los Hogares,ENGH/ENGHo,,ARG,,,
+30,South Sudan,South Sudan High Frequency Survey,,,,SSD,,,
+31,Egypt,"Egypt Household Income, Expenditure and Consumption Survey",,HIECS,,EGY,,,
+32,Costa Rica,Costa Rica National Survey on Sexual and Reproductive Health,Costa Rica Encuesta Nacional de Salud Sexual y Reproductiva,ENSSyR,,CRI,,,
+33,Georgia,Georgia Welfare Monitoring Survey,,WMS,,GEO,,,
+34,Algeria,Algerian Demography,Demographie Algerienne,,,DZA,,,
+35,Indonesia,Indonesia Basic Health Research,Indonesia Riset Kesehatan Dasar,RISKESDAS,,IDN,,,
+36,Spain,Spain National Health Survey,Encuesta Nacional de Salud de España,ENSE,,ESP,,,
+37,Burkina Faso,Burkina Faso National Nutrition Survey using SMART Methodology,"Enquetes Nutritionnelle Nationale SMART, Burkina Faso",,,BFA,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+38,Trinidad and Tobago,Trinidad and Tobago Survey of Living Condtions,,,,TTO,,,
+39,Saint Lucia,Saint Lucia Surveys of Living Conditions,,,,LCA,,,
+40,Democratic Republic of the Congo,"Democratic Republic of the Congo 1-2-3 Survey on Employment, Informal Sector and Living Conditions of Househods","Enquête 1-2-3 sur l'Emploi, le Secteur Informel et les Conditions de Vie des Ménages en République Démocratique du Congo",,,COD,,,
+41,Uganda,Uganda National Panel Survey,,UNPS,,UGA,,,
+42,Uganda,Uganda National Household Survey,,,,UGA,,,
+43,Botswana,Botswana Demographic Survey,,BDS,,BWA,,,
+44,South Sudan,South Sudan National Household Survey Using LQAS,,,,SSD,,,
+45,Kosovo,Kosovo Household Budget Survey,,,,XKX,,,
+46,Kosovo,Kosovo Labour Force Survey,,,,XKX,,,
+47,Guinea,Guinea Demographic and Health Survey,Enquête Démographique  et de Santé Guinée,EDSG,,GIN,,,
+48,Venezuela (Bolivarian Republic of),Venezuela National Survey of Living Conditions,Encuesta Nacional de Condiciones de Vida de la Población Venezolana,ENCOVI,,VEN,,,
+49,Afghanistan,Afghanistan Malaria Indicator Survey,,,,AFG,MIS,Malaria Indicator Survey,MIS
+50,Indonesia,Indonesian National Socio-Economic Survey,Indonesia Survei Sosial Ekonomi Nasional,SUSENAS,,IDN,,,
+51,Albania,Albania Household Budget Survey,Anketa e Buxhetit të Familjes,ABF,,ALB,,,
+52,Panama,Panama National Survey of Sexual and Reproductive Health,Encuesta Nacional de Salud Sexual y Reproductiva Panamá,ENASSER,,PAN,,,
+53,Albania,Albania Living Standards Measurement Survey,,,,ALB,,,
+54,Albania,Albania Census of Population and Housing,,,,ALB,Census,Census,Census
+55,Kuwait,Kuwait Nutrition Surveillance System,,KNSS,,KWT,,,
+56,Kuwait,Kuwait World Health Survey,,,,KWT,,,
+57,Fiji,Fiji Household Income and Expenditure Survey,,,,FJI,,,
+58,Benin,Benin Demographic and Health Survey,Enquete Demographique et de Sante du Benin,EDSB,,BEN,,,
+59,Benin,Benin Integrated Modular Survey on Household Living Conditions,Enquête Modulaire Intégrée sur les Conditions de Vie des ménages du Benin,EMICoV,,BEN,,,
+60,Benin,"Benin Comprehensive Food Security, Vulnerability and Nutrition Analysis","L’Analyse Globale de la Vulnérabilité, de la Sécurité Alimentaire et de la Nutrition - Benin",AGVSAN,,BEN,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+61,Benin,Benin Population and Housing Census,Benin Recensement General de la Population et de l'Habitation,RGPH,,BEN,Census,Census,Census
+62,Benin,Benin Household Survey,,,,BEN,,,
+63,Viet Nam,Viet Nam Population Change and Family Planning Survey,,PCFPS,,VNM,,,
+64,Viet Nam,Viet Nam Household Living Standard Survey,,VHLSS,,VNM,,,
+65,Viet Nam,Viet Nam Nutrition Surveillance Profile,,,,VNM,NNS,National Nutrition Survey,NNS
+66,Viet Nam,Viet Nam General Nutrition Survey,,,,VNM,,,
+67,Nepal,Nepal Living Standards Survey,,NLSS,,NPL,,,
+68,Viet Nam,Viet Nam Population and Housing Census,Phiếu điều tra dân,,,VNM,,,
+69,Eritrea,Eritrea EPI Coverage Survey,,,,ERI,,,
+70,Eswatini,Eswatini Household Income and Expenditure Survey,,SHIES,,SWZ,,,
+71,Eswatini,Eswatini HIV Incidence Measurement Survey,,SHIMS,,SWZ,,,
+72,Papua New Guinea,Papua New Guinea Malaria Indicator Survey,,,,PNG,MIS,Malaria Indicator Survey,MIS
+73,Bangladesh,Bangladesh EPI Coverage Evaluation Survey,,,,BGD,,,
+74,Niger,Niger National Nutrition and Child Survival Survey,Enquête nationale Nutrition et Survie de l’Enfant Niger,,,NER,,,
+75,Poland,Poland European Health Interview Survey,,,,POL,,,
+76,Maldives,Maldives Household Income and Expenditure Survey,,HIES,,MDV,,,
+77,Fiji,Fiji Population and Housing Census,,,,FJI,,,
+78,Maldives,Maldives Reproductive Health Survey,,,,MDV,,,
+79,Mali,Mali Living Standards Measurement Study - Integrated Survey on Agriculture,Mali Enquête Agricole de Conjoncture Intégrée aux Conditions de Vie des Ménages,EAC-I,,MLI,,,
+80,Maldives,Maldives Malé STEPS Noncommunicable Disease Risk Factors Survey,,,,MDV,,,
+81,Maldives,Maldives Vulnerability and Poverty Assessment Survey,,VPA,,MDV,,,
+82,Maldives,Maldives Demographic and Health Survey,,,,MDV,DHS,Demographic and Health Survey,DHS
+83,Maldives,Maldives Population and Housing Census,,,,MDV,Census,Census,Census
+84,Maldives,Maldives Multiple Indicator Cluster Survey,,,,MDV,MICS,Multiple Indicator Cluster Survey,MICS
+86,Maldives,Maldives Reproductive Tract Infection Survey,,,,MDV,,,
+87,India,India National Family Health Survey,,NFHS,,IND,DHS,Demographic and Health Survey,DHS
+88,Malaysia,Malaysia National Health and Morbidity Survey,Program Tinjauan Kebangsaan Kesihatan dan Morbiditi,NHMS,,MYS,,,
+89,Libya,Libya National Family Health Survey,,,,LBY,PAPFAM,Pan Arab Project for Family Health,PAPFAM
+90,Malaysia,Malaysia Migration Survey,Laporan Penyiasatan Migrasi,,,MYS,,,
+91,Oman,Oman Global School-Based Health Survey,,,,OMN,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+92,Oman,Oman Protein Energy Malnutrition Survey,,,,OMN,,,
+93,Oman,Oman National Nutrition Survey,,ONNS,,OMN,,,
+94,Indonesia,Indonesia Intercensal Survey,Survei Penduduk Antar Sensus,SUPAS,,IDN,,,
+95,Mali,Mali Demographic and Health Survey,Enquête Démographique et de Santé au Mali,EDSM,,MLI,DHS,Demographic and Health Survey,DHS
+96,Anguilla,Anguilla Global School-Based Health Survey,,,,AIA,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+97,Mali,"Mali National Anthropometric, Nutrition and Mortality Survey","Enquête Nationale Nutritionnelle Anthropométrique et de Mortalité rétrospective suivant la méthodologie SMART, Mali",,,MLI,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+98,Argentina,Argentina Vital Statistics,Estadísticas Vitales,,,ARG,CRVS,Civil Registration and Vital Statistics,CRVS
+99,Mexico,Mexico National Health Information System Birth Certificates Standard Database,Mexico Nacimientos Occurridos (Certificado de Nacimiento),,,MEX,CRVS,Civil Registration and Vital Statistics,CRVS
+100,Mexico,Mexico National Population Dynamics Survey,Mexico Encuesta Nacional de la Dinamica Demografica,ENADID,,MEX,,,
+101,Mexico,Mexico National Health and Nutrition Survey,"Encuesta nacional de salud y nutrición, Mexico",ENSANUT,,MEX,,,
+102,Mexico,Mexico Intercensal Survey,Mexico Encuesta Intercensal,EIC,,MEX,,,
+103,Mexico,Mexico Family Life Survey,"Encuesta Nacional sobre Niveles de Vida de los Hogares, Mexico",ENNVIH/MFLS,,MEX,,,
+104,Cambodia,Cambodia Intercensal Population Survey,,ICPS,,KHM,Intercensal Survey,Intercensal Survey,Intercensal Survey
+105,Cambodia,Cambodia School-based Survey on Iodine Nutrition,,CSIN,,KHM,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+106,Cambodia,Cambodia Labour Force (CLF) / Child Labour Surveys (CLS),,CLFCLS,,KHM,LFS,Labour Force Survey,LFS
+107,Cambodia,Cambodia General Population Census,,,,KHM,Census,Census,Census
+108,Cambodia,Cambodia Socio-Economic Survey,,CSES,,KHM,,,
+109,Cambodia,Cambodia Demographic and Health Survey,,,,KHM,DHS,Demographic and Health Survey,DHS
+110,Cambodia,Cambodia Malaria Indicator Survey,,,,KHM,MIS,Malaria Indicator Survey,MIS
+111,Pakistan,Pakistan Demographic and Health Survey,,,,PAK,DHS,Demographic and Health Survey,DHS
+112,Liberia,Liberia Household Income and Expenditure Survey,,,,LBR,,,
+113,Liberia,Liberia National Nutrition Survey,,LNNS,,LBR,,,
+114,Liberia,Liberia Demographic and Health Survey,,LDHS,,LBR,,,
+115,Liberia,Liberia Comprehensive Food Security and Nutrition Survey,,CFSNS,,LBR,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+116,Liberia,Liberia Core Welfare Indicator Questionnaire Survey,,,,LBR,CWIQ,Core Welfare Indicator Survey,CWIQ
+117,Liberia,Liberia Malaria Indicator Survey,,,,LBR,MIS,Malaria Indicator Survey,MIS
+118,Iran (Islamic Republic of),Iran National Integrated Micronutrient Survey,,NIMS,,IRN,,,
+119,Barbados,Barbados Survey of Living Conditions,,SLC,,BRB,,,
+120,Barbados,Barbados Population and Housing Census,,,,BRB,Census,Census,Census
+121,Zimbabwe,Zimbabwe Demographic and Health Survey,,ZDHS,,ZWE,DHS,Demographic and Health Survey,DHS
+122,Zimbabwe,Zimbabwe Multiple Indicator Cluster Survey,,,,ZWE,MICS,Multiple Indicator Cluster Survey,MICS
+123,Zimbabwe,Zimbabwe National Nutrition Survey,,,,ZWE,,,
+124,Zimbabwe,Zimbabwe IDD Sentinel District Monitoring,,,,ZWE,Surveillance,Surveillance System,Surveillance
+125,Botswana,Botswana Family Health Survey,,,,BWA,,,
+126,Zimbabwe,Zimbabwe National Micronutrient Survey,,,,ZWE,,,
+127,Zimbabwe,Zimbabwe Intercensal Demographic Survey,,ICDS,,ZWE,Intercensal Survey,Intercensal Survey,Intercensal Survey
+128,Djibouti,Djibouti Intercensal Demographic Survey,Djibouti Enquête Démographique Intercensitaire,,,DJI,Intercensal Survey,Intercensal Survey,Intercensal Survey
+129,Timor-Leste,Timor-Leste Survey of Living Standards,,,,TLS,LSMS,Living Standards Measurement Survey,LSMS
+130,Bosnia and Herzegovina,Bosnia and Herzegovina Living Standards and Measurements Survey,Anketa o mjerenju životnog standarda u Bosni i Hercegovini,,,BIH,LSMS,Living Standards Measurement Survey,LSMS
+131,Bosnia and Herzegovina,Bosnia and Herzegovina Household Budget Survey,Anketa o Potrošnji Domaćinstava u Bosne i Hercegovine,,,BIH,,,
+132,Iraq,Iraq Multiple Indicator Cluster Survey,,,,IRQ,MICS,Multiple Indicator Cluster Survey,MICS
+133,Iraq,Iraq Comprehensive Food Security and Vulnerability Assessment,,,,IRQ,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+134,Iraq,Iraq Household Socio-Economic Survey,,,,IRQ,,,
+135,Nigeria,Nigeria HIV/AIDS Indicator and Impact Survey,,NAIIS,,NGA,,,
+136,Bosnia and Herzegovina,Bosnia and Herzegovina Labour Force Survey,Anketa o Randoj Snazi,,,BIH,LFS,Labour Force Survey,LFS
+137,Bosnia and Herzegovina,Bosnia and Herzegovina Demographic Statistics,Demografija u Bosna i Hercegovina,,,BIH,CRVS,Civil Registration and Vital Statistics,CRVS
+138,Bosnia and Herzegovina,Bosnia and Herzegovina Population and Housing Census,"Popis stanovništva, domaćinstava i stanova u Bosni i Hercegovini",,,BIH,Census,Census,Census
+139,Bosnia and Herzegovina,Bosnia and Herzegovina Multiple Indicator Cluster Survey,,,,BIH,MICS,Multiple Indicator Cluster Survey,MICS
+140,Bulgaria,Bulgaria Living Standards Measurement Survey,,,,BGR,LSMS,Living Standards Measurement Survey,LSMS
+141,Bulgaria,Bulgaria World Fertility Survey,,,,BGR,WFS,World Fertility Survey,WFS
+142,Bulgaria,Bulgaria Women in Transition Survey,,,,BGR,,,
+143,Bulgaria,Bulgaria Household Budget Survey,БЮДЖЕТИ НА ДОМАКИНСТВАТА В РЕПУБЛИКА БЪЛГАРИЯ,,,BGR,,,
+144,Bulgaria,Bulgaria National Survey of Food Intake and Nutrition,,NSFIN,,BGR,,,
+145,Jordan,Jordan National Micronutrient Survey,,,,JOR,,,
+146,Bulgaria,Bulgaria Census,,,,BGR,Census,Census,Census
+147,Thailand,Thailand Multiple Indicator Cluster Survey,,,,THA,MICS,Multiple Indicator Cluster Survey,MICS
+148,Jordan,Jordan Population and Family Health Survey,,,,JOR,,,
+149,Jordan,Jordan EPI/CDD & Childhood Mortality Survey,,,,JOR,,,
+150,Jordan,Jordan Population and Housing Census,,,,JOR,Census,Census,Census
+151,Jordan,Jordan Annual Fertility Survey,,JAFS,,JOR,,,
+152,Jordan,Jordan Living Conditions Survey,,JLCS,,JOR,,,
+153,Jordan,Jordan Household Income and Expenditure Survey,,HIES,,JOR,,,
+154,Jordan,Jordan STEPS Noncommunicable Disease Risk Factors Survey,,,,JOR,STEPS NCD Risk Factors Survey,STEPS Noncommunicable Disease Risk Factors Survey,STEPS NCD Risk Factors Survey
+155,Japan,Japan National Nutrition Survey,,,,JPN,NNS,National Nutrition Survey,NNS
+156,France,France National Survey of Overweight and Obesity,Enquête épidémiologique nationale sur le surpoids et l'obésité,,,FRA,,,
+157,Zimbabwe,Zimbabwe Population and Housing Census,,,,ZWE,Census,Census,Census
+158,Jordan,Jordan Labour Market Panel Survey,,JLMPS,,JOR,LFS,Labour Force Survey,LFS
+159,Gambia,Gambia Program for Education Impact Evaluation Survey,,,,GMB,,,
+160,Gambia,Gambia EPI Immunization Coverage Survey,,,,GMB,,,
+161,Gambia,Gambia Population and Housing Census,,,,GMB,Census,Census,Census
+162,Gambia,Gambian Contraceptive Prevalence and Fertility Determinants Survey,,GCPFDS,,GMB,,,
+163,Gambia,Gambia Social Dimensions of Adjustment Priority Survey,,,,GMB,,,
+164,Gambia,Gambia Malaria Indicator Survey,,,,GMB,MIS,Malaria Indicator Survey,MIS
+165,Gambia,Gambia Integrated Household Survey,,,,GMB,,,
+166,Mauritius,Mauritius Contraceptive Prevalence Survey,,,,MUS,,,
+167,Mauritius,Mauritius Population Census,,,,MUS,Census,Census,Census
+168,Mauritius,Mauritius Population and Vital Statistics,,,,MUS,CRVS,Civil Registration and Vital Statistics,CRVS
+169,Mauritius,Mauritius Bi-annual Digest of Statistics,,,,MUS,CRVS,Civil Registration and Vital Statistics,CRVS
+170,Mauritius,Mauritius Household Budget Survey,,,,MUS,,,
+171,Mauritius,Mauritius Noncommunicable Disease Survey,,,,MUS,,,
+172,Mauritius,Mauritius National Nutrition Survey,,,,MUS,NNS,National Nutrition Survey,NNS
+173,Afghanistan,Afghanistan National Nutrition Survey,,,,AFG,,,
+174,"China, Hong Kong Special Administrative Region",Hong Kong Breastfeeding Survey,,,,HKG,,,
+175,Bhutan,Bhutan National Health Survey,,,,BTN,,,
+176,Bhutan,Bhutan Living Standards Survey,,BLSS,,BTN,,,
+177,Bhutan,Bhutan National Nutrition Survey,,,,BTN,NNS,National Nutrition Survey,NNS
+178,Djibouti,Djibouti Immunization Coverage Survey,L’enquete de couverture vaccinale Djibouti,,,DJI,,,
+179,Djibouti,Djibouti National Nutrition Survey using SMART methodology,"Enquête Nutritionnelle Nationale avec la Methodologie SMART, Djibouti",,,DJI,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+180,Djibouti,Djibouti Household Survey - Social Indicators,Enquête Djiboutienne Auprès des Ménages pour les Indicateurs Sociaux,,,DJI,,,
+181,Djibouti,Djibouti Family Health Survey,Enquete Djiboutienne sur la Sante de la Famille,EDSF,,DJI,PAPFAM,Pan Arab Project for Family Health,PAPFAM
+182,Djibouti,Djibouti Malaria Indicator Survey,,,,DJI,MIS,Malaria Indicator Survey,MIS
+183,Djibouti,Djibouti Multiple Indicator Survey,Enquête djiboutienne à indicateurs multiples,EDIM,,DJI,MICS,Multiple Indicator Cluster Survey,MICS
+184,Ghana,Ghana Living Standards Survey,,GLSS,,GHA,,,
+185,Cameroon,Cameroon Household Survey,Enquête Camerounaise auprès des Ménages,ECAM,,CMR,,,
+186,Guinea-Bissau,Guinea-Bissau Welfare Indicator Questionnaire Survey,Republica da Guiné-Bissau Inquerito Ligeiro para a Avaliação da Pobreza,ILAP,,GNB,,,
+187,Uruguay,Uruguay Survey of Reproductive Behavior,Uruguay Encuesta de Comportamientos Reproductivos,ENCoR,,URY,,,
+188,Gabon,Gabon Poverty Monitoring and Evaluation Survey,Enquête Gabonaise pour l'Evaluation et le Suivi de la Pauvreté,EGESP,,GAB,,,
+189,Gabon,Gabon Population and Housing Census,Gabon Recensement Général de la Population et de l'Habitat,,,GAB,Census,Census,Census
+190,Togo,Togo Core Welfare Indicator Survey,Togo Questionnaire de Base des Indicateurs de Base du Bien-être,,,TGO,CWIQ,Core Welfare Indicator Survey,CWIQ
+191,Togo,Togo National Nutrition Survey using SMART Methodology,"Enquette Nutritionnelle Nationale Utilisant La Methodologie SMART, Togo",,,TGO,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+192,Mauritania,Mauritania National Nutrition Survey - SMART,"Enquête nutritionnelle nationale SMART, Maurtanie",,,MRT,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+193,Cameroon,Cameroon Population and Housing Census,Cameroun Recensement Général de la Population et de l'Habitat,RGPH,,CMR,Census,Census,Census
+194,Burundi,Burundi Population and Housing Census,Recensement Général de la Population Burundi,RGPH,,BDI,Census,Census,Census
+195,Burundi,Burundi Post-Enumeration Survey,Enquete Post-Censitaire Burundi,EP,,BDI,Post-Enumeration Survey,Post-Enumeration Survey,Post-Enumeration Survey
+196,Burundi,Burundi Demographic Survey,"Enquete Demographique, Burudin",ED,,BDI,,,
+197,Guinea-Bissau,Guinea-Bissau Population and Housing Census,Republica da Guiné-Bissau Recenseamento geral da população e habitação,RGPH,,GNB,Census,Census,Census
+198,Guinea-Bissau,Guinea-Bissau Post-Enumeration Survey,"Republica da Guiné-Bissau Inquerito Post Censitario,",,,GNB,Post-Enumeration Survey,Post-Enumeration Survey,Post-Enumeration Survey
+199,Guinea-Bissau,Guinea-Bissau Household Budget and Consumption Survey,"Inquerito ao Consumo e Orcamentos Familiares, Republica da Guiné-Bissau",ICOF,,GNB,,,
+200,Fiji,Fiji National Nutrition Survey,,FNNS,,FJI,NNS,National Nutrition Survey,NNS
+201,Ireland,Ireland Childhood Obesity Surveillance Initiative,,,,IRL,COSI,WHO European Childhood Obesity Surveillance Initiative (COSI),COSI
+202,Ireland,Ireland - Growing Up in Ireland Study,,GUI,,IRL,,,
+203,Ireland,Ireland National Perinatal Reporting System,,NPRS,,IRL,Surveillance,Surveillance System,Surveillance
+204,Ireland,Ireland Census,,,,IRL,Census,Census,Census
+205,Singapore,Singapore National Breastfeeding Survey,,,,SGP,,,
+206,Singapore,Singapore National Nutrition Survey,,,,SGP,NNS,National Nutrition Survey,NNS
+207,Singapore,Singapore Household Income and Expenditure Survey,,,,SGP,,,
+208,Singapore,Singapore Primary Care Survey,,,,SGP,,,
+209,France,France National Perinatal Survey,"Enquête nationale périnatale, France",,,FRA,,,
+210,Saudi Arabia,Saudi Arabia Population Characteristics Survey,,,,SAU,,,
+211,Solomon Islands,Solomon Islands Household Income and Expenditure Survey,,,,SLB,,,
+212,Solomon Islands,Solomon Islands Population and Housing Census,,,,SLB,,,
+213,Solomon Islands,Solomon Islands People's Survey,,,,SLB,,,
+214,Solomon Islands,Solomon Islands Demographic and Health Survey,,,,SLB,DHS-Style,DHS-Style Survey,DHS-Style
+215,American Samoa,American Samoa Household Income and Expenditure Survey,,,,ASM,,,
+216,American Samoa,American Samoa Census,,,,ASM,Census,Census,Census
+217,Afghanistan,Afghanistan FACT Survey,,,,AFG,FACT Survey,Fortification Assessment Coverage Toolkit,FACT Survey
+218,Cabo Verde,Cabo Verde Demographic and Reproductive Health Survey,"Inquérito Demográfico e de Saúde Reprodutiva, Cabo Verde",IDSR,,CPV,,,
+219,Cabo Verde,Cabo Verde Household Income and Expenditure Survey,"Inquérito às Despesas e Receitas Familiares, Cabo Verde",IDRF,,CPV,,,
+220,Thailand,Thailand Reproductive Health Survey,,,,THA,,,
+221,Belize,Belize Maternal and Child Mortality Survey,,BMCMS,,BLZ,,,
+222,United Republic of Tanzania,Tanzania National Panel Survey,,NPS,,TZA,LSMS,Living Standards Measurement Survey,LSMS
+223,Malta,Malta Demographic Review,,,,MLT,CRVS,Civil Registration and Vital Statistics,CRVS
+224,Malta,Malta Census of Population and Housing,,,,MLT,Census,Census,Census
+225,Malta,Malta Labour Force Survey,,,,MLT,LFS,Labour Force Survey,LFS
+226,Malta,Malta Statistics on Income and Living Conditions,,SILC,,MLT,,,
+227,Malta,Malta Health Interview Survey,,HIS,,MLT,,,
+228,Malta,Malta Household Budgetary Survey,,,,MLT,,,
+229,Luxembourg,Luxembourg Immunization Coverage Survey,Enquête de couverture vaccinale au Grand-Duché de Luxembourg,,,LUX,,,
+230,Rwanda,Rwanda Labour Force Survey,,,,RWA,LFS,Labour Force Survey,LFS
+231,Rwanda,Rwanda Malaria Indicator Survey,,RMIS,,RWA,MIS,Malaria Indicator Survey,MIS
+232,Rwanda,Rwanda Population and Housing Census,Rwanda Recensement Général de la Population et de l'Habitat,,,RWA,Census,Census,Census
+233,Rwanda,Rwanda Demographic Survey,"Enquete Demographique, Rwanda",ED,,RWA,,,
+234,Rwanda,Rwanda National Vaccination Coverage Evaluation Survey,,,,RWA,,,
+235,Rwanda,Rwanda Service Provision Assessment,,,,RWA,SPA,Service Provision Assessment,SPA
+236,Rwanda,Rwanda Core Welfare Indicator Questionnaire Survey,"Enquête sur les Indicateurs de Base du Bien-être, Republique Rwandaise",QUIBB,,RWA,CWIQ,Core Welfare Indicator Survey,CWIQ
+237,Tokelau,Tokelau Population and Housing Census,,,,TKL,Census,Census,Census
+238,Kyrgyzstan,Kyrgyzstan Multiple Indicator Cluster Survey,,,,KGZ,MICS,Multiple Indicator Cluster Survey,MICS
+239,Kyrgyzstan,Kyrgyzstan Demographic and Health Survey,,,,KGZ,DHS,Demographic and Health Survey,DHS
+240,Kyrgyzstan,Kyrgyzstan Living Standards Survey,,,,KGZ,LSMS,Living Standards Measurement Survey,LSMS
+241,Marshall Islands,Marshall Island Census,,,,MHL,Census,Census,Census
+242,Zambia,Zambia National Malaria Indicator Survey,,,,ZMB,MIS,Malaria Indicator Survey,MIS
+243,Belize,Belize Population and Housing Census,,,,BLZ,Census,Census,Census
+244,Belize,Belize Living Standards Measurement Survey,,,,BLZ,,,
+245,Belize,Belize Family Health Survey,,,,BLZ,,,
+246,Belize,Belize Poverty Assessment Report,,,,BLZ,,,
+247,Belize,Belize Multiple Indicator Cluster Survey,,,,BLZ,MICS,Multiple Indicator Cluster Survey,MICS
+248,Belize,Belize Child Activity Survey,,,,BLZ,,,
+249,Belize,Belize Household Expenditure Survey,,,,BLZ,,,
+250,Montenegro,Montenegro Multiple Indicator Cluster Survey,,,,MNE,MICS,Multiple Indicator Cluster Survey,MICS
+251,Montenegro,Montenegro Roma Settlements Multiple Indicator Cluster Survey,,,,MNE,MICS,Multiple Indicator Cluster Survey,MICS
+252,Vanuatu,Vanuatu Multiple Indicator Cluster Survey,,,,VUT,MICS,Multiple Indicator Cluster Survey,MICS
+253,Montenegro,"Montenegro Census of Population, Households and Dwellings",,,,MNE,Census,Census,Census
+254,Turkey,Turkey National Research on Domestic Violence Against Women,,,,TUR,,,
+255,Turkey,Turkey Demographic and Health Survey,,,,TUR,,,
+256,Turkey,Turkey Multiple Indicator Cluster Survey,,,,TUR,MICS,Multiple Indicator Cluster Survey,MICS
+257,Panama,Panama Family Planning/Maternal and Child Health Survey,"Encuesta de Salud Materno-Infantil y Planificacion Familiar, Panama",,,PAN,RHS,Reproductive Health Survey,RHS
+258,Turkey,Turkey Population and Housing Census,,,,TUR,Census,Census,Census
+259,Turkey,Turkey Infant and Child Mortality Survey,,INCHMOR,,TUR,,,
+260,Turkey,Turkey Population Census,,,,TUR,Census,Census,Census
+261,Taiwan,Taiwan Nutrition and Health Survey,,NAHSIT,,TWN,,,
+262,Taiwan,Taiwan Global School-Based Health Survey,,,,TWN,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+263,Taiwan,Taiwan Population and Housing Census,,,,TWN,Census,Census,Census
+264,Ireland,"Ireland Survey of Lifestyle, Attitudes and Nutrition",,SLAN,,IRL,,,
+265,Luxembourg,Luxembourg Population and Housing Census,,Luxembourg Recensement de la Population,,LUX,Census,Census,Census
+266,Ireland,Irish Contraception and Crisis Pregnancy Study,,ICCP,,IRL,,,
+267,Ireland,Irish Study of Sexual Health and Relationships,,,,IRL,,,
+268,Hungary,Hungary Representative Nutrition Survey,,,,HUN,NNS,National Nutrition Survey,NNS
+269,Hungary,Hungary Fertility Survey,,,,HUN,WFS,World Fertility Survey,WFS
+270,Hungary,Hungary National Population Health Survey,Országos Lakossági Egészségfelmérés,OLEF,,HUN,,,
+271,Jamaica,Jamaica Health and Lifestyle Survey,,JHLS,,JAM,,,
+272,Papua New Guinea,Papua New Guinea Demographic and Health Survey,,,,PNG,,,
+273,Philippines,Philippines Maternal and Child Health Survey,,,,PHL,,,
+274,Lebanon,Lebanon National Immunization Coverage Survey,,,,LBN,,,
+275,Philippines,Philippines Family Income and Expenditure Survey,,FIES,,PHL,,,
+276,Cyprus,Cyprus Children Immunization Survey,,,,CYP,,,
+277,India,India District Level Household and Facility Survey,,DLHS,,IND,,,
+278,Cabo Verde,Cabo Verde Continuous Multi-Purpose Survey,"Inquérito Multi-Objectivo Contínuo, Cabo Verde",IMC,,CPV,,,
+279,Ethiopia,Ethiopia Mini Demographic and Health Survey,,EMDHS,,ETH,,,
+280,Ethiopia,Ethiopia Performance Monitoring and Accountability 2020 Survey,,,,ETH,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+281,Ethiopia,"Ethiopia Household Income, Consumption and Expenditure Survey",,HICE,,ETH,,,
+282,Ethiopia,Ethiopia Welfare Monitoring Survey,,WMS,,ETH,,,
+283,Ethiopia,Ethiopia Socioeconomic Survey,,,,ETH,,,
+284,Ethiopia,Ethiopia Demographic and Health Survey,,,,ETH,DHS,Demographic and Health Survey,DHS
+285,Ethiopia,Ethiopia Rural Socioeconomic Survey,,ERSS,,ETH,,,
+286,Ethiopia,Ethiopia Population and Housing Census,,,,ETH,Census,Census,Census
+287,Ethiopia,Ethiopia National Child Labour Survey,,,,ETH,,,
+288,Ethiopia,Ethiopia Malaria Indicator Survey,,,,ETH,MIS,Malaria Indicator Survey,MIS
+289,Nepal,Nepal Adolescent and Youth Survey,,NAYS,,NPL,,,
+290,Nepal,Nepal Demographic and Health Survey,,,,NPL,DHS,Demographic and Health Survey,DHS
+291,Nepal,Nepal Multiple Indicator Cluster Survey,,NMICS,,NPL,MICS,Multiple Indicator Cluster Survey,MICS
+292,Nepal,Nepal Annual Household Survey,,AHS,,NPL,,,
+293,Philippines,Philippines National Nutrition Survey,,,,PHL,NNS,National Nutrition Survey,NNS
+294,Philippines,Philippines National Demographic and Health Survey,,,,PHL,DHS,Demographic and Health Survey,DHS
+295,Philippines,Philippines Global School-Based Student Health Survey,,,,PHL,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+296,Philippines,Philippines Multiple Indicator Cluster Survey,,,,PHL,MICS,Multiple Indicator Cluster Survey,MICS
+297,Suriname,Suriname Multiple Indicator Cluster Survey,,,,SUR,MICS,Multiple Indicator Cluster Survey,MICS
+298,Gambia,Gambia Multiple Indicator Cluster Survey,,,,GMB,MICS,Multiple Indicator Cluster Survey,MICS
+299,Bolivia (Plurinational State of),Bolivia National Demographic and Health Survey,Bolivia Encuesta nacional de demografia y salud,ENDSA,,BOL,DHS,Demographic and Health Survey,DHS
+300,Burundi,Burundi Demographic and Health Survey,Enquête démographique et de santé Burundi,,,BDI,DHS,Demographic and Health Survey,DHS
+301,Chad,Chad Demographic and Health Survey,Enquête Démographique et de Santé et à Indicateurs Multiples du Tchad,,,TCD,DHS,Demographic and Health Survey,DHS
+302,Chad,Chad Multiple Indicator Cluster Survey,Enquête par grappes à indicateurs multiples Tchad,,,TCD,MICS,Multiple Indicator Cluster Survey,MICS
+303,Chad,Chad National Nutrition and Mortality Survey,Enquete Nationale De Nutrition et de Mortalite Retrospecive chez les Enfants et la Population Generrale selon la Méthodologie SMART Tchad,,,TCD,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+304,Chad,Chad Comprehensive Food Security and Vulnerability Analysis,"Analyse Globale de la Sécurité Alimentaire et de la Vulnérabilité, Tchad",,,TCD,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+305,Chad,Chad National Survey on Iodine Deficiency,,,,TCD,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+306,Burundi,Burundi National Nutrition Survey,"Enquete Nationale sur la Situation Nutritionnelle, Burundi",,,BDI,NNS,National Nutrition Survey,NNS
+307,Burundi,Burundi National Nutrition and Mortality SMART Survey,"Enquete Nationale sur la Situation Nutritionnelle et la Mortalite sur la Mortalite Basee Sur La Methodologie SMART, Burundi",,,BDI,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+308,Haiti,"Haiti Mortality, Morbidity and Service Utilization Survey","Enquête Mortalité, Morbidité et Utilisation des Services, Haïti",EMMUS,,HTI,,,
+309,Lesotho,Lesotho Demographic and Health Survey,,LDHS,,LSO,DHS,Demographic and Health Survey,DHS
+310,Madagascar,Madagascar Demographic and Health Survey,,,,MDG,DHS,Demographic and Health Survey,DHS
+311,Madagascar,Madagascar Multiple Indicator Cluster Survey,"Enquete a Indicateurs Multiples, Madagascar",,,MDG,MICS,Multiple Indicator Cluster Survey,MICS
+312,Burundi,Burundi Comprehensive Food Security and Vulnerability Analysis,"Analyse Globale de la Sécurité Alimentaire, de la Nutrition et de la Vulnérabilité au Burundi",,,BDI,,,
+313,Haiti,Haiti National Contraceptive Prevalence Survey,,,,HTI,,,
+314,Haiti,Haiti Employment and Informal Sector Survey,"Enquete sur l'Emploi et l'Economie Informelle, Haiti",EEEI,,HTI,,,
+315,Haiti,Haiti Living Conditions Survey,Enquête sur les Conditions de vie en Haïti,ECVH,,HTI,,,
+316,Haiti,Haiti Survey of Household Living Conditions of households after the Earthquake,"Enquête sur les conditions de Vie des Ménages Aprés Seisme, Haïti",ECVMAS,,HTI,,,
+317,Malawi,Malawi Vulnerability Assessment Committee SMART,,MVAC SMART,,MWI,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+318,Bangladesh,Bangladesh National Micronutrient Survey,,,,BGD,,,
+319,State of Palestine,Palestinian Multiple Indicator Cluster Survey,,,,PSE,MICS,Multiple Indicator Cluster Survey,MICS
+320,Haiti,Haiti Population and Housing Census,"Recensement General de la Population et de l'Habitat, Haiti",,,HTI,Census,Census,Census
+321,Bangladesh,Bangladesh Multiple Indicator Cluster Survey,Progotir Pathey,,,BGD,,,
+322,Uganda,Uganda Malaria Indicator Survey,,UMIS,,UGA,MIS,Malaria Indicator Survey,MIS
+323,Afghanistan,Afghanistan Multiple Indicator Cluster Survey,,AMICS,,AFG,MICS,Multiple Indicator Cluster Survey,MICS
+324,United Republic of Tanzania,Tanzania National Nutrition Survey using SMART Methodology,,TNNS,,TZA,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+325,Uganda,Uganda Population and Housing Census,,,,UGA,Census,Census,Census
+326,Uganda,Uganda In Depth Study,,,,UGA,In Depth (DHS),In Depth Study (DHS),In Depth (DHS)
+327,Uganda,Uganda AIDS Indicator Survey,,,,UGA,AIS,AIDS Indicator Survey,AIS
+328,Uganda,Uganda Service Provision Assessment,,,,UGA,SPA,Service Provision Assessment,SPA
+329,Chile,"Chile Activities of Children, Girls and Adolescents Survey","Chile Encuesta de Actividades de Ninos, Ninas y Adolescentes",EANNA,,CHL,,,
+330,South Africa,South Africa Survey of Activities of Young People,,SAYP,,ZAF,LFS,Labour Force Survey,LFS
+331,Zambia,Zambia Labour Force Survey,,,,ZMB,LFS,Labour Force Survey,LFS
+332,South Sudan,South Sudan Malaria Indicator Survey,,SSMIS,,SSD,MIS,Malaria Indicator Survey,MIS
+333,Tajikistan,Tajikistan Micronutrient Status Survey,,TMNSS,,TJK,,,
+334,Tajikistan,Tajikistan Living Standards Measurement Survey,,TLSS,,TJK,LSMS,Living Standards Measurement Survey,LSMS
+335,Tajikistan,Tajikistan National Nutrition Survey,,,,TJK,NNS,National Nutrition Survey,NNS
+336,Tajikistan,Tajikistan Multiple Indicator Cluster Survey,,,,TJK,MICS,Multiple Indicator Cluster Survey,MICS
+337,Tajikistan,Tajikistan Demographic and Health Survey,,,,TJK,DHS,Demographic and Health Survey,DHS
+338,Oman,Oman Multiple Indicator Cluster Survey,,,,OMN,MICS,Multiple Indicator Cluster Survey,MICS
+339,State of Palestine,Palestine National Nutrition Surveillance System,,NSS,,PSE,Surveillance,Surveillance System,Surveillance
+340,Burkina Faso,Burkina Faso Malaria Indicator Survey,Enquête sur les indicateurs du paludisme au Burkina Faso,,,BFA,MIS,Malaria Indicator Survey,MIS
+341,Czechia,Czechia Nation-wide anthropological survey of children and adolescents,,,,CZE,,,
+342,Seychelles,Seychelles Global School-Based Student Health Survey,,,,SYC,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+343,Seychelles,Seychelles Food Insecurity Experience Scale Survey,,,,SYC,FIES,Food Insecurity Experience Scale Survey,FIES
+344,Seychelles,Seychelles Household Budget Survey,,,,SYC,,,
+345,Malawi,Malawi Malaria Indicator Survey,,,,MWI,MIS,Malaria Indicator Survey,MIS
+346,Malawi,Malawi Integrated Household Survey,,IHS,,MWI,LSMS,Living Standards Measurement Survey,LSMS
+347,Malawi,Malawi Multiple Indicator Cluster Survey,,,,MWI,MICS,Multiple Indicator Cluster Survey,MICS
+348,Malawi,Malawi Demographic and Health Survey,,,,MWI,DHS,Demographic and Health Survey,DHS
+349,Malawi,Malawi Population-Based HIV Impact Assessment,,MPHIA,,MWI,PHIA,Population-based HIV Impact Assessment,PHIA
+350,Malawi,Malawi National Child Labour Survey,,NCLS,,MWI,LFS,Labour Force Survey,LFS
+351,Malawi,Malawi Welfare Monitoring Survey,,WMS,,MWI,Other,Other Survey,Other
+352,Malawi,Malawi Service Provision Assessment,,MSPA,,MWI,SPA,Service Provision Assessment,SPA
+353,Malawi,Malawi Violence against Children Survey,,,,MWI,VACS,Voilence against Children Survey,VACS
+354,Malawi,Malawi World Health Survey,,,,MWI,WHS,World Health Survey,WHS
+355,Malawi,"Malawi Knowledge, Attitudes, and Practices in Health Survey",,,,MWI,KAP,"Knowledge, Attitudes and Practices Survey",KAP
+356,Malawi,Malawi Population and Housing Census,,,,MWI,Census,Census,Census
+357,Seychelles,Seychelles Heart Study,,,,SYC,,,
+358,Lao People's Democratic Republic,Laos Reproductive Health Survey,,,,LAO,,,
+359,Malawi,Malawi National Micronutrient Survey,,,,MWI,,,
+360,Tonga,Tonga Disability Survey,,,,TON,,,
+361,South Sudan,South Sudan Food Security and Nutrition Monitoring System,,FSNMS,,SSD,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+362,India,India Comprehensive National Nutrition Survey,,CNNS,,IND,NNS,National Nutrition Survey,NNS
+363,Mongolia,Mongolia Social Indicator Sample Survey,,SISS,,MNG,MICS,Multiple Indicator Cluster Survey,MICS
+364,Mongolia,Mongolia Child and Development Survey,,,,MNG,MICS,Multiple Indicator Cluster Survey,MICS
+365,Pakistan,Pakistan Child Labour Survey,,,,PAK,LFS,Labour Force Survey,LFS
+366,Sudan,Sudan Simple Spatial Surveying Method Survey,,S3M,,SDN,,,
+367,Uzbekistan,Uzbekistan Nutrition Survey,,UNS,,UZB,NNS,National Nutrition Survey,NNS
+368,Denmark,Danish National Survey of Diet and Physical Activity,,DANSDA,,DNK,,,
+369,India,India National Sample Survey,,NSS,,IND,,,
+370,Senegal,Senegal National Survey of Poverty,Enquête de suivi de la pauvreté au Sénégal,ESPS,,SEN,,,
+371,Senegal,Senegal Malaria Indicator Survey,Enquête Nationale sur le Paludisme au Sénégal,,,SEN,MIS,Malaria Indicator Survey,MIS
+372,Senegal,Senegal Household Survey,Enquête Sénégalaise Auprès des Ménages,ESAM,,SEN,,,
+373,El Salvador,El Salvador Multiple Indicator Cluster Survey,"Encuesta de indicadores multiples por conglomerados, El Salvador",,,SLV,MICS,Multiple Indicator Cluster Survey,MICS
+374,El Salvador,El Salvador National Family Health Survey,El Salvador Encuesta Nacional de Salud Familiar,FESAL,,SLV,,,
+375,Senegal,Senegal Continuous Service Provision Assessment,Enquête Continue sur la Prestation des Services de Soins de Santé du Senegal,ECPSS,,SEN,SPA,Service Provision Assessment,SPA
+376,Senegal,Senegal Population and Housing Census,Recensement General de la Population du Senegal,,,SEN,Census,Census,Census
+377,Nigeria,Nigeria Demographic and Health Survey,,NDHS,,NGA,DHS,Demographic and Health Survey,DHS
+378,Nigeria,Nigeria Multiple Indicator Cluster Survey,,,,NGA,MICS,Multiple Indicator Cluster Survey,MICS
+379,Nigeria,Nigeria General Household Survey,,,,NGA,LSMS,Living Standards Measurement Survey,LSMS
+380,Albania,Albania Monitoring of Breastfeeding Practices in Infants and Young Children,,,,ALB,,,
+381,Uzbekistan,Uzbekistan Multiple Indicator Cluster Survey,,,,UZB,MICS,Multiple Indicator Cluster Survey,MICS
+382,Sierra Leone,Sierra Leone Demographic and Health Survey,,SLDHS,,SLE,DHS,Demographic and Health Survey,DHS
+383,Sierra Leone,Sierra Leone Multiple Indicator Cluster Survey,,,,SLE,MICS,Multiple Indicator Cluster Survey,MICS
+384,Sierra Leone,Sierra Leone National Nutrition Survey,,SLNNS,,SLE,,,
+385,Sierra Leone,Sierra Leone Micronutrient Survey,,,,SLE,,,
+386,Sierra Leone,Sierra Leone Integrated Household Survey,,SLIHS,,SLE,,,
+387,Sierra Leone,Sierra Leone Malaria Indicator Survey,,,,SLE,MIS,Malaria Indicator Survey,MIS
+388,Sierra Leone,Sierra Leone Food Security and Nutrition Survey,,,,SLE,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+389,Sierra Leone,Sierra Leone Service Availability and Readiness Assessment,,,,SLE,,,
+390,Sierra Leone,Sierra Leone Core Welfare Indicators Questionnaire Survey,,,,SLE,CWIQ,Core Welfare Indicator Survey,CWIQ
+391,Sierra Leone,Sierra Leone Demographic and Social Monitoring Survey,,DSMS,,SLE,,,
+392,Democratic People's Republic of Korea,Democratic People's Republic of Korea Multiple Indicator Cluster Survey,,,,PRK,MICS,Multiple Indicator Cluster Survey,MICS
+393,Democratic People's Republic of Korea,Democratic People's Republic of Korea Reproductive Health Survey,,,,PRK,,,
+394,Democratic People's Republic of Korea,Democratic People's Republic of Korea National Nutrition Survey,,,,PRK,NNS,National Nutrition Survey,NNS
+395,Democratic People's Republic of Korea,Democratic People's Republic of Korea Iodine Deficiency Disorders Survey,,,,PRK,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+396,Sierra Leone,Sierra Leone Population and Housing Census,,,,SLE,Census,Census,Census
+397,Rwanda,Rwanda Demographic and Health Survey,"Enquête démographique et de santé, Rwanda",RDHS,,RWA,DHS,Demographic and Health Survey,DHS
+398,Rwanda,Rwanda Comprehensive Food Security and Vulnerability Analysis,,,,RWA,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+399,Niger,Niger Performance Monitoring and Accountability 2020 Survey (Niamey),,,,NER,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+400,Rwanda,Rwanda Violence Against Children and Youth Survey,,,,RWA,VACS,Voilence against Children Survey,VACS
+401,Rwanda,Rwanda Mortality Assessment Survey,,,,RWA,,,
+402,Rwanda,Rwanda Health Management Information System,,HMIS,,RWA,,,
+403,Rwanda,Rwanda Post-Enumeration Survey,,,,RWA,Post-Enumeration Survey,Post-Enumeration Survey,Post-Enumeration Survey
+404,Rwanda,Rwanda Interim Demographic and Health Survey,,,,RWA,IDHS,Interim Demographic and Health Survey,IDHS
+405,Rwanda,Rwanda National Child Labour Survey,,,,RWA,,,
+406,Rwanda,Rwanda Multiple Indicator Cluster Survey,,,,RWA,MICS,Multiple Indicator Cluster Survey,MICS
+407,Myanmar,Myanmar Multiple Indicator Cluster Survey,,,,MMR,,,
+408,Democratic Republic of the Congo,Democratic Republic of the Congo Multiple Indicator Cluster Survey,,MICS-RDC,,COD,MICS,Multiple Indicator Cluster Survey,MICS
+409,Morocco,Morocco National Violence against Women Survey,"Enquête nationale sur la prévalence de la violence à l’égard des femmes, Royaume du Maroc",,,MAR,,,
+410,Yemen,Yemen National Social Protection Monitoring Survey,,NSPMS,,YEM,,,
+411,Lesotho,Lesotho Multiple Indicator Cluster Survey,,,,LSO,MICS,Multiple Indicator Cluster Survey,MICS
+412,Slovenia,Slovenia National Dietary Survey,,SI.Menu,,SVN,,,
+413,Lesotho,Lesotho Continuous Multipurpose Survey,,CMS,,LSO,,,
+414,Lesotho,Lesotho Combined Continuous Multipurpose Household Survey and Household Budget Survey,,CMS-HBS,,LSO,,,
+415,Lesotho,Lesotho Household Budget Survey,,HBS,,LSO,,,
+416,Uruguay,"Uruguay Nutrition, Child Development and Health Survey","Uruguay Encuesta de Nutrición, Desarrollo Infantil y Salud",ENDIS,,URY,,,
+417,Australia,Australia National Health Survey,,NHS,,AUS,,,
+418,Zimbabwe,Zimbabwe Malaria Indicator Survey,,,,ZWE,MIS,Malaria Indicator Survey,MIS
+419,Senegal,Senegal Continuous Demographic and Health Survey,Enquête Démographique et de Santé Continue du Sénégal,EDS-C,,SEN,,,
+420,Senegal,Senegal Demographic and Health Survey,Enquête démographique et de santé au Sénégal,EDS,,SEN,DHS,Demographic and Health Survey,DHS
+421,Central African Republic,Central African Republic National Nutrition and Mortality Survey,Enquete Nationale sur la Situation Nutritionnelle et la Mortalite en Republique Centrafricaine,,,CAF,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+422,Algeria,Algeria Multiple Indicator Cluster Survey,,,,DZA,MICS,Multiple Indicator Cluster Survey,MICS
+423,Cameroon,Cameroon Demographic and Health Survey,Enquête Démographique et de Santé du Cameroun,,,CMR,DHS,Demographic and Health Survey,DHS
+424,Cameroon,Cameroon Multiple Indicator Cluster Survey,Enquête à Indicateurs Multiples au Cameroun,,,CMR,MICS,Multiple Indicator Cluster Survey,MICS
+425,Cameroon,Cameroon Comprehensive Food Security and Vulnerability Analysis,Analyse Globale de la Sécurité Alimentaire et de la Vulnérabilité au Cameroun,,,CMR,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+426,Yemen,Yemen Multiple Indicator Cluster Survey,,,,YEM,MICS,Multiple Indicator Cluster Survey,MICS
+427,Yemen,Yemen Demographic and Health Survey,,,,YEM,DHS,Demographic and Health Survey,DHS
+428,Yemen,Yemen Comprehensive Food Security Survey,,,,YEM,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+429,India,India National Iodine Survey,,,,IND,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+430,Yemen,Yemen Global School-Based Student Health Survey,,,,YEM,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+431,Serbia,Serbia Multiple Indicator Cluster Survey,,,,SRB,MICS,Multiple Indicator Cluster Survey,MICS
+432,Serbia,Serbia Living Standards Measurement Survey,,,,SRB,LSMS,Living Standards Measurement Survey,LSMS
+433,Serbia,Serbia Multiple Indicator Cluster Survey (Roma Settlements),,,,SRB,MICS,Multiple Indicator Cluster Survey,MICS
+434,Andorra,Andorra National Health Survey,,,,AND,,,
+435,Bangladesh,Bangladesh Demographic and Health Survey,,BDHS,,BGD,DHS,Demographic and Health Survey,DHS
+436,Afghanistan,Afghanistan Demographic and Health Survey,,,,AFG,DHS,Demographic and Health Survey,DHS
+437,Afghanistan,Afghanistan Global School-Based Student Health Survey,,,,AFG,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+438,Afghanistan,Afghanistan National Risk and Vulnerability Assessment,,NRVA,,AFG,,,
+439,Afghanistan,Afghanistan National Immunization Coverage Survey,,,,AFG,,,
+440,Afghanistan,Afghanistan Population Census,,,,AFG,Census,Census,Census
+441,Afghanistan,Afghanistan National Demographic and Family Guidance Survey,,,,AFG,,,
+442,Ghana,Ghana Maternal Health Survey,,,,GHA,SDHS,Special Demograhic and Health Survey,SDHS
+443,Ghana,Ghana Micronutrient Survey,,,,GHA,,,
+444,Ghana,Ghana Multiple Indicator Cluster Survey,,,,GHA,MICS,Multiple Indicator Cluster Survey,MICS
+445,Ghana,Ghana PMA Primary Health Care Survey,,,,GHA,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+446,Ghana,Ghana Performance Monitoring and Accountability 2020 Survey,,,,GHA,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+447,Ghana,Ghana Malaria Indicator Survey,,,,GHA,MIS,Malaria Indicator Survey,MIS
+448,Ghana,Ghana National Iodine Survey,,,,GHA,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+449,Ghana,Ghana Demographic and Health Survey,,,,GHA,DHS,Demographic and Health Survey,DHS
+450,Ghana,Ghana Global School-Based Student Health Survey,,,,GHA,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+451,Ghana,Ghana Comprehensive Food Security and Vulnerability Analysis (Northern Ghana),,,,GHA,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+452,Ghana,Ghana Multiple Indicator Cluster Survey (Accra),,,,GHA,MICS,Multiple Indicator Cluster Survey,MICS
+453,Ghana,Ghana Socioeconomic Panel Survey,,,,GHA,,,
+454,Pakistan,Pakistan National Nutrition Survey,,,,PAK,NNS,National Nutrition Survey,NNS
+455,Ghana,Ghana Comprehensive Food Security and Vulnerability Analysis,,,,GHA,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+456,Ghana,Ghana Maternal and Child Health Service Provision Assessment,,,,GHA,MCH SPA,Maternal and Child Health Service Provision Assessment,MCH SPA
+457,Bangladesh,Bangladesh National Low Birth Weight Survey,,NLBWS,,BGD,,,
+458,Bangladesh,Bangladesh National Iodine Deficiency Disorders Survey,,,,BGD,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+459,Niger,Niger Demographic and Health Survey,Enquête Démographique et de Santé du Niger,EDSN,,NER,DHS,Demographic and Health Survey,DHS
+460,Guinea,Guinea National Nutrition Survey based on SMART Methodology,"Enquête Nationale Nutritionnelle, basée sur la Méthodologie SMART,  Guinée",,,GIN,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+461,Guinea,Guinea Parasitic Prevalence of Malaria and Anemia Survey,République de Guinée Enquête de prévalence parasitaire du paludisme et de l’anémie,EEPA,,GIN,,,
+462,Guinea,Guinea Poverty Assessment Survey,"Enquête légère sur la pauvreté, Guinée",ELEP,,GIN,,,
+463,Guinea,Guinea Comprehensive Food Security and Vulnerability Analysis,"Analyse globale de la vulnérabilité, de la sécurité alimentaire et de la nutrition, Guinee",AGVSAN,,GIN,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+464,Guinea,Guinea Conakry Food Security Assessment in Emergencies,"Evaluation de la Sécurité Alimentaire en Situation d’Urgence, Guinée Conakry",ESASU,,GIN,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+465,Guinea,Guinea Multiple Indicator Cluster Survey,Enquête par grappes à indicateurs multiples Guinée.,,,GIN,,,
+466,Zimbabwe,Zimbabwe Poverty Income Consumption and Expenditure Survey,,PICES,,ZWE,,,
+467,Zimbabwe,Zimbabwe Labour Force and Child Labour Survey,,LFCLS,,ZWE,LFS,Labour Force Survey,LFS
+468,Georgia,Georgia Multiple Indicator Cluster Survey,,,,GEO,MICS,Multiple Indicator Cluster Survey,MICS
+469,Afghanistan,Survey of the Afghan Returnees,,,,AFG,,,
+470,Estonia,Estonia National Dietary Survey,,,,EST,,,
+471,North Macedonia,North Macedonia Multiple Indicator Cluster Survey,,,,MKD,MICS,Multiple Indicator Cluster Survey,MICS
+472,North Macedonia,North Macedonia Multiple Indicator Cluster Survey (Roma Settlements),,,,MKD,MICS,Multiple Indicator Cluster Survey,MICS
+473,Zambia,Zambia Demographic and Health Survey,,ZDHS,,ZMB,DHS,Demographic and Health Survey,DHS
+474,Colombia,Colombia National Living Standards Survey,Encuesta Nacional de Calidad de Vida - Colombia,ENCV,,COL,,,
+475,Colombia,Colombia National Survey of the Nutritional Situation,"Encuesta Nacional de Situación Nutricional, Colombia",ENSIN,,COL,NNS,National Nutrition Survey,NNS
+476,Colombia,Colombia National Demographic and Health Survey,Colombia Encuesta Nacional de Demográfia y Salud,,,COL,DHS,Demographic and Health Survey,DHS
+477,Tuvalu,Tuvalu Household Income and Expenditure Survey,,HIES,,TUV,,,
+478,Nauru,Nauru Household Income and Expenditure Survey,,HIES,,NRU,,,
+479,Vanuatu,Vanuatu Household Income and Expenditure Survey,,HIES,,VUT,,,
+480,Vanuatu,Vanuatu Global School-Based Student Health Survey,,,,VUT,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+481,Philippines,Philippines Updating of Nutritional Status of Filipino Children and Other Population Groups Survey,,,,PHL,NNS,National Nutrition Survey,NNS
+482,Philippines,Philippines Annual Poverty Indicator Survey,,APIS,,PHL,,,
+483,Georgia,Georgia National Study of Violence against Children,,NSVAC,,GEO,VACS,Voilence against Children Survey,VACS
+484,Zimbabwe,Zimbabwe Violence against Children Survey,,,,ZWE,VACS,Voilence against Children Survey,VACS
+485,Micronesia (Federated States of),Federated States of Miconesia Household Income and Expenditure Survey,,HIES,,FSM,,,
+486,Italy,Italy Aspects of Daily Life Survey,Aspetti della Vita Quotidiana,AVQ,,ITA,,,
+487,Libya,Libya Service Availability and Readiness Assessment,,,,LBY,SARA,Service Availability and Readiness Assessment,SARA
+488,Nigeria,Nigeria Service Availability Mapping,,,,NGA,SAM,Service Availability Mapping,SAM
+489,Nigeria,Nigeria Living Standards Survey,,,,NGA,,,
+490,Togo,Togo Multiple Indicator Cluster Survey,Enquête par grappes à indicateurs multiples MICS Togo,,,TGO,MICS,Multiple Indicator Cluster Survey,MICS
+491,Togo,Togo Demographic and Health Survey,Enquête démographique et de santé au Togo,,,TGO,DHS,Demographic and Health Survey,DHS
+492,Madagascar,Madagascar National Survey on Iodine and Salt,Enquete Nationale sur L'Iode et Le Sel A Madagascar,ENISM,,MDG,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+493,Ghana,Ghana Time-Use Survey,,GTUS,,GHA,,,
+494,Sri Lanka,Sri Lanka National Survey on Iodine Deficiency,,,,LKA,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+495,Sri Lanka,Sri Lanka Household Income and Expenditure Survey,,HIES,,LKA,,,
+496,Sri Lanka,Sri Lanka Demographic and Health Survey,,SLDHS,,LKA,,,
+497,Honduras,Honduras Multiple Indicator Cluster Survey,,,,HND,MICS,Multiple Indicator Cluster Survey,MICS
+498,Honduras,Honduras Demographic and Health Survey,"Encuesta nacional de salud y demografía, Honduras",,,HND,DHS,Demographic and Health Survey,DHS
+499,Honduras,Honduras National Nutrition Survey,"Encuesta nacional de nutricion, Honduras",,,HND,NNS,National Nutrition Survey,NNS
+500,Honduras,Honduras National Survey of Epidemiology and Family Health,"Encuesta Nacional de Epidemiologia y Salud Familiar, Honduras",ENESF,,HND,RHS,Reproductive Health Survey,RHS
+501,Honduras,Honduras National Men's Health Survey,"Encuesta Nacional de Salud Masculina, Honduras",ENSM,,HND,RHS,Reproductive Health Survey,RHS
+502,Honduras,Honduras Violence Against Children Survey,,,,HND,VACS,Voilence against Children Survey,VACS
+503,Honduras,Honduras Global School-Based Student Health Survey,,,,HND,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+504,Honduras,Honduras Service Availability Mapping,,,,HND,SAM,Service Availability Mapping,SAM
+505,Honduras,Honduras National Micronutrient Survey,,,,HND,,,
+506,Honduras,Honduras National Household Survey on Living Conditions,"Encuesta Nacional de Hogares sobre Condiciones de Vida, Honduras",ENCOVI,,HND,LSMS,Living Standards Measurement Survey,LSMS
+507,Guyana,Guyana Multiple Indicator Cluster Survey,,,,GUY,MICS,Multiple Indicator Cluster Survey,MICS
+508,Guyana,Guyana Demographic and Health Survey,,,,GUY,DHS,Demographic and Health Survey,DHS
+509,Saint Lucia,Saint Lucia Multiple Indicator Cluster Survey,,,,LCA,MICS,Multiple Indicator Cluster Survey,MICS
+510,Bangladesh,Bangladesh Household Income and Expenditure Survey,,HIES,,BGD,,,
+511,Niger,Niger National Nutrition Survey using SMART Methodology,"Enquête nationale de nutrition avec la méthodologie SMART, Niger",,,NER,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+512,Belarus,Belarus Multiple Indicator Cluster Survey,,,,BLR,MICS,Multiple Indicator Cluster Survey,MICS
+513,Belarus,Social Conditions and Standard of Living in the Republic of Belarus,,,,BLR,Statistical Yearbook,Statistical Yearbook,Statistical Yearbook
+514,Guyana,Guyana Living Standards Measurement Survey,,GLSMS,,GUY,LSMS,Living Standards Measurement Survey,LSMS
+515,Guyana,Guyana Household Income and Expenditure Survey,,,,GUY,,,
+516,Burkina Faso,Burkina Faso Core Welfare Indicator Questionnaires Survey,Enquête Intégrale sur les Conditions de Vie des Ménages Burkinabè,EICVM,,BFA,CWIQ,Core Welfare Indicator Survey,CWIQ
+517,Burkina Faso,Burkina Faso Priority Survey,,,,BFA,Priority Survey,Priority Survey,Priority Survey
+518,Burkina Faso,Burkina Faso Demographic and Health Survey,"Enquête démographique et de santé, Burkina Faso",EDSBF,,BFA,DHS,Demographic and Health Survey,DHS
+519,Burkina Faso,Burkina Faso Multiple Indicator Cluster Survey,"Enquête par grappes à indicateurs multiples, Burkina Faso",,,BFA,MICS,Multiple Indicator Cluster Survey,MICS
+520,Burkina Faso,Burkina Faso World Health Survey,,,,BFA,WHS,World Health Survey,WHS
+521,Burkina Faso,Burkina Faso Service Availability and Readiness Assessment,"Enquete Nationale sur les Presetations des Services de Sante et la Qualite des Donnees Sanitaires, Burkina Faso",EN-PSQD,,BFA,SARA,Service Availability and Readiness Assessment,SARA
+522,Burkina Faso,Burkina Faso Performance Monitoring and Accountability 2020 Nutrition Survey,,,,BFA,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+523,Burkina Faso,Burkina Faso Performance Monitoring and Accountability 2020 Survey,,,,BFA,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+524,Burkina Faso,Burkina Faso Service Availability Mapping (Central Region),"Cartographie de l'offre de services de santé,  Burkina Faso (Région du Centre)",,,BFA,SAM,Service Availability Mapping,SAM
+525,Burkina Faso,Burkina Faso Child Labour Survey,"Enquête Nationale sur le Travail des Enfants, Burkina Faso",ENTE,,BFA,LFS,Labour Force Survey,LFS
+526,Kosovo,Kosovo Multiple Indicator Cluster Survey,,,,XKX,MICS,Multiple Indicator Cluster Survey,MICS
+527,Kosovo,Kosovo Multiple Indicator Cluster Survey (Roma Settlements),,,,XKX,MICS,Multiple Indicator Cluster Survey,MICS
+528,Congo,Congo Multiple Indicator Cluster Survey,,,,COG,MICS,Multiple Indicator Cluster Survey,MICS
+529,Albania,Albania Demographic and Health Survey,,,,ALB,DHS,Demographic and Health Survey,DHS
+530,Japan,Japan National Health and Nutrition Survey,国民健康・栄養調査,,,JPN,,,
+531,China,China National Iodine Deficiency Disorders Surveillance,,,,CHN,Surveillance,Surveillance System,Surveillance
+532,Paraguay,Paraguay Permanent Household Survey,Encuesta Permanente de Hogares,EPH,,PRY,,,
+533,Angola,Angola Multiple Indicator Cluster Survey,,,,AGO,MICS,Multiple Indicator Cluster Survey,MICS
+534,Argentina,Argentina Children's and Adolescents Activity Survey,"Encuesta de Actividades de Niños, niñas y adolescentes, Argentina",EANNA,,ARG,,,
+535,Argentina,Argentina National Disability Survey,"Estudio Nacional sobre el Perfil de las Personas con Discapacidad, Argentina",,,ARG,,,
+536,Argentina,Argentina National Victimization Survey,"Encuesta Nacional de Victimización, Argentina",,,ARG,,,
+537,Argentina,Argentina Multiple Indicator Cluster Survey,"Encuesta de Indicadores Múltiples por Conglomerados, Argentina",,,ARG,MICS,Multiple Indicator Cluster Survey,MICS
+538,Turkmenistan,Turkmenistan Multiple Indicator Cluster Survey,,,,TKM,MICS,Multiple Indicator Cluster Survey,MICS
+539,Turkmenistan,Turkmenistan Demographic and Health Survey,,,,TKM,DHS,Demographic and Health Survey,DHS
+540,Sao Tome and Principe,Sao Tome and Principe Multiple Indicator Cluster Survey,Enquête de grappes à indicateurs multiples MICS République Démocratique de Sao Tome et Principe,,,STP,MICS,Multiple Indicator Cluster Survey,MICS
+541,Sao Tome and Principe,Sao Tome and Principe Core Welfare Indicator Questionnaire Survey,"Questionario Unificado de Indicaroes Basicos do Bem-Estar, São Tomé e Príncipe",QUIBB,,STP,CWIQ,Core Welfare Indicator Survey,CWIQ
+542,Sao Tome and Principe,Sao Tome and Principe Demographic and Health Survey,Enquête démographique et de santé à Sao Tomé e Príncipe,EDS-STP,,STP,DHS,Demographic and Health Survey,DHS
+543,Trinidad and Tobago,Trinidad and Tobago Multiple Indicator Cluster Survey,,,,TTO,MICS,Multiple Indicator Cluster Survey,MICS
+544,Trinidad and Tobago,Trinidad and Tobago Global School-Based Student Health Survey,,,,TTO,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+545,Burundi,Burundi National Nutrition and Food Security Survey,Enquete Nationale sur la Situation Nutritionnelle et la Securite Alimentaire au Burundi,ENSNSAB,,BDI,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+546,Cuba,Cuba Multiple Indicator Cluster Survey,"Encuesta de Indicadores Múltiples por Conglomerados, Cuba",,,CUB,MICS,Multiple Indicator Cluster Survey,MICS
+547,Kuwait,Kuwait Global School-Based Student Health Survey,,,,KWT,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+548,Iran (Islamic Republic of),Iran Anthropometric Nutritional Indicators Survey,,ANIS,,IRN,,,
+549,Iran (Islamic Republic of),Iran Multiple Indicator Cluster Survey,,,,IRN,MICS,Multiple Indicator Cluster Survey,MICS
+550,Costa Rica,Costa Rica National Nutrition Survey,"Encuesta nacional de nutricion, Costa Rica",,,CRI,NNS,National Nutrition Survey,NNS
+551,Costa Rica,Costa Rica Family Health Needs Survey,"Encuesta de necesidades en salud familiar, Costa Rica",,,CRI,,,
+552,Costa Rica,Costa Rica National Household Survey,Costa Rica Encuesta Nacional de Hogares,ENAHO,,CRI,,,
+553,Costa Rica,Costa Rica National Disability Survey,Costas Rica Encuesta Nacional sobre Discapacidad,ENADIS,,CRI,,,
+554,Costa Rica,Costa Rica National Survey of Household Income and Expenditure,"Encuesta Nacional de Ingresos y Gastos de los Hogares, Costa Rica",ENIGH,,CRI,,,
+555,Costa Rica,Costa Rica National Reproductive Health Survey,Costa Rica Encuesta Nacional de Salud Reproductiva,ESR,,CRI,,,
+556,South Africa,South Africa Demographic and Health Survey,,SADHS,,ZAF,,,
+557,South Africa,South Africa Living Conditions Survey,,LCS,,ZAF,,,
+558,South Africa,South Africa Time Use Survey,,,,ZAF,,,
+559,South Africa,South Africa Community Survey,,,,ZAF,,,
+560,South Africa,South Africa Income and Expenditure Survey,,IES,,ZAF,,,
+561,South Africa,South Africa National Food Consumption Survey,,NFCS,,ZAF,,,
+562,South Africa,South Africa Survey of Socioeconomic Opportunity and Achievement,,,,ZAF,,,
+563,Costa Rica,Costa Rica Multiple Indicator Cluster Survey,"Encuesta de Indicadores Múltiples por Conglomerados, Costa Rica",,,CRI,MICS,Multiple Indicator Cluster Survey,MICS
+564,South Africa,South Africa Census,,,,ZAF,Census,Census,Census
+565,South Africa,South Africa Rapid Mortality Surveillance,,RMS,,ZAF,CRVS,Civil Registration and Vital Statistics,CRVS
+566,South Africa,South Africa October Household Survey,,OHS,,ZAF,,,
+567,South Africa,South Africa Post-Enumeration Survey,,,,ZAF,Post-Enumeration Survey,Post-Enumeration Survey,Post-Enumeration Survey
+568,South Africa,South Africa Mortality and Causes of Death,,,,ZAF,CRVS,Civil Registration and Vital Statistics,CRVS
+569,South Africa,"South Africa National HIV Prevalence, Incidence and Behaviour Survey",,,,ZAF,,,
+570,Lebanon,Lebanon Multiple Indicator Cluster Survey,,,,LBN,,,
+571,Nigeria,Nigeria Performance Monitoring and Accountability 2020 Survey,,,,NGA,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+572,Uganda,Uganda Performance Monitoring and Accountability 2020 Survey,,,,UGA,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+573,India,India Performance Monitoring and Accountability 2020 Survey (Rajastan),,,,IND,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+574,New Zealand,New Zealand Health Survey,,,,NZL,,,
+575,Syrian Arab Republic,Syria National Nutrition Situation according to SMART Methodology,,,,SYR,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+576,Syrian Arab Republic,Syria Family Income and Expenditure Survey,,,,SYR,,,
+577,Syrian Arab Republic,Syria Multiple Indicator Cluster Survey,,,,SYR,MICS,Multiple Indicator Cluster Survey,MICS
+578,Syrian Arab Republic,Syria Family Health Survey,,,,SYR,PAPFAM,Pan Arab Project for Family Health,PAPFAM
+579,Belarus,Belarus Population Census,,,,BLR,Census,Census,Census
+580,United States,United States National Health and Nutrition Examination Survey,,,,USA,NHANES,National Health and Nutrition Examination Survey,NHANES
+581,Kenya,Kenya Performance Monitoring and Accountability 2020 Nutrition Survey,,,,KEN,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+582,Kenya,Kenya Performance Monitoring and Accountability 2020 Survey,,,,KEN,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+583,Kenya,Kenya Integrated Household Budget Survey,,KIHBS,,KEN,,,
+584,Kenya,Kenya Demographic and Health Survey,,KDHS,,KEN,DHS,Demographic and Health Survey,DHS
+585,Kenya,Kenya Malaria Indicator Survey,,,,KEN,MIS,Malaria Indicator Survey,MIS
+586,Kenya,Kenya Violence against Children Survey,,,,KEN,VACS,Voilence against Children Survey,VACS
+587,Kenya,Kenya AIDS Indicator Survey,,KAIS,,KEN,AIS,AIDS Indicator Survey,AIS
+588,Kenya,Kenya Welfare Monitoring Survey,,,,KEN,,,
+589,Kenya,Kenya Household Health Expenditure and Utilisation Survey,,HHEUS,,KEN,,,
+590,Kazakhstan,Kazakhstan Demographic and Health Survey,,,,KAZ,DHS,Demographic and Health Survey,DHS
+591,Kenya,Kenya Population and Housing Census,,,,KEN,Census,Census,Census
+592,Kenya,Kenya National Demographic Survey,,,,KEN,,,
+593,Kenya,Kenya World Fertility Survey,,,,KEN,WFS,World Fertility Survey,WFS
+594,Kenya,Kenya Service Provision Assessment Survey,,,,KEN,,,
+595,Kenya,Kenya Multiple Indicator Cluster Survey,,,,KEN,MICS,Multiple Indicator Cluster Survey,MICS
+596,Nigeria,Nigeria National HIV/AIDS & Reproductive Health Survey,,NARHS,,NGA,,,
+597,Armenia,Armenia Integrated Living Conditions Survey,,ILCS,,ARM,,,
+598,Armenia,Armenia Demographic and Health Survey,,,,ARM,DHS,Demographic and Health Survey,DHS
+599,Armenia,Armenia Labour Force Survey,,,,ARM,LFS,Labour Force Survey,LFS
+600,Nigeria,Nigeria Malaria Indicator Survey,,,,NGA,MIS,Malaria Indicator Survey,MIS
+601,Uganda,Uganda Demographic and Health Survey,,,,UGA,DHS,Demographic and Health Survey,DHS
+602,Somalia,Somalia Multiple Indicator Cluster Survey,,,,SOM,MICS,Multiple Indicator Cluster Survey,MICS
+603,Ecuador,Ecuador National Health and Nutrition Survey,"Encuesta Nacional de Salud y Nutrición, Ecuador",ENSANUT-ECU,,ECU,,,
+604,Ecuador,Ecuador Living Conditions Survey,"Encuesta de Condiciones de Vida, Ecuador",ECV,,ECU,LSMS,Living Standards Measurement Survey,LSMS
+605,Somalia,Somalia Multiple Indicator Cluster Survey (Somaliland),,,,SOM,MICS,Multiple Indicator Cluster Survey,MICS
+606,Somalia,Somalia Multiple Indicator Cluster Survey (Northeast Zone),,,,SOM,MICS,Multiple Indicator Cluster Survey,MICS
+607,Somalia,Somalia National Micronutrient Survey,,SMS,,SOM,,,
+608,Somalia,Somali High Frequency Survey,,HFS,,SOM,,,
+609,Somalia,Somalia National Malaria Indicator Survey,,,,SOM,MIS,Malaria Indicator Survey,MIS
+610,Germany,German Health Survey for Children and Adolescents,Studie zur Gesundheit von Kindern und Jugendlichen in Deutschland,KiGGS,,DEU,,,
+611,Georgia,Georgia Household Integrated Survey,,,,GEO,,,
+612,Georgia,Georgia Reproductive Health Survey,,,,GEO,,,
+613,India,India Human Development Survey,,IHDS,,IND,,,
+614,Ethiopia,Ethiopia Performance Monitoring and Accountability 2020 Maternal and Newborn Health Survey,,,,ETH,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+616,Mexico,Mexico National Household Income and Expenditure Survey,"Encuesta Nacional de Ingresos y Gastos de los Hogares, México",ENIGH,,MEX,,,
+617,Mexico,Mexico National Survey on the Dynamics of Household Relationships,"Encuesta Nacional sobre la Dinámica de las Relaciones en los Hogares, Mexico",ENDIREH,,MEX,,,
+618,Mozambique,Mozambique Malaria Indicator Survey,Inquérito Nacional sobre Indicadores de Malária em Moçambique,IMM,,MOZ,MIS,Malaria Indicator Survey,MIS
+619,Guyana,Guyana Labour Force Survey,,GLFS,,GUY,LFS,Labour Force Survey,LFS
+620,Guyana,Guyana Women's Health and Life Experiences Survey,,GWHLES,,GUY,Women's Health Survey,Women's Health Survey,Women's Health Survey
+621,Guyana,Guyana Global School-Based Student Health Survey,,,,GUY,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+622,Tunisia,Tunisia Multiple Indicator Cluster Survey,"Enquête par grappes à indicateurs multiples, Tunisie",,,TUN,MICS,Multiple Indicator Cluster Survey,MICS
+623,Niger,Niger National Performance Monitoring and Accountability 2020 Survey,,,,NER,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+624,Kazakhstan,Kazakhstan Multiple Indicator Cluster Survey,,,,KAZ,MICS,Multiple Indicator Cluster Survey,MICS
+625,Zambia,Zambia Social Dimensions of Adjustment Priority Survey,,,,ZMB,Priority Survey,Priority Survey,Priority Survey
+626,United Republic of Tanzania,Tanzania AIDS Indicator Survey,,,,TZA,AIS,AIDS Indicator Survey,AIS
+627,Togo,Togo Population and Housing Census,Recensement Général de la Population et de l'Habitat du Togo,,,TGO,Census,Census,Census
+628,Madagascar,Madagascar National Survey on Monitoring the Millennium Development Goals,Enquête Nationale Sur le Suivi des Objectifs du Millènaire pour le Dèveloppement Â Madagascar,ENSOMD,,MDG,,,
+629,Azerbaijan,Azerbaijan Demographic and Health Survey,,,,AZE,,,
+630,Côte d'Ivoire,Côte d'Ivoire Performance Monitoring and Accountability 2020 Survey,,,,CIV,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+631,Côte d'Ivoire,Côte d'Ivoire Permanent Household Survey,"Enquête Permanente auprès des Ménages, Côte d'Ivoire",EPAM,,CIV,LSMS,Living Standards Measurement Survey,LSMS
+632,Côte d'Ivoire,Côte d'Ivoire Demographic and Health Survey,"Enquête demographique et de santé, Côte d'Ivoire",,,CIV,DHS,Demographic and Health Survey,DHS
+633,Côte d'Ivoire,Côte d'Ivoire Multiple Indicator Cluster Survey,"Enquête à Indicateurs Multiples, Côte d'Ivoire",,,CIV,MICS,Multiple Indicator Cluster Survey,MICS
+634,Egypt,Egypt Interim Demographic and Health Survey,,,,EGY,IDHS,Interim Demographic and Health Survey,IDHS
+635,Chad,Chad Assessment of the Nutritional and Mortality Situation in the Regions of the Sahelian Strip,Evaluation de la Situation Nutritionnelle et de Mortalite dans les Regions de la Bande Sahelienne du Tchad,,,TCD,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+636,Chad,Chad Anthropometric Nutritional and Retrospective Mortality SMART Survey (South),Enquete Nutritionnelle Anthropometrique et de Mortalite Retrospective SMART dans les regions au Sud du Tchad,,,TCD,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+637,Bangladesh,Bangladesh Health and Morbidity Status Survey,,,,BGD,,,
+638,Democratic Republic of the Congo,Democratic Republic of the Congo Performance Monitoring and Accountability 2020 Survey (Kinshasa & Kongo Central),,,,COD,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+639,Democratic Republic of the Congo,Democratic Republic of the Congo Performance Monitoring and Accountability 2020 Survey (Kinshasa),,,,COD,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+640,Indonesia,Indonesia Demographic and Health Survey,,,,IDN,DHS,Demographic and Health Survey,DHS
+641,Indonesia,Indonesia Family Life Survey,,,,IDN,,,
+642,Afghanistan,Afghanistan Service Provision Assessment,,,,AFG,SPA,Service Provision Assessment,SPA
+643,Brazil,Brazil Consumer Expenditure Survey,"Pesquisa de orçamentos familiares, Brasil",POF,,BRA,,,
+644,Bangladesh,Bangladesh Violence against Women Survey,,,,BGD,,,
+645,Bangladesh,Bangladesh Child and Mother Nutrition Survey,,CMNS,,BGD,NNS,National Nutrition Survey,NNS
+646,Brazil,Brazil Continuous Household Sample Survey,"Pesquisa Nacional por Amostra de Domiciolios Continua, Brasil",PNAD,,BRA,,,
+647,Brazil,Brazil Food and Nutrition Surveillance System,"Sistema de vigilancia alimentar e nutricional, Brasil",SISVAN,,BRA,Surveillance,Surveillance System,Surveillance
+648,Wallis and Futuna Islands,Wallis and Futuna Population Census,Recensement général de la population des îles Wallis et Futuna,,,WLF,Census,Census,Census
+649,Antigua and Barbuda,Antigua and Barbuda Population and Housing Census,,,,ATG,Census,Census,Census
+650,Jamaica,Jamaica Global School-Based Student Health Survey,,,,JAM,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+651,Russian Federation,Russia Longitudinal Monitoring Survey - Higher School of Economics,,RLMS-HSE,,RUS,,,
+652,Russian Federation,Russia Reproductive Health Survey,,,,RUS,RHS,Reproductive Health Survey,RHS
+653,Cambodia,Cambodia Post-Enumeration Survey,,,,KHM,Post-Enumeration Survey,Post-Enumeration Survey,Post-Enumeration Survey
+654,Madagascar,Madagascar Permanent Survey of Households,"Enquête permanente aupres des menages, Madagascar",EPM,,MDG,,,
+655,Chile,Chile National Health Service System,,,,CHL,Surveillance,Surveillance System,Surveillance
+656,Chile,Chile Nutrition Surveillance,"Boletin anual de vigilancia nutricional, ChileZ",,,CHL,Surveillance,Surveillance System,Surveillance
+657,Bangladesh,Bangladesh Health Facility Survey,,,,BGD,SPA,Service Provision Assessment,SPA
+658,Bangladesh,Bangladesh Sample Vital Statistics,,SVRS,,BGD,CRVS,Civil Registration and Vital Statistics,CRVS
+659,Nigeria,Nigeria Performance Monitoring and Accountability 2020 Survey (Oyo),,,,NGA,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+660,Senegal,Senegal World Health Survey,,,,SEN,WHS,World Health Survey,WHS
+661,Benin,Benin Global School-Based Student Health Survey,,,,BEN,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+663,Bolivia (Plurinational State of),Bolivia Demographic and Health Survey,Bolivia Encuesta de Demografia y Salud,EDSA,,BOL,,,
+664,Bolivia (Plurinational State of),Bolivia Household Survey,"Encuesta de Hogares, Bolivia",EH,,BOL,,,
+665,State of Palestine,Palestine Time-Use Survey,,,,PSE,,,
+666,State of Palestine,Palestine Population and Housing Census,,,,PSE,Census,Census,Census
+667,Peru,Peru Living Standards Measurement Survey,"Encuesta Nacional de Niveles de Vida, Peru",ENNIV,,PER,,,
+668,Viet Nam,Viet Nam Multiple Indicators Cluster Survey,,,,VNM,MICS,Multiple Indicator Cluster Survey,MICS
+669,Kenya,Kenya Population-based HIV Impact Assessment,,KENPHIA,,KEN,PHIA,Population-based HIV Impact Assessment,PHIA
+670,Brunei Darussalam,Bruinei National Health and Nutritional Status Survey,,NHANSS,,BRN,,,
+671,Brunei Darussalam,Brunei Population and Housing Census,Laporan Akhir Kemaskini Banci Penduduk Dan Perumahan,KBPP,,BRN,Census,Census,Census
+672,Brunei Darussalam,Brunei Household Expenditure Survey,Laporan Kajian Perbelanjaan Keluarga,HES,,BRN,,,
+673,Brazil,Brazil National Demographic and Health Survey,"Pesquisa nacional de demografia e saúde, Brasil",PNDS,,BRA,,,
+674,Chile,Chile National Health Survey,"Encuesta Nacional de Salud, Chile",ENS,,CHL,,,
+675,Egypt,Egypt Demographic and Health Survey,,,,EGY,DHS,Demographic and Health Survey,DHS
+676,India,India National Nutrition Monitoring Bureau Survey,,NNMB,,IND,,,
+677,Zambia,Zambia Living Conditions Monitoring Survey,,LCS,,ZMB,,,
+678,Benin,Benin Multiple Indicator Cluster Survey,,,,BEN,MICS,Multiple Indicator Cluster Survey,MICS
+679,Eswatini,Eswatini Multiple Indicator Cluster Survey,,,,SWZ,MICS,Multiple Indicator Cluster Survey,MICS
+680,Mali,Mali Multiple Indicator Cluster Survey,Enquête par Grappes à Indicateurs Multiples au Mali,,,MLI,MICS,Multiple Indicator Cluster Survey,MICS
+681,Mali,Mali Malaria Indicator Survey,Enquête sur les Indicateurs du Paludisme au Mali,EIPM,,MLI,MIS,Malaria Indicator Survey,MIS
+682,Democratic Republic of the Congo,Democratic Republic of the Congo Demographic and Health Survey,"Enquête démographique et de santé, République Démocratique du Congo",,,COD,DHS,Demographic and Health Survey,DHS
+683,Dominican Republic,Dominican Republic National Multipurpose Household Survey,"Encuesta Nacional de Hogares de Propósitos Múltiples, Republica Dominicana",ENHOGAR,,DOM,,,
+684,Dominican Republic,Dominican Republic Demographic and Health Survey,"Encuesta demografica y de salud, Republica Dominicana,",ENDESA,,DOM,DHS,Demographic and Health Survey,DHS
+685,Dominican Republic,Dominican Republic Multiple Indicator Cluster Survey,,,,DOM,MICS,Multiple Indicator Cluster Survey,MICS
+686,Myanmar,Myanmar Poverty and Living Conditions Survey,,MPLCS,,MMR,,,
+687,Mauritania,Mauritania Multiple Indicator Cluster Survey,"Enquête par grappes à indicateurs multiples, Mauritanie",,,MRT,MICS,Multiple Indicator Cluster Survey,MICS
+688,Republic of Korea,Republic of Korea National Health and Nutrition Examination Survey,KNHANES,,,KOR,NHANES,National Health and Nutrition Examination Survey,NHANES
+689,Cameroon,Cameroon Population-based HIV Impact Assessment,,CAMPHIA,,CMR,PHIA,Population-based HIV Impact Assessment,PHIA
+690,Myanmar,Myanmar Integrated Household Living Conditions Assessment,,IHLCA,,MMR,,,
+691,Namibia,Namibia Demographic and Health Survey,,,,NAM,DHS,Demographic and Health Survey,DHS
+692,Pakistan,Pakistan Social & Living Standards Measurement Survey,,PSLM,,PAK,,,
+693,Fiji,Fiji Global School-Based Student Health Survey,,,,FJI,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+694,Uruguay,Uruguay Continuous Household Survey,Uruguay Encuesta Continua de Hogares,ECH,,URY,,,
+695,Myanmar,Myanmar National Nutrition Survey,,,,MMR,NNS,National Nutrition Survey,NNS
+696,Eritrea,Eritrea Demographic and Health Survey,,,,ERI,DHS,Demographic and Health Survey,DHS
+697,Maldives,Maldives Global School-Based Student Health Survey,,,,MDV,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+698,Panama,Panama Multiple Indicator Cluster Survey,,,,PAN,MICS,Multiple Indicator Cluster Survey,MICS
+699,Barbados,Barbados Multiple Indicator Cluster Survey,,,,BRB,MICS,Multiple Indicator Cluster Survey,MICS
+700,Uruguay,Uruguay Multiple Indicator Cluster Survey,"Encuesta de Indicadores Múltiples por Conglomerados, Uruguay",,,URY,MICS,Multiple Indicator Cluster Survey,MICS
+701,Uruguay,Uruguay Global School-Based Student Health Survey,,,,URY,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+702,Qatar,Qatar Multiple Indicator Cluster Survey,,,,QAT,MICS,Multiple Indicator Cluster Survey,MICS
+703,Jamaica,Jamaica Multiple Indicator Cluster Survey,,,,JAM,MICS,Multiple Indicator Cluster Survey,MICS
+704,Mongolia,Mongolia National Nutrition Survey,,,,MNG,NNS,National Nutrition Survey,NNS
+705,Saint Kitts and Nevis,Saint Kitts and Nevis Population and Housing Census,,,,KNA,Census,Census,Census
+706,Timor-Leste,Timor-Leste Demographic and Health Survey,,,,TLS,,,
+707,Timor-Leste,Timor-Leste Multiple Indicator Cluster Survey,,,,TLS,,,
+708,Myanmar,Myanmar Demographic and Health Survey,,,,MMR,DHS,Demographic and Health Survey,DHS
+709,Angola,Angola Demographic and Health Survey,Inquérito de Indicadores Múltiplos e de Saúde em Angola,,,AGO,DHS,Demographic and Health Survey,DHS
+710,Angola,Angola Malaria Indicator Survey,,,,AGO,MIS,Malaria Indicator Survey,MIS
+711,Angola,Angola Integrated Survey on the Welfare of the Population,"Inquérito Integrado sobre o Bem-Estar da População, Angola",IBEP,,AGO,,,
+712,Angola,Angola Comprehensive Food Security and Vulnerability Analysis,,,,AGO,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+713,Angola,Angola Household Income and Expenditure Survey,"Inquérito aos Agregados Familiares sobre Despesas e Receitas, Angola",IDR,,AGO,,,
+714,United Republic of Tanzania,Tanzania Demographic and Health Survey,,,,TZA,DHS,Demographic and Health Survey,DHS
+715,Guatemala,Guatemala Maternal and Child Health Survey,"Encuesta nacional de salud materno infantil, Guatemala",,,GTM,,,
+716,Samoa,Samoa Demographic and Health Survey,,SDHS,,WSM,,,
+717,Gabon,Gabon Demographic and Health Survey,Enquête démographique et de santé Gabon,,,GAB,DHS,Demographic and Health Survey,DHS
+718,Gambia,Gambia Demographic and Health Survey,,GDHS,,GMB,DHS,Demographic and Health Survey,DHS
+719,Viet Nam,Viet Nam Demographic and Health Survey,,,,VNM,DHS,Demographic and Health Survey,DHS
+720,Mozambique,Mozambique Demographic and Health Survey,Moçambique inquérito demográfico e de Saúde,,,MOZ,DHS,Demographic and Health Survey,DHS
+721,Eswatini,Eswatini Demographic and Health Survey,,,,SWZ,DHS,Demographic and Health Survey,DHS
+722,Comoros,Comoros Demographic and Health Survey,Enquête démographique et de santé et à indicateurs multiples aux Comores,,,COM,DHS,Demographic and Health Survey,DHS
+723,Morocco,Morocco National Demographic and Health Survey,"Enquête nationale sur la population et la santé, Royaume du Maroc",ENPS,,MAR,DHS,Demographic and Health Survey,DHS
+724,Sudan (Former),Sudan (Former) Demographic and Health Survey,,,,SNF,DHS,Demographic and Health Survey,DHS
+725,Equatorial Guinea,Equatorial Guinea Demographic and Health Survey,Encuesta demográfica y de salud en Guinea Ecuatorial,EDSGE,,GNQ,DHS,Demographic and Health Survey,DHS
+726,Congo,Congo Demographic and Health Survey,Enquête démographique et de santé du Congo,EDSC,,COG,DHS,Demographic and Health Survey,DHS
+727,Ukraine,Ukraine Demographic and Health Survey,,,,UKR,DHS,Demographic and Health Survey,DHS
+728,Brazil,Brazil Demographic and Health Survey (North-East),,,,BRA,DHS,Demographic and Health Survey,DHS
+729,Republic of Moldova,Moldova Demographic and Health Survey,,MDHS,,MDA,DHS,Demographic and Health Survey,DHS
+730,Mauritania,Mauritania Demographic and Health Survey,,,,MRT,DHS,Demographic and Health Survey,DHS
+731,Uzbekistan,Uzbekistan Demographic and Health Survey,,,,UZB,DHS,Demographic and Health Survey,DHS
+732,Central African Republic,Central African Republic Demographic and Health Survey,Enquête demographique et de santé République Centrafricaine,,,CAF,DHS,Demographic and Health Survey,DHS
+733,Paraguay,Paraguay Demographic and Health Survey,"Encuesta nacional de demografia y salud, Paraguay",,,PRY,DHS,Demographic and Health Survey,DHS
+734,Tunisia,Tunisia Demographic and Health Survey,Enquête démographique et de santé en Tunisie,,,TUN,DHS,Demographic and Health Survey,DHS
+735,Thailand,Thailand Demographic and Health Survey,,,,THA,DHS,Demographic and Health Survey,DHS
+736,Trinidad and Tobago,Trinidad and Tobago Demographic and Health Survey,,,,TTO,DHS,Demographic and Health Survey,DHS
+737,Mexico,Mexico National Fertility and Health Survey,Mexico Encuesta Nacional Sobre Fecundidad Y Salud,,,MEX,DHS,Demographic and Health Survey,DHS
+738,Ecuador,Ecuador Demographic and Health Survey,Ecuador Encuesta Demográfica y de Salud Familiar,,,ECU,DHS,Demographic and Health Survey,DHS
+739,Vanuatu,Vanuatu Demographic and Health Survey,,,,VUT,,,
+740,Marshall Islands,Marshall Islands Demographic and Health Survey,,RMIDHS,,MHL,,,
+741,State of Palestine,Palestine Demographic and Health Survey,,,,PSE,,,
+742,Tuvalu,Tuvalu Demographic and Health Survey,,,,TUV,,,
+743,Tonga,Tonga Demographic and Health Survey,,,,TON,,,
+744,Nauru,Nauru Demographic and Health Survey,,,,NRU,,,
+745,Kiribati,Kiribati Demogaphic and Health Survey,,,,KIR,,,
+746,Somalia,Somalia Health and Demographic Survey,,SHDS,,SOM,,,
+747,Iran (Islamic Republic of),Iran Multiple Indicator Demographic and Health Survey,,IrMIDHS,,IRN,,,
+748,Iran (Islamic Republic of),Iran Demographic and Health Survey,,,,IRN,,,
+749,Zambia,Zambia Multiple Indicator Cluster Survey,,,,ZMB,MICS,Multiple Indicator Cluster Survey,MICS
+750,Morocco,Morocco National Multiple Indicator Child Health Survey,Morocco Enquête Nationale à Indicateurs Multiples et Santé de Jeunes,,,MAR,,,
+751,Marshall Islands,Marshall Islands Integrated Child Health and Nutrition Surve,,,,MHL,,,
+752,Paraguay,Paraguay Multiple Indicator Cluster Survey,Encuesta de Indicadores Multiples por Conglomerados Paraguay,,,PRY,MICS,Multiple Indicator Cluster Survey,MICS
+753,Ukraine,Ukraine Multiple Indicator Cluster Survey,,,,UKR,MICS,Multiple Indicator Cluster Survey,MICS
+754,Lao People's Democratic Republic,Lao People's Democratic Republic Multiple Indicator Cluster Survey,,,,LAO,MICS,Multiple Indicator Cluster Survey,MICS
+755,Ukraine,Ukraine Household Living Conditions Survey,,,,UKR,,,
+756,Sudan (Former),Sudan (Former) Multiple Indicator Cluster Survey,,,,SNF,MICS,Multiple Indicator Cluster Survey,MICS
+757,Liberia,Liberia Multiple Indicator Cluster Survey,,,,LBR,MICS,Multiple Indicator Cluster Survey,MICS
+758,"Yugoslavia, The Federal Republic of (Former)",Yugoslavia (former) Multiple Indicator Cluster Survey,,,,YUG,MICS,Multiple Indicator Cluster Survey,MICS
+759,Bolivia (Plurinational State of),Bolivia Multiple Indicator Cluster Survey,Bolivia Encuesta de Multiples Indicadores por Conglomerados,,,BOL,MICS,Multiple Indicator Cluster Survey,MICS
+760,Albania,Albania Multiple Indicator Cluster Survey,,,,ALB,MICS,Multiple Indicator Cluster Survey,MICS
+761,Guinea-Bissau,Guinea-Bissau Multiple Indicator Cluster Survey,"Enquête par grappes à indicateurs multiples, Guinée-Bissau",,,GNB,MICS,Multiple Indicator Cluster Survey,MICS
+762,India,India Multiple Indicator Cluster Survey,,,,IND,MICS,Multiple Indicator Cluster Survey,MICS
+763,Croatia,Croatia Multiple Indicator Cluster Survey,,,,HRV,MICS,Multiple Indicator Cluster Survey,MICS
+764,China,China Multiple Indicator Cluster Survey,,,,CHN,MICS,Multiple Indicator Cluster Survey,MICS
+765,Mozambique,Mozambique Multiple Indicator Cluster Survey,,,,MOZ,MICS,Multiple Indicator Cluster Survey,MICS
+766,Republic of Moldova,Moldova Multiple Indicator Cluster Survey,,,,MDA,MICS,Multiple Indicator Cluster Survey,MICS
+767,Fiji,Fiji Multiple Indicator Cluster Survey,,,,FJI,MICS,Multiple Indicator Cluster Survey,MICS
+768,Kiribati,Kiribati Social Development Indicator Survey,,KSDIS,,KIR,MICS,Multiple Indicator Cluster Survey,MICS
+769,Tuvalu,Tuvalu Multiple Indicator Cluster Survey,,,,TUV,MICS,Multiple Indicator Cluster Survey,MICS
+770,Palau,Palau Household Income and Expenditure Survey,,,,PLW,,,
+771,Nauru,Nauru Multiple Indicator Cluster Survey,,,,NRU,MICS,Multiple Indicator Cluster Survey,MICS
+772,Samoa,Samoa Demographic and Health Survey - Multiple Indicator Cluster Survey,,DHS-MICS,,WSM,MICS,Multiple Indicator Cluster Survey,MICS
+773,Turks and Caicos Islands,Turks and Caicos Islands Multiple Indicator Cluster Survey,,,,TCA,MICS,Multiple Indicator Cluster Survey,MICS
+774,Azerbaijan,Azerbaijan Multiple Indicator Cluster Survey,,,,AZE,MICS,Multiple Indicator Cluster Survey,MICS
+775,Central African Republic,Central African Republic Multiple Indicator Cluster Survey,"Enquête par grappes à indicateurs multiples, Republique Centrafricaine",,,CAF,MICS,Multiple Indicator Cluster Survey,MICS
+776,Indonesia,Indonesia Multiple Indicator Cluster Survey,,,,IDN,MICS,Multiple Indicator Cluster Survey,MICS
+777,Pakistan,Pakistan Multiple Indicator Cluster Survey (Punjab),,,,PAK,MICS,Multiple Indicator Cluster Survey,MICS
+778,Pakistan,Pakistan Multiple Indicator Cluster Survey,,,,PAK,MICS,Multiple Indicator Cluster Survey,MICS
+779,United Republic of Tanzania,Tanzania Multiple Indicator Cluster Survey,,,,TZA,MICS,Multiple Indicator Cluster Survey,MICS
+780,Burundi,Burundi National Children and Women Living Conditions Assessment Survey,Enquête Nationale d'Evaluation des Conditions de Vie de l'Enfant et de la Femme au Burundi,ENECEF,,BDI,MICS,Multiple Indicator Cluster Survey,MICS
+781,Bhutan,Bhutan Multiple Indicator Cluster Survey,,BMIS,,BTN,MICS,Multiple Indicator Cluster Survey,MICS
+782,Niger,Niger Multiple Indicator Cluster Survey,Enquete a indicateurs multiples Niger,,,NER,MICS,Multiple Indicator Cluster Survey,MICS
+783,Senegal,Senegal Multiple Indicator Cluster Survey,,,,SEN,MICS,Multiple Indicator Cluster Survey,MICS
+784,Senegal,Senegal Multiple Indicator Cluster Survey (Dakar),Dakar Enquête par grappes à indicateurs multiples,,,SEN,MICS,Multiple Indicator Cluster Survey,MICS
+785,South Sudan,Mutliple Indicator Cluster Survey in the Southern Part of Sudan,,,,SSD,MICS,Multiple Indicator Cluster Survey,MICS
+786,Mexico,"Mexico National Survey of Boys, Girls and Women","Encuesta Nacional de Niños, Niñas y Mujeres en México",,,MEX,MICS,Multiple Indicator Cluster Survey,MICS
+787,Libya,Libya Multiple Indicator Cluster Survey,,,,LBY,MICS,Multiple Indicator Cluster Survey,MICS
+788,Venezuela (Bolivarian Republic of),Venezuela Multiple Indicator Cluster Survey,"Encuesta por conglomerados de indicadores multiples, Venezuela",,,VEN,MICS,Multiple Indicator Cluster Survey,MICS
+789,Comoros,Comoros Multiple Indicator Cluster Survey,"Enquête a indicateurs multiples, Comoros",,,COM,MICS,Multiple Indicator Cluster Survey,MICS
+790,Botswana,Botswana Multiple Indicator Cluster Survey,,,,BWA,MICS,Multiple Indicator Cluster Survey,MICS
+791,Equatorial Guinea,Equatorial Guinea Multiple Indicator Cluster Survey,"Encuesta de indicadores multiples , República de Guinea Educatorial",,,GNQ,MICS,Multiple Indicator Cluster Survey,MICS
+792,Sudan,Sudan Household Health Survey,,SHHS,,SDN,,,
+793,Kenya,Kenya Multiple Indicator Cluster Survey (Nyanza Province),,,,KEN,MICS,Multiple Indicator Cluster Survey,MICS
+794,Sudan,Sudan Multiple Indicator Cluster Survey,,,,SDN,MICS,Multiple Indicator Cluster Survey,MICS
+795,South Sudan,South Sudan Household Survey,,,,SSD,MICS,Multiple Indicator Cluster Survey,MICS
+796,Pakistan,"Pakistan Multiple Indicator Cluster Survey (Azad, Jammu & Kashmir)",,,,PAK,MICS,Multiple Indicator Cluster Survey,MICS
+797,Lebanon,Lebanon Multiple Indicator Cluster Survey (Palestinians),,,,LBN,MICS,Multiple Indicator Cluster Survey,MICS
+798,Mongolia,Mongolia Child Development Survey (Khuvsgul),,,,MNG,MICS,Multiple Indicator Cluster Survey,MICS
+799,Kenya,Kenya Informal Settlement Survey (Mombasa),,,,KEN,MICS,Multiple Indicator Cluster Survey,MICS
+800,Madagascar,Madagascar Multiple Indicator Cluster Survey (South),Madagascar Sud Enquete par Grappes a Indicateurs Multiples,,,MDG,MICS,Multiple Indicator Cluster Survey,MICS
+801,Pakistan,Pakistan Multiple Indicator Cluster Survey (Khyber Pakhtunkhwa),,,,PAK,MICS,Multiple Indicator Cluster Survey,MICS
+802,Mongolia,Mongolia Child Development Survey (Nalaikh district),,,,MNG,MICS,Multiple Indicator Cluster Survey,MICS
+803,Pakistan,Pakistan Multiple Indicator Cluster Survey (Gilgit-Baltistan),,,,PAK,MICS,Multiple Indicator Cluster Survey,MICS
+804,Pakistan,Pakistan Multiple Indicator Cluster Survey (Balochistan),,,,PAK,MICS,Multiple Indicator Cluster Survey,MICS
+805,Egypt,Egypt Multiple Indicator Cluster Survey in the rural districts covered by the IPHN programme,,,,EGY,MICS,Multiple Indicator Cluster Survey,MICS
+806,Egypt,Egypt Multiple Indicator Cluster Survey,,,,EGY,MICS,Multiple Indicator Cluster Survey,MICS
+807,Kenya,Kenya Multiple Indicator Cluster Survey (Bungoma County),,,,KEN,MICS,Multiple Indicator Cluster Survey,MICS
+808,Kenya,Kenya Multiple Indicator Cluster Survey (Kakamega County),,,,KEN,MICS,Multiple Indicator Cluster Survey,MICS
+809,Kenya,Kenya Multiple Indicator Cluster Survey (Turkana County),,,,KEN,MICS,Multiple Indicator Cluster Survey,MICS
+810,Pakistan,Pakistan Multiple Indicator Cluster Survey (Sindh),,,,PAK,MICS,Multiple Indicator Cluster Survey,MICS
+811,Thailand,Thailand Multiple Indicator Cluster Survey (Bangkok Small Community),,,,THA,MICS,Multiple Indicator Cluster Survey,MICS
+812,Thailand,Thailand Multiple Indicator Cluster Survey (14 Provinces),,,,THA,MICS,Multiple Indicator Cluster Survey,MICS
+813,Ghana,Ghana Core Welfare Indicator Questionnaire Survey,,,,GHA,CWIQ,Core Welfare Indicator Survey,CWIQ
+814,Indonesia,Indonesia Performance Monitoring and Accountability 2020 Survey,,,,IDN,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+815,Mozambique,Mozambique AIDS Indicator Survey,"Inquérito Nacional de Prevalência, Riscos Comportamentais e Informação sobre o HIV e SIDA em Moçambique",,,MOZ,AIS,AIDS Indicator Survey,AIS
+816,Algeria,Algeria Global School-Based Student Health Survey,,,,DZA,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+817,United Arab Emirates,United Arab Emirates Global School-Based Student Health Survey,,,,ARE,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+818,Eswatini,Eswatini Global School-Based Student Health Survey,,,,SWZ,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+819,Tonga,Tonga Global School-Based Student Health Survey,,,,TON,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+820,Suriname,Suriname Global School-Based Student Health Survey,,,,SUR,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+821,Zambia,Zambia Global School-Based Student Health Survey,,,,ZMB,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+822,Viet Nam,Viet Nam Global School-Based Student Health Survey,,,,VNM,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+823,Antigua and Barbuda,Antigua and Barbuda Global School-Based Health Survey,,,,ATG,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+824,Argentina,Argentina Global School-Based Student Health Survey,,,,ARG,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+825,Sri Lanka,Sri Lanka Global School-Based Student Health Survey,,,,LKA,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+826,Pakistan,Pakistan Global School-Based Student Health Survey,,,,PAK,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+827,Namibia,Namibia Global School-Based Student Health Survey,,,,NAM,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+828,Djibouti,Djibouti Global School-Based Student Health Survey,"Enquête mondiale réalisée en milieu scolaire sur la santé des élèves, Djibout",,,DJI,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+829,Chile,Chile Global School-Based Student Health Survey,,,,CHL,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+830,Cook Islands,Cook Islands Global School-Based Student Health Survey,,,,COK,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+831,Guatemala,Guatemala Global School-Based Student Health Survey,,,,GTM,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+832,Morocco,Morocco Global School-Based Student Health Survey,,,,MAR,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+833,Mongolia,Mongolia Global School-Based Student Health Survey,,,,MNG,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+834,Mauritius,Mauritius Global School-Based Student Health Survey,,,,MUS,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+835,Lebanon,Lebanon Global School-Based Student Health Survey,,,,LBN,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+836,Jordan,Jordan Global School-Based Student Health Survey,,,,JOR,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+837,Egypt,Egypt Global School-Based Student Health Survey,,,,EGY,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+838,Bahamas,Bahamas Global School-Based Survey Health Survey,,,,BHS,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+839,Bangladesh,Bangladesh Global School-Based Student Health Survey,,,,BGD,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+840,Barbados,Barbados Global School-Based Student Health Survey,,,,BRB,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+841,Belize,Belize Global School-Based Student Health Survey,,,,BLZ,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+842,Bhutan,Bhutan Global School-Based Student Health Survey,,,,BTN,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+843,Uganda,Uganda Global School-based Student Health Survey,,,,UGA,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+844,Congo,Congo AIDS Indicator Survey,Enquête de Séroprévalence et sur les Indicateurs du Sida – Congo,,,COG,AIS,AIDS Indicator Survey,AIS
+845,Guyana,Guyana HIV/AIDS Indicator Survey,,,,GUY,AIS,AIDS Indicator Survey,AIS
+846,Viet Nam,Viet Nam Population and AIDS Indicator Survey,,,,VNM,AIS,AIDS Indicator Survey,AIS
+847,Côte d'Ivoire,Côte d’Ivoire AIDS Indicator Survey,"Enquête sur les Indicateurs du Sida, Côte d’Ivoire",,,CIV,AIS,AIDS Indicator Survey,AIS
+848,United Kingdom,United Kingdom Infant Feeding Survey,,,,GBR,,,
+849,United Kingdom,United Kingdom Millennium Cohort Study,,MCS,,GBR,,,
+850,United Kingdom,United Kingdom General Household Survey,,,,GBR,,,
+851,Senegal,Senegal Multiple Indicator Demographic and Health Survey,Enquête démographique et de santé à indicateurs multiples au Sénégal,EDS-MICS,,SEN,MICS-DHS,Combined Demographic and Health Survey and Mulitple Indicator Cluster Survey,MICS-DHS
+852,Botswana,Botswana Malaria Indicator Survey,,,,BWA,MIS,Malaria Indicator Survey,MIS
+853,Bhutan,Bhutan STEPS Noncommunicable Disease Risk Factors Survey,,,,BTN,STEPS NCD Risk Factors Survey,STEPS Noncommunicable Disease Risk Factors Survey,STEPS NCD Risk Factors Survey
+854,Ethiopia,Ethiopia Multiple Indicator Cluster Survey,,,,ETH,MICS,Multiple Indicator Cluster Survey,MICS
+855,Chile,Chile National Socioeconomic Characterization Survey,Chile Encuesta Nacional de Caracterización Socio-económica,CASEN,,CHL,,,
+856,Thailand,Thailand National Health and Examination Survey,,,,THA,NHANES,National Health and Nutrition Examination Survey,NHANES
+857,South Africa,South African National Health and Nutrition Examination Survey,,SANHANES,,ZAF,NHANES,National Health and Nutrition Examination Survey,NHANES
+858,Guinea-Bissau,Guinea-Bissau National Nutrition Survey using SMART Methodology,Enquete Nationale Sur L’etat Nutritionnel en Republique De Guinee-Bissau,,,GNB,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+859,Philippines,Philippines National Safe Motherhood Survey,,,,PHL,In Depth (DHS),In Depth Study (DHS),In Depth (DHS)
+860,Egypt,Egypt Indepth Study on the Reasons for Nonuse of Family Planning,,,,EGY,In Depth (DHS),In Depth Study (DHS),In Depth (DHS)
+861,Azerbaijan,Azerbaijan Food Security and Nutrition Survey,,,,AZE,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+862,Uganda,Uganda Comprehensive Food Security & Vulnerability Analysis,,,,UGA,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+863,Madagascar,Madagascar Comprehensive Food Security and Vulnerability Analysis,,,,MDG,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+864,Haiti,Haiti Comprehensive Food Security and Vulnerability Analysis,"Analyse Compréhensive de la Sécurité Alimentaire et de la Vulnérabilité, Haïti",,,HTI,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+865,Timor-Leste,Timor-Leste Comprehensive Food Security & Vulnerability Analysis,,,,TLS,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+866,United Republic of Tanzania,Tanzania Comprehensive Food Security and Vulnerability Analysis,,,,TZA,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+867,Mali,Mali National Nutrition and Food Security Survey,"Enquête Nationale sur la Sécurité Alimentaire et Nutritionnelle, Mali",ENSAN,,MLI,,,
+868,Senegal,Senegal Comprehensive Food Security and Vulnerability Analysis,"Analyse Globale de la Vulnérabilité, de la Sécurité Alimentaire et de la Nutrition, Senegal",,,SEN,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+869,Bangladesh,Bangladesh Household Food Security and Nutrition Assessment,,,,BGD,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+870,Mozambique,Mozambique Comprehensive Food Security and Vulnerability Analysis,,,,MOZ,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+871,Nepal,Nepal Comprehensive Food Security and Vulnerability Analysis,,,,NPL,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+872,Sao Tome and Principe,Sao Tome and Principe Comprehensive Food Security and Vulnerability Analysis,São Tomé and Principe Analyse Compréhensive de la Sécurité Alimentaire et de la Vulnérabilité,,,STP,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+873,Democratic Republic of the Congo,Democratic Republic of the Congo Comprehensive Food Security and Vulnerability Analysis,"Congo, Dem. Rep. Analyse Globale de la Sécurité Alimentaire et de la Vulnerabilité",,,COD,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+874,Mauritania,Mauritania Comprehensive Food Security and Vulnerability Analysis,,,,MRT,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+875,Guinea-Bissau,Guinea-Bissau Comprehensive Food Security and Vulnerability Analysis,,,,GNB,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+876,Malawi,Malawi Comprehensive Food Security and Vulnerability Assessment,,,,MWI,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+877,Mali,Mali Comprehensive Food Security and Vulnerability Analysis,,,,MLI,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+878,Niger,Niger Comprehensive Food Security and Vulnerability Analysis,Niger Analyse de la Sécurité Alimentaire et de la Vulnérabilité,,,NER,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+879,Iraq,Iraq Global School-Based Student Health Survey,,,,IRQ,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+880,Malawi,Malawi Comprehensive Food Security and Vulnerability Analysis (Rural),,,,MWI,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+881,Niger,Niger Comprehensive Food Security and Vulnerability Analysis (Rural),Enquete Nationale sur la Vulnerabilite a L'insecurite Alimentaire des Menages en Milieu Rural au Niger,,,NER,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+882,Kenya,Kenya Comprehensive Food Security and Vulnerability Analysis (Urban),,,,KEN,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+883,Kenya,Kenya Comprehensive Food Security and Vulnerability Analysis,,,,KEN,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+884,China,China Food Security and Vulnerability Analysis (Rural),,,,CHN,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+885,Côte d'Ivoire,Côte d'Ivoire Comprehensive Food Security and Vulnerability Analysis (Rural),,,,CIV,CFSVA,Comprehensive Food Security and Vulnerability Analysis,CFSVA
+886,Albania,Albania National Study on Nutrition,,,,ALB,NNS,National Nutrition Survey,NNS
+887,Albania,Albania National Nutrition Survey,,,,ALB,NNS,National Nutrition Survey,NNS
+888,Bangladesh,Bangladesh Nutritional Surveillance Project,,,,BGD,Surveillance,Surveillance System,Surveillance
+889,Bangladesh,Bangladesh Utilization of Essential Service Delivery Survey,,UESD,,BGD,,,
+890,Bangladesh,Bangladesh National Salt Iodization Survey,,,,BGD,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+891,Eritrea,Eritrea Malaria Indicator Survey,,,,ERI,MIS,Malaria Indicator Survey,MIS
+892,United Republic of Tanzania,Tanzania Malaria Indicator Survey,,,,TZA,MIS,Malaria Indicator Survey,MIS
+893,Panama,Panama Living Standards Measurement Survey,"Encuesta de niveles de vida, Republica de Panama",ENV,,PAN,LSMS,Living Standards Measurement Survey,LSMS
+894,Saint Vincent and the Grenadines,Saint Vincent and the Grenadines Survey of Living Conditions and Household Budgets,,SLC-HBS,,VCT,,,
+895,Saint Vincent and the Grenadines,Saint Vincent and the Grenadines Risk Factor Survey,,,,VCT,,,
+896,Saint Vincent and the Grenadines,Saint Vincent and the Grenadines Population and Housing Census,,,,VCT,Census,Census,Census
+897,Saudi Arabia,Saudi Arabia Family Health Survey,,,,SAU,GFHS,Gulf Family Health Survey,GFHS
+898,Bahrain,Bahrain Family Health Survey,,,,BHR,GFHS,Gulf Family Health Survey,GFHS
+899,United Arab Emirates,United Arab Emirates Family Health Survey,,,,ARE,GFHS,Gulf Family Health Survey,GFHS
+900,Oman,Oman Family Health Survey,,,,OMN,GFHS,Gulf Family Health Survey,GFHS
+901,Bolivia (Plurinational State of),Bolivia Global School-Based Student Health Survey,,,,BOL,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+902,Botswana,Botswana Global School-Based Student Health Survey,,,,BWA,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+903,Saint Vincent and the Grenadines,Saint Vincent and the Grenadines Global School-Based Student Health Survey,,,,VCT,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+904,Tuvalu,Tuvalu Global School-Based Student Health Survey,,,,TUV,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+905,Cambodia,Cambodia Global School-Based Student Health Survey,,,,KHM,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+906,Brazil,Brazil National Survey on Health and Nutrition,,,,BRA,,,
+907,Uzbekistan,Uzbekistan Health Examination Survey,,,,UZB,SDHS,Special Demograhic and Health Survey,SDHS
+908,British Virgin Islands,British Virgin Islands Global School Based Student Health Survey,,,,VGB,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+909,Brunei Darussalam,Brunei Global School-Based Student Health Survey,,,,BRN,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+910,Costa Rica,Costa Rica Global School-Based Student Health Survey,,,,CRI,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+911,Kiribati,Kiribati Global School-Based Student Health Survey,,,,KIR,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+912,Peru,Peru Global School-Based Student Health Survey,,,,PER,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+913,Sudan,Sudan Global School-Based Student Health Survey,,,,SDN,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+914,Libya,Libya Global School-Based Student Health Survey,,,,LBY,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+915,North Macedonia,North Macedonia Global School-Based Student Health Survey,,,,MKD,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+916,United Republic of Tanzania,Tanzania Global School-Based Student Health Survey,,,,TZA,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+917,Dominica,Dominica Global School-Based Student Health Survey,,,,DMA,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+918,Qatar,Qatar Global School-Based Student Health Survey,,,,QAT,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+919,Tajikistan,Tajikistan Global School-Based Student Health Survey,,,,TJK,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+920,Yemen,Yemen Family Health Survey,,,,YEM,PAPFAM,Pan Arab Project for Family Health,PAPFAM
+921,Yemen,Yemen Household Budget Survey,,,,YEM,,,
+922,Algeria,Algeria Maternal and Child Health Survey,,,,DZA,PAPFAM,Pan Arab Project for Family Health,PAPFAM
+923,Algeria,Algeria Protein-Energy Malnutrition Survey,,,,DZA,,,
+924,Algeria,Algeria Family Health Survey,,,,DZA,PAPFAM,Pan Arab Project for Family Health,PAPFAM
+925,Eritrea,Eritrea Population and Health Survey,,PHS,,ERI,,,
+926,United Republic of Tanzania,Tanzania Core Welfare Indicators Questionnaire Survey,,,,TZA,CWIQ,Core Welfare Indicator Survey,CWIQ
+927,Suriname,Suriname Survey of Living Conditions,,,,SUR,,,
+928,Timor-Leste,Timor-Leste Food and Nutrition Survey,,,,TLS,NNS,National Nutrition Survey,NNS
+929,Niger,Niger National Survey on Household Living Conditions and Agriculture,,,,NER,LSMS,Living Standards Measurement Survey,LSMS
+930,Burkina Faso,Burkina Faso Demographic and Health Module Survey,"Enquête sur le Module Démographie et Santé, Burkina Faso",EMDS,,BFA,LSMS,Living Standards Measurement Survey,LSMS
+931,Burkina Faso,Burkina Faso Continuous Multi-sectoral Survey,"Rapport Enquete Multisectorielle continue, Burkina Faso",EMC,,BFA,LSMS,Living Standards Measurement Survey,LSMS
+932,Guatemala,Guatemala Living Standards Measurement Survey,Guatemala Encuesta Nacional Sobre Condiciones de Vida,ENCOVI,,GTM,,,
+933,China,China Living Standards Survey,,,,CHN,LSMS,Living Standards Measurement Survey,LSMS
+934,Kazakhstan,Kazakhstan Living Standards Measurement Survey,,,,KAZ,LSMS,Living Standards Measurement Survey,LSMS
+935,Romania,Romania Integrated Household Survey,,IHS,,ROU,,,
+936,Kosovo,Kosovo Living Standards Measurement Study Survey,,,,XKX,LSMS,Living Standards Measurement Survey,LSMS
+937,Brazil,Brazil Living Standards Measurement Survey,,,,BRA,LSMS,Living Standards Measurement Survey,LSMS
+938,Papua New Guinea,Papua New Guinea Household Survey,,,,PNG,LSMS,Living Standards Measurement Survey,LSMS
+939,Azerbaijan,Azerbaijan Survey of Living Conditions,,,,AZE,LSMS,Living Standards Measurement Survey,LSMS
+940,Morocco,Morocco National Living Conditions Survey,"Enquête nationale des conditions de Vie des Menages, Morocco",,,MAR,LSMS,Living Standards Measurement Survey,LSMS
+941,South Africa,South Africa Integrated Household Survey,,,,ZAF,,,
+942,Togo,Togo Malaria Indicator Survey,Enquête sur les Indicateurs du Paludisme au Togo,,,TGO,MIS,Malaria Indicator Survey,MIS
+943,Haiti,Haiti Service Privision Assessment,"Évaluation de Prestation des Services de Soins de Santé, Haïti",EPSSS,,HTI,SPA,Service Provision Assessment,SPA
+944,United Republic of Tanzania,Tanzania Service Provision Assessment,,TSPA,,TZA,SPA,Service Provision Assessment,SPA
+945,China,China National Nutrition and Health Survey,,CNNHS,,CHN,,,
+946,Namibia,Namibia Malaria Indicator Survey,,,,NAM,MIS,Malaria Indicator Survey,MIS
+947,Sudan,Sudan Northern States Malaria Indicator Survey,,SNMIS,,SDN,MIS,Malaria Indicator Survey,MIS
+948,Sudan,Sudan National Malaria Indicator Survey,,,,SDN,MIS,Malaria Indicator Survey,MIS
+949,Burundi,Burundi Malaria Indicator Survey,Enquête sur les Indicateurs du Paludisme Burundi,,,BDI,MIS,Malaria Indicator Survey,MIS
+950,Cameroon,Cameroon Malaria Indicator Survey,Enquête Nationale sur les indicateurs du paludisme au Cameroun,,,CMR,MIS,Malaria Indicator Survey,MIS
+951,Eswatini,Eswatini Malaria Indicator Survey,,,,SWZ,MIS,Malaria Indicator Survey,MIS
+952,Oman,"Oman Household Income, Expenditure and Consumption Survey",,HICE,,OMN,,,
+953,Philippines,Philippines Expanded National Nutrition Survey,,ENNS,,PHL,NNS,National Nutrition Survey,NNS
+954,Trinidad and Tobago,Trinidad and Tobago HIV/AIDS Service Provision Assessment Survey (Tobago),,,,TTO,HSPA,Caribbean Region HIV and AIDS Service Provision Assessment Surveys,HSPA
+955,Antigua and Barbuda,Antigua and Barbuda HIV and AIDS Service Provision Assessment Survey,,,,ATG,HSPA,Caribbean Region HIV and AIDS Service Provision Assessment Surveys,HSPA
+956,Dominica,Dominica HIV and AIDS Service Provision Assessment Survey,,,,DMA,HSPA,Caribbean Region HIV and AIDS Service Provision Assessment Surveys,HSPA
+957,Barbados,Barbados HIV and AIDS Service Provision Assessment Survey,,,,BRB,HSPA,Caribbean Region HIV and AIDS Service Provision Assessment Surveys,HSPA
+958,Eswatini,Eswatini Intercensal Survey,,,,SWZ,Intercensal Survey,Intercensal Survey,Intercensal Survey
+959,Viet Nam,Viet Nam Intercensal Population and Housing Survey,,,,VNM,Intercensal Survey,Intercensal Survey,Intercensal Survey
+960,Montserrat,Montserrat Intercensal Population Count and Labour Force Survey,,,,MSR,Intercensal Survey,Intercensal Survey,Intercensal Survey
+961,Egypt,Egypt Health Issues Survey,,,,EGY,SDHS,Special Demograhic and Health Survey,SDHS
+962,Botswana,Botswana AIDS Impact Survey,,BAIS,,BWA,,,
+963,Australia,Australia National Nutrition Survey,,,,AUS,NNS,National Nutrition Survey,NNS
+964,Bangladesh,Bangladesh Service Provision Assessment Survey,,,,BGD,SPA,Service Provision Assessment,SPA
+965,Ghana,Ghana Service Provision Assessment Survey,,,,GHA,,,
+966,Lebanon,Lebanon Family Health Survey,,,,LBN,PAPFAM,Pan Arab Project for Family Health,PAPFAM
+967,Libya,Libyan Maternal and Child Health Survey,,,,LBY,PAPFAM,Pan Arab Project for Family Health,PAPFAM
+969,Sudan (Former),Sudan (Former) Household Health Survey,,SHHS,,SNF,PAPFAM,Pan Arab Project for Family Health,PAPFAM
+970,China,China National Surveillance System (Nutritional status of children aged 0-5 years old),,,,CHN,Surveillance,Surveillance System,Surveillance
+971,China,China National Nutrition Survey,,,,CHN,NNS,National Nutrition Survey,NNS
+972,Sri Lanka,Sri Lanka Nutrition and Food Security Survey,,,,LKA,NNS,National Nutrition Survey,NNS
+973,Senegal,Senegal National Nutrition and Food Security Survey,Sénégal Enquête Nationale sur la Sécurité Alimentaire et Nutritionnelle,ENSAN,,SEN,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+974,Senegal,Senegal National Nutrition Survey with SMART Methodology,Enquête nutritionnelle Nationale utilisant la methodologie SMART,,,SEN,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+975,Senegal,"Senegal National Nutrition, Food Security and Resilience Survey","Enquete Nationale de Securite Alimentaire, Nutrition et Resilience, Senegal",ESANR,,SEN,,,
+976,Nigeria,Nigeria Food Consumption and Nutrition Survey,,FCNS,,NGA,NNS,National Nutrition Survey,NNS
+977,Angola,Angola National Nutrition Survey,Relatorio do Inquerito sobre a Nutriçao em Angola,,,AGO,NNS,National Nutrition Survey,NNS
+978,Azerbaijan,Azerbaijan Nutrition Survey,,AzNS,,AZE,NNS,National Nutrition Survey,NNS
+979,Argentina,Argentina National Survey for Evaluating Child Psychomotor Development,,,,ARG,,,
+980,Argentina,Argentina Anthropometric Survey of Children under 6 years in the Maternal and Child Program,,,,ARG,,,
+981,Armenia,Armenia Health and Nutritional Status of Children and Women,,,,ARM,,,
+982,Australia,Australia National Children's Nutriton Physical Activity Survey,,,,AUS,,,
+983,Azerbaijan,Azerbaijan Health and Nutrition Survey of Internally Displaced and Resident Population,,,,AZE,,,
+984,Azerbaijan,Azerbaijan Reproductive Health Survey,,,,AZE,RHS,Reproductive Health Survey,RHS
+985,Bahrain,Bahrain Child Health Survey,,,,BHR,,,
+986,Bangladesh,Bangladesh Child Nutrition Survey,,,,BGD,NNS,National Nutrition Survey,NNS
+987,Cambodia,Cambodia Anthropometrics Survey,,CAS,,KHM,,,
+988,Indonesia,Indonesia National Health Survey,Indonesia Survei Kesehatan Nasional,SURKESNAS,,IDN,,,
+989,Indonesia,Indonesia STEPS Noncommunicable Disease Risk Factors Survey (Jawa Barat),,,,IDN,STEPS NCD Risk Factors Survey,STEPS Noncommunicable Disease Risk Factors Survey,STEPS NCD Risk Factors Survey
+990,Georgia,Georgia National Nutrition Survey,,GNNS,,GEO,NNS,National Nutrition Survey,NNS
+991,Belize,"Belize Food, Nutrition and Health Situation Assessment",,,,BLZ,,,
+992,Bhutan,Bhutan National Anthropometric Survey of Under Five Children,,,,BTN,,,
+993,Bolivia (Plurinational State of),Bolivia Health and Nutrition Assessment Survey,Encuesta de Evaluación de Salud y Nutrición,ESNUT,,BOL,,,
+994,Eritrea,Eritrea Health and Nutrition Survey,,,,ERI,,,
+995,Canada,Canada Community Health Survey,,CCHS,,CAN,,,
+996,Canada,Canada Households and the Environment Survey,,,,CAN,,,
+997,Canada,Canada Health Measures Survey,,,,CAN,,,
+998,Chile,Chile Nutritional Status of the Child Population,"Estado nutricional de la poblacion infantil, Republica de Chile",,,CHL,,,
+999,Bolivia (Plurinational State of),Bolivia Food and Nutrition Situation Analysis,Situacion alimentaria y nutricional de Bolivia,,,BOL,,,
+1000,Bolivia (Plurinational State of),Bolivia Map of Malnutrition,Bolivia: mapa de la desnutricion,,,BOL,,,
+1001,Benin,Benin Iodine Deficiency Disorders Epidemiologic Study,Étude epidemiologique de la lutte contre les troubles dus a la carence en iode au benin,,,BEN,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+1002,Bulgaria,Bulgaria Nutrition and Nutritional Status of Children aged under 5 years,,,,BGR,NNS,National Nutrition Survey,NNS
+1003,Bulgaria,Bulgaria Household Survey on Children and Pregnant Women Consumption of Iodine,,,,BGR,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+1004,Bulgaria,Bulgaria National Survey of Nutrition Factor for Health Risk among the Population,НАЦИОНАЛНО ПРОУЧВАНЕ НА ФАКТОР ХРАНЕНЕ В РИСКА ЗА ЗДРАВЕТО НА НАСЕЛЕНИЕТО В Р БЪЛГАРИЯ,,,BGR,NNS,National Nutrition Survey,NNS
+1005,Cabo Verde,Cabo Verde Anthropometric Survey,,,,CPV,NNS,National Nutrition Survey,NNS
+1006,Cabo Verde,Cabo Verde Health Status of Children under 5 years old,A saude das crianças menores de cinco anos em Cabo Verde,,,CPV,,,
+1007,Cabo Verde,Cabo Verde Iodized Salt Consumption Monitoring and Evaluation Report,,,,CPV,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+1008,China,China National Child Growth and Development Survey,,,,CHN,,,
+1009,Liberia,Liberia National Micronutrient Survey,,,,LBR,,,
+1010,India,India Rapid Survey on Children,,RSOC,,IND,,,
+1011,Lao People's Democratic Republic,Lao People's Democratic Republic Child Anthropometry Assessment Survey,,,,LAO,,,
+1012,Ecuador,Ecuador Maternal and Child Demographic and Health Survey,Encuesta demografía y de salud materna e infantil Ecuador,ENDEMAIN,,ECU,,,
+1013,Iraq,Iraq Multiple Indicator Rapid Assessment,,IMIRA,,IRQ,,,
+1014,Sri Lanka,Sri Lanka National Nutrition and Micronutrient Survey,,,,LKA,,,
+1015,Viet Nam,Viet Nam National Vitamin A Deficiency and Protein-Energy Malnutrition Prevalence Survey,,,,VNM,,,
+1016,Viet Nam,Viet Nam National Protein Energy Malnutrition Survey,,,,VNM,,,
+1017,Gambia,Gambia National Micronutrient Survey,,,,GMB,,,
+1018,Lesotho,Lesotho National Nutriton Survey,,,,LSO,NNS,National Nutrition Survey,NNS
+1019,Lesotho,Lesotho National Nutrition and EPI Cluster Survey,,,,LSO,NNS,National Nutrition Survey,NNS
+1020,Egypt,Egyptian Maternal and Child Health Survey,,EMCHS,,EGY,PAPFAM,Pan Arab Project for Family Health,PAPFAM
+1021,Colombia,Colombia Consistent Improvement in the Nutritional Status of Children,,,,COL,Other,Other Survey,Other
+1022,Comoros,Comoros Nutritional Status and Factors involved in Children under Two Years of Age,,Rapport sur l'état nutritionnel et les facteurs impliqués chez les enfants de moins de deux ans en République Fédérale Islamique des Comores,,COM,,,
+1023,Guyana,Guyana Micronutrient Study,,,,GUY,,,
+1024,Congo,Congo National Survey on the Nutritional Status of Pre-school Aged Children,Enquête nationale sur l'état nutritionnel des enfants d'age prescolaire au Congo,,,COG,NNS,National Nutrition Survey,NNS
+1025,Costa Rica,Costa Rica Analysis of the Nutritional Status of the Population,Analisis del estado nutricional de la poblacion Costarricense,,,CRI,,,
+1026,Costa Rica,Costa Rica Nutritional status of Preschool Children in the Primary Care Program,Estado nutricional de preescolares atendidos por el programa de atencion primaria,,,CRI,,,
+1027,Côte d'Ivoire,Côte d'Ivoire Vitamin A and Iron Deficiencies Assessment,Evaluation des carences en vitamine A et fer en Côte d'Ivoire,,,CIV,,,
+1028,El Salvador,El Salvador Nutritional Food Situation Assessment,Evaluacion de la situacion alimentaria nutricional en El Salvador,ESANES,,SLV,NNS,National Nutrition Survey,NNS
+1029,Ecuador,"Ecuador Food, Nutrition and Health Situation Assessment","Diagnostico de la situacion alimentaria, nutricional y de salud de la poblacion ecuatoriana menor de cinco años",,,ECU,,,
+1030,Egypt,Egypt National Survey of Iodine Status and Household Iodized Salt Use,,,,EGY,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+1031,Eswatini,Eswatini National Nutrition Survey,,,,SWZ,NNS,National Nutrition Survey,NNS
+1032,Pakistan,Pakistan Time Use Survey,,,,PAK,,,
+1033,Pakistan,Pakistan Integrated Household Survey,,IHS,,PAK,,,
+1034,Mongolia,Mongolia Household Socio-Economic Survey,,HSES,,MNG,,,
+1035,Mongolia,Mongolia Time-Use Survey,,TUS,,MNG,,,
+1036,Maldives,Maldives National Nutrition Survey,,,,MDV,NNS,National Nutrition Survey,NNS
+1037,Uganda,Uganda Time Use Survey,,,,UGA,,,
+1038,Romania,Romania National Nutritional Surveillance Programme,,,,ROU,Surveillance,Surveillance System,Surveillance
+1039,Romania,Romania Reproductive Health Survey,,,,ROU,RHS,Reproductive Health Survey,RHS
+1040,Uruguay,Uruguay Nutritional Status Surveillance System,"Sistema de vigilancia del estado nutricional, Uruguay",SISVEN,,URY,Surveillance,Surveillance System,Surveillance
+1041,Vanuatu,Vanuatu National Nutrition Survey,,,,VUT,NNS,National Nutrition Survey,NNS
+1042,Cabo Verde,Cabo Verde Iodine Deficiency Survey,Enquete d’Evaluation de la Lutte contre les Troubles dus a la Carence en Iode au Cap Vert,,,CPV,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+1043,China,China Research Report on Nutrition Policy,,,,CHN,,,
+1044,Paraguay,Paraguay National Demographic and Reproductive and Sexual Health Survey,Paraguay Encuesta Nacional de Demografia y Salud Sexual y Reproductiva,ENDSSR,,PRY,,,
+1045,Paraguay,Paraguay National Demographic and Reproductive Health Survey,Paraguay Encuesta Nacional de Demografia y Salud Reproductiva,,,PRY,,,
+1046,Paraguay,Paraguay National Maternal and Child Health Survey,Paraguay Encuesta Nacional de Salud Materno Infantil,ENSMI,,PRY,,,
+1047,Tunisia,Tunisia Maternal and Child Health Survey,,,,TUN,,,
+1048,State of Palestine,Palestine Family Health Survey,,,,PSE,PAPFAM,Pan Arab Project for Family Health,PAPFAM
+1049,Mongolia,Mongolia Reproductive Health Survey,,,,MNG,,,
+1050,Cambodia,Cambodia Violence against Children Survey,,,,KHM,VACS,Voilence against Children Survey,VACS
+1051,Colombia,Colombia Violence against Children and Youth Survey,"Encuesta Nacional de Violencia contra Niños, Niñas y Adolescentes en  Colombia",EVCNNA,,COL,VACS,Voilence against Children Survey,VACS
+1052,Mongolia,Mongolia Population and Housing Census,,,,MNG,Census,Census,Census
+1053,Haiti,Haiti National Nutrition Survey using SMART Methodology,"Enquete Nutritionnelle Nationale avec la Methodologie SMART, Haiti",,,HTI,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+1054,Haiti,Haiti National Nutrition and Mortality Survey,"Enquête nationale nutritionnelle et de mortalité, Haiti",,,HTI,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+1055,Nigeria,Nigeria COVID-19 National Longitudinal Phone Survey,,COVID-19 NLPS,,NGA,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1056,North Macedonia,North Macedonia National Nutrition Survey,,,,MKD,NNS,National Nutrition Survey,NNS
+1057,Ethiopia,Ethiopia COVID-19 High Frequency Phone Survey of Households,,,,ETH,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1058,Guatemala,Guatemala National Micronutrient Survey,Encuesta Nacional de Micronutrientes en Guatemala,ENMICRON,,GTM,,,
+1059,State of Palestine,Palestine Socio-Economic and Food Security Survey,,SFSec,,PSE,,,
+1060,Tonga,Tonga Multiple Indicator Cluster Survey,,,,TON,MICS,Multiple Indicator Cluster Survey,MICS
+1062,Dominican Republic,Dominican Republic Global School-Based Student Health Survey,,,,DOM,STEPS GSHS,STEPS Global School-Based Student Health Survey,STEPS GSHS
+1063,Dominican Republic,Dominican Republic Combined National Multipurpose Household and Multiple Indicator Cluster Survey,"Encuesta Nacional de Hogares de Propósitos Múltiples-MICS, Republica Dominicana",ENHOGAR-MICS,,DOM,,,
+1064,State of Palestine,Palestine Housing Conditions Survey,,HCS,,PSE,,,
+1065,Tonga,Tonga Household Income and Expenditure Survey,,HIES,,TON,,,
+1066,Tonga,Tonga National Nutrition Survey,,,,TON,NNS,National Nutrition Survey,NNS
+1067,State of Palestine,Palestine Health Survey,,,,PSE,MICS,Multiple Indicator Cluster Survey,MICS
+1068,State of Palestine,Palestine Family Survey,,,,PSE,MICS,Multiple Indicator Cluster Survey,MICS
+1069,Mexico,Mexico National Nutrition Survey,"Encuesta Nacional de Nutrición, Mexico",ENN,,MEX,NNS,National Nutrition Survey,NNS
+1070,United States,United States American Housing Survey,,AHS,,USA,,,
+1071,Congo,Congolese Household Survey for Poverty Assessment,Enquête Congolaise auprès des Ménages pour l’Evaluation de la Pauvreté,ECOM,,COG,CWIQ,Core Welfare Indicator Survey,CWIQ
+1072,Kyrgyzstan,Kyrgyzstan National Nutrition Survey,,KNNS,,KGZ,NNS,National Nutrition Survey,NNS
+1073,State of Palestine,Palestine Nutrition Survey,,,,PSE,NNS,National Nutrition Survey,NNS
+1074,Sri Lanka,Sri Lanka National Nutrition Survey,,,,LKA,NNS,National Nutrition Survey,NNS
+1075,Germany,Germany National Nutrition Survey,Nationale Verzehrsstudie,NVS,,DEU,NNS,National Nutrition Survey,NNS
+1076,Kiribati,Kiribati National Nutrition Survey,,,,KIR,NNS,National Nutrition Survey,NNS
+1077,Nepal,Nepal National Nutrition Survey,,,,NPL,NNS,National Nutrition Survey,NNS
+1078,Romania,Romania National Nutrition Survey,,,,ROU,NNS,National Nutrition Survey,NNS
+1079,Samoa,Samoa National Nutrition Survey,,,,WSM,NNS,National Nutrition Survey,NNS
+1080,Papua New Guinea,Papua New Guinea National Nutrition Survey,,,,PNG,NNS,National Nutrition Survey,NNS
+1081,Solomon Islands,Solomon Islands National Nutrition Survey,,,,SLB,NNS,National Nutrition Survey,NNS
+1082,Haiti,Haiti Nutrition Survey,,,,HTI,NNS,National Nutrition Survey,NNS
+1083,Marshall Islands,Marshall Islands National Nutrition Survey,,,,MHL,NNS,National Nutrition Survey,NNS
+1084,Ethiopia,Ethiopia National Rural Nutrition Survey,,,,ETH,NNS,National Nutrition Survey,NNS
+1085,Central African Republic,Central African Republic National Nutrition Survey,"L'enquête de nutrition, Centrafricaine",,,CAF,NNS,National Nutrition Survey,NNS
+1086,Thailand,Thailand National Nutrition Survey,,,,THA,NNS,National Nutrition Survey,NNS
+1087,Rwanda,Rwanda National Nutrition Survey,,,,RWA,NNS,National Nutrition Survey,NNS
+1088,Tunisia,Tunisia National Nutritional Status Assessment Survey,"Enquête nationale, Evaluation de l'état nutritionnel de la population Tunisienne",,,TUN,NNS,National Nutrition Survey,NNS
+1089,Côte d'Ivoire,Côte d'Ivoire Nutrition and Mortality Survey,Enquête de Nutrition Mortalité en Côte d’Ivoire,,,CIV,NNS,National Nutrition Survey,NNS
+1090,Kosovo,Kosovo National Nutriton Survey,,,,XKX,NNS,National Nutrition Survey,NNS
+1091,Somalia,Somalia Infant and Young Child Nutrition Assessment,,,,SOM,NNS,National Nutrition Survey,NNS
+1092,Iran (Islamic Republic of),Iran National Anthropometric and Nutrition Survey,,,,IRN,NNS,National Nutrition Survey,NNS
+1093,United Republic of Tanzania,Tanzania HIV Impact Survey,,THIS,,TZA,PHIA,Population-based HIV Impact Assessment,PHIA
+1094,Namibia,Namibia Population-based HIV Impact Assessment,,NAMPHIA,,NAM,PHIA,Population-based HIV Impact Assessment,PHIA
+1095,Jordan,Jordan National Child Labour Survey,,,,JOR,,,
+1096,Mali,Mali COVID-19 High Frequency Phone Survey of Households,,,,MLI,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1097,Equatorial Guinea,Equatorial Guinea National Nutrition Survey,,,,GNQ,NNS,National Nutrition Survey,NNS
+1098,Ethiopia,Ethiopia National Micronutrient Survey,,,,ETH,,,
+1099,Ethiopia,Ethiopia Post Market and Household Iodized Salt Coverage Survey,,,,ETH,,,
+1100,Gambia,Gambia National Nutrition Survey using SMART Methodology,,,,GMB,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+1101,Georgia,Georgia National Iodine Survey,,,,GEO,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+1102,Guinea,Guinea Household Living Conditions Survey,"Enquête Intégrale sur les Conditions de Vie des Ménages (avec module budget et consommation), Guinée",EIBC,,GIN,,,
+1103,Thailand,Thailand Random Survey on Nutritional Status of Children,,,,THA,,,
+1104,Ukraine,Ukraine National Micronutrient Survey,,,,UKR,,,
+1105,Malaysia,Malaysia Family Health Information System,,,,MYS,Surveillance,Surveillance System,Surveillance
+1106,Nigeria,Nigeria National Micronutrient Survey,,,,NGA,,,
+1107,Venezuela (Bolivarian Republic of),Venezuela Food and Nutrition Surveillance,"Sistema de Vigilancia Alimentaria y Nutricional, Venezuela",SISVAN,,VEN,Surveillance,Surveillance System,Surveillance
+1108,Uruguay,"Uruguay National Nutritional Status, Feeding Practices and Anemia Survey","Encuesta nacional sobre estado nutricional, prácticas de alimentación y anemia, Uruguay",,,URY,,,
+1109,Zimbabwe,Zimbabwe National Helath Information System,,,,ZWE,Surveillance,Surveillance System,Surveillance
+1110,Guinea,Guinea National Survey on Nutritional Status and Tracking Key Indicators of Child Survival,"Enquête Nationale sur l'Etat Nutritionnel et le Suivi des Principaux Indicateurs de Survie de l'Enfant, Guinée",ENENSE,,GIN,,,
+1111,Guinea,Guinea National Health and Nutrition Survey using SMART Methodology,"Enquête nationale nutrition-santé, basée sur la méthodologie SMART, Republique de Guinée",,,GIN,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+1112,Honduras,Honduras National Socio-Economic Indicators Survey,,,,HND,,,
+1113,Indonesia,Indonesia Nutrition and Health Surveillance System,,,,IDN,Surveillance,Surveillance System,Surveillance
+1114,State of Palestine,Palestine Micronutrient Survey,,PMS,,PSE,,,
+1115,Syrian Arab Republic,Syria Maternal and Child Health Survey,,SMCHS,,SYR,PAPFAM,Pan Arab Project for Family Health,PAPFAM
+1116,Sri Lanka,Sri Lanka National Nutrition and Health Survey,,,,LKA,,,
+1117,Iraq,Iraq Infant and Child Mortality and Nutrition Survey,,,,IRQ,,,
+1118,State of Palestine,Palestine Rapid Nutritional Assessment,,,,PSE,Other,Other Survey,Other
+1119,Pakistan,Pakistan National Health Survey,,NHSP,,PAK,,,
+1120,Oman,Oman National Vitamin A Deficiency Prevalence Study,,,,OMN,VAD Survey,Vitamin A Deficiency Survey,VAD Survey
+1121,United Republic of Tanzania,Tanzania National Iodine Deficiency Survey,,,,TZA,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+1122,Maldives,Maldives National Micronutrient Survey,,,,MDV,,,
+1123,Mauritania,Mauritania Maternal and Child Health Survey,,MMCHS,,MRT,PAPFAM,Pan Arab Project for Family Health,PAPFAM
+1124,Lesotho,Lesotho Core Welfare Indicator Questionnaire Survey,,,,LSO,CWIQ,Core Welfare Indicator Survey,CWIQ
+1125,Lesotho,"Lesotho National Iodine, Vitamin A and Iron Status Survey",,,,LSO,,,
+1126,Kenya,Kenya Rural Child Nutrition Survey,,,,KEN,,,
+1127,Lebanon,Lebanon Maternal and Child Health Survey,,,,LBN,PAPFAM,Pan Arab Project for Family Health,PAPFAM
+1128,Japan,Japan Growth Survey of Infants and Children,,,,JPN,,,
+1129,Mexico,Mexico National Rural Food Survey,Encuesta nacional de alimentacion en el medio rural,ENAL,,MEX,,,
+1130,Jordan,Jordan Assessment Iodine Deficiency Status Among Children,,,,JOR,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+1131,Jordan,Jordan Iodine Deficiency Study,,,,JOR,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+1132,Mozambique,Mozambique Core Welfare Indicators Questionnaire Survey,"Questionário de Indicadores Básicos de Bem-Estar, Moçambique",,,MOZ,CWIQ,Core Welfare Indicator Survey,CWIQ
+1133,Morocco,Morocco Maternal and Child Health Survey,Enquête de santé materno-infantil sur la population Marocaine,,,MAR,PAPFAM,Pan Arab Project for Family Health,PAPFAM
+1134,Lao People's Democratic Republic,Laos Assessment of Nutritional Status and Food Consumption,Diagnostic de la situation nutritionnel et consommationn alimentaire au Laos,,,LAO,,,
+1135,Nepal,Nepal Iodine Deficiency Disorders Status Survey,,,,NPL,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+1136,Senegal,Senegal Social Dimensions of Adjustment Priority Survey,"Enquete Sur Les Priorites, Sénégal",ESP,,SEN,Priority Survey,Priority Survey,Priority Survey
+1137,Senegal,Senegal National Survey on Household Utilisation of Iodised Salt,,,,SEN,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+1138,Papua New Guinea,Papua New Guinea Household Income and Expenditure Survey,,,,PNG,,,
+1139,Malaysia,Malaysia Malnutrition Study,,,,MYS,,,
+1140,Malaysia,Malaysia National Iodine Deficiency Disorders Survey,,,,MYS,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+1141,Mauritania,Mauritania Social Dimensions of Adjustment Survey,,,,MRT,,,
+1142,Mauritania,Mauritania Iodine Deficiency Disorder Survey,,,,MRT,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+1143,Niger,Niger National Evaluation of Socio-Economic and Demographic Indicators Study,"Etude nationale d’evaluation d’indicateurs socio-economiques et demographiques, Niger",ENISED,,NER,,,
+1144,Qatar,Qatar National Iodine Deficiency Disorders Survey,,,,QAT,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+1145,Nicaragua,Nicaragua Integrated Nutritional Intervention Surveillance System,Sistema integrado de vigilancia de interventiones nutricionales (SIVIN) Nicaragua,SIVIN,,NIC,,,
+1146,Niger,Niger National Mortality and Morbidity Survey,"Enquête nationale sur la morbidité et la mortalité, Niger",,,NER,,,
+1147,Paraguay,Paraguay Iodine Deficiency Disorders Prevention Program,"Programa de Prevención de los Desordenes por Deficiencia de Yodo, Paraguay",,,PRY,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+1148,Paraguay,"Paraguay Income, Expenditures and Living Conditions Survey","Encuesta de Ingresos y Gastos y de Condiciones de Vida ,Paraguay",,,PRY,,,
+1149,Philippines,Philippines Regional Nutrition Survey,,,,PHL,,,
+1150,Qatar,Qatar Nutritional Assessment,,,,QAT,,,
+1151,Republic of Korea,Republic of Korea Child Growth Study,,,,KOR,,,
+1152,South Africa,South Africa National Survey of the Iodine Concentration of Household Salt,,,,ZAF,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+1153,Singapore,Singapore National Healthcare Group Polyclinics' Anthropometric Growth Study,,,,SGP,,,
+1154,South Africa,"South Africa Anthropometric, Vitamin A, Iron and Immunisation Coverage Status Survey",,,,ZAF,,,
+1155,Sao Tome and Principe,Sao Tome and Principe Nutritional Status and Vaccination Coverage Survey,,,,STP,,,
+1156,Saudi Arabia,Saudi Arabia Growth Standards Comparison Study,,,,SAU,,,
+1157,Saudi Arabia,Saudi Arabia Growth Standards Study,,,,SAU,,,
+1158,Saudi Arabia,Saudi Arabia National Iodine Deficiency Disorders Survey,,,,SAU,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+1159,Seychelles,Seychelles Nutritional Status of Children Study,,,,SYC,,,
+1160,Uruguay,Uruguay Food and Nutrition Situation Analysis,"Uruguay: Situacion alimentario-nutricional, algunos factores condicionantes",,,URY,,,
+1161,Kenya,Kenya National Micronutrient Survey,,,,KEN,,,
+1162,Venezuela (Bolivarian Republic of),Venezuela Project Survey,Proyecto Venezuela,,,VEN,,,
+1163,Albania,Albania Reproductive Health Survey,,,,ALB,RHS,Reproductive Health Survey,RHS
+1164,United Arab Emirates,United Arab Emirates World Health Survey,,,,ARE,WHS,World Health Survey,WHS
+1165,Ukraine,Ukraine Reproductive Health Survey,,,,UKR,RHS,Reproductive Health Survey,RHS
+1166,Senegal,Senegal Health Indicator Survey,Enquête Sénégalaise sur les Indicateurs de Santé,ESIS,,SEN,DHS,Demographic and Health Survey,DHS
+1167,Senegal,Senegal Harmonized Survey on Household Living Conditions,Enquête Harmonisée sur les Conditions de Vie des Ménages au Sénégal,EHCVM,,SEN,,,
+1168,Nepal,Nepal Multiple Indicator Cluster Survey (Mid- and Far- Western Regions),,,,NPL,MICS,Multiple Indicator Cluster Survey,MICS
+1169,Nepal,Nepal Family Health Survey,,,,NPL,DHS,Demographic and Health Survey,DHS
+1170,Nicaragua,Nicaragua Family Health Survey,Nicaragua Encuesta Sobre Salud Familiar,,,NIC,RHS,Reproductive Health Survey,RHS
+1171,Nicaragua,Nicaragua National Micronutrient Survey,"Encuesta Nacional de Micronutrientes, Nicaragua",,,NIC,,,
+1172,Jamaica,Jamaica Reproductive Health Survey,,,,JAM,RHS,Reproductive Health Survey,RHS
+1173,Republic of Moldova,Moldova Reproductive Health Survey,,,,MDA,RHS,Reproductive Health Survey,RHS
+1174,Czechia,Czechia Reproductive Health Survey,,,,CZE,RHS,Reproductive Health Survey,RHS
+1175,Jamaica,Jamaica Contraceptive Prevalence Survey,,,,JAM,RHS,Reproductive Health Survey,RHS
+1176,Eswatini,Eswatini Family Health Survey,,,,SWZ,RHS,Reproductive Health Survey,RHS
+1177,Costa Rica,Costa Rica National Fertility and Health Survey,Costa Rica Encuesta Nacional de Fecundidad y Salud,,,CRI,RHS,Reproductive Health Survey,RHS
+1178,Jordan,Jordan Fertility and Family Health Survey,,,,JOR,RHS,Reproductive Health Survey,RHS
+1179,Nigeria,Nigeria Demographic and Health Survey (Ondo State),,,,NGA,SDHS,Special Demograhic and Health Survey,SDHS
+1180,Greece,"Greece Growth, Exercise and Nutrition Epidemiological Study In preSchoolers Study",,GENESIS,,GRC,NNS,National Nutrition Survey,NNS
+1181,Nepal,Nepal Special Demographic and Health Survey,,,,NPL,SDHS,Special Demograhic and Health Survey,SDHS
+1182,Bangladesh,Bangladesh Maternal Health Services and Maternal Mortality Survey,,,,BGD,SDHS,Special Demograhic and Health Survey,SDHS
+1183,Morocco,Morocco Population and Health Panel Survey,"Enquête de Panel sur la Population et la Santé, Royaume du Maroc",EPPS,,MAR,SDHS,Special Demograhic and Health Survey,SDHS
+1184,Cambodia,Cambodia National Health Survey,,,,KHM,SDHS,Special Demograhic and Health Survey,SDHS
+1185,Dominican Republic,Dominican Republic Experimental Demographic and Health Survey,Republica Dominicana Encuesta Experimental de Demografia y Salud,,,DOM,SDHS,Special Demograhic and Health Survey,SDHS
+1186,Dominican Republic,Dominican Republic Sociodemographic and HIV / AIDS Survey (Bateyes Estatales),Encuesta Sociodemográfica y sobre VIH/SIDA en los Bateyes Estatales de la República Dominicana,,,DOM,SDHS,Special Demograhic and Health Survey,SDHS
+1187,Rwanda,Rwanda Special Demographic and Health Survey,,,,RWA,SDHS,Special Demograhic and Health Survey,SDHS
+1188,Mali,Mali Anemia and Malaria Parasite Prevelance Survey,"Enquête sur la prévalence de l’Anémie et de la Parasitémie palustre chez les enfants, Mali",EA&P,,MLI,SDHS,Special Demograhic and Health Survey,SDHS
+1189,Côte d'Ivoire,Côte d’Ivoire Prevalence of Malaria and Anemia Survey,Enquête de prévalence parasitaire du paludisme et de l’anémie en Côte d’Ivoire,,,CIV,SDHS,Special Demograhic and Health Survey,SDHS
+1190,Haiti,Haiti Special Demographic and Health Survey,,,,HTI,SDHS,Special Demograhic and Health Survey,SDHS
+1191,Chile,Chile National Quality of Life and Health Survey,Encuesta Nacional de Calidad de Vida y Salud  Chile,ENCAVI,,CHL,,,
+1192,"China, Hong Kong Special Administrative Region",Hong Kong Infant & Young Child Feeding Survey,,,,HKG,,,
+1193,Ethiopia,Ethiopia Nutrition and Health Survey,,NHS,,ETH,,,
+1194,Equatorial Guinea,Equatoria Guinea Annual Malaria Indicator Survey (Bioko Island),,,,GNQ,MIS,Malaria Indicator Survey,MIS
+1195,Pakistan,Pakistan Maternal Mortality Survey,,PMMS,,PAK,,,
+1196,Pakistan,Pakistan Household Integrated Economic Survey,,HIES,,PAK,,,
+1197,Malawi,Malawi High-Frequency Phone Survey on COVID-19,,,,MWI,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1198,Uganda,Uganda High-Frequency Phone Survey on COVID-19,,,,UGA,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1199,Kiribati,Kiribati Household Income and Expenditure Survey,,,,KIR,,,
+1200,Nepal,Nepal Health Facility Survey,,,,NPL,SPA,Service Provision Assessment,SPA
+1201,Namibia,Namibia Health Facility Census,,,,NAM,SPA,Service Provision Assessment,SPA
+1202,Democratic Republic of the Congo,Democratic Republic of the Congo Healthcare Service Provision Assessment,"Evaluation des Prestations des Services de soins de Sante , République Démocratique du Congo",EPSS,,COD,SPA,Service Provision Assessment,SPA
+1203,Burkina Faso,Burkina Faso High-Frequency COVID-19 Phone Survey,,,,BFA,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1204,Ethiopia,Ethiopia Performance Monitoring for Action Cohort Survey,,,,ETH,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+1205,Ethiopia,Ethiopia Performance Monitoring for Action Cross-sectional Survey,,,,ETH,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+1206,Kenya,Kenya Performance Monitoring for Action Client Exit Interview Survey,,,,KEN,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+1207,Nigeria,Nigeria Performance Monitoring for Action Client Exit Interview Survey (Kano and Lagos),,,,NGA,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+1208,Burkina Faso,Burkina Faso Multipe Indicator Demographic and Health Survey,Burkina Faso Enquête Démographique et de Santé et à Indicateurs Multiples,EDSBF-MICS,,BFA,DHS,Demographic and Health Survey,DHS
+1209,Viet Nam,Viet Nam Life History Survey,,VLHS,,VNM,,,
+1210,Viet Nam,Viet Nam Longitudinal Survey,,VLS,,VNM,,,
+1211,Peru,Peru Monitoring of Nutritional Indicators in the National Household Survey,"Monitoreo de Indicadores Nutricionales en la Encuesta Nacional de Hogares, Peru",MONIN,,PER,,,
+1212,Mauritania,Mauritania Infant Mortality and Malaria Survey,"Enquête sur la Mortalité Infantile et le Paludisme, Mauritanie",EMIP,,MRT,SDHS,Special Demograhic and Health Survey,SDHS
+1213,India,India Rural COVID-19 Related Shocks Survey,,,,IND,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1214,Netherlands,Netherlands Nationwide Growth Study,,,,NLD,,,
+1215,Kenya,Kenya COVID-19 Rapid Response Phone Survey With Households,,,,KEN,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1216,United Kingdom,United Kingdom National Diet and Nutrition Survey,,NDNS,,GBR,,,
+1217,Malaysia,Malaysia Adult Nutrition Survey,,,,MYS,,,
+1218,Belgium,Belgium Food Consumption Survey,"Enquete de la Consummation Alimentaire, Belgique",,,BEL,,,
+1219,Burkina Faso,Burkina Faso Performance Monitoring and Accountability Phase 1 Baseline Survey,,,,BFA,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+1220,Democratic Republic of the Congo,Democratic Republic of the Congo Performance Monitoring and Accountability Phase 1 Survey (Kinshasa & Kongo Central),,,,COD,PMA,"Performance, Monitoring, and Accountability Survey",PMA
+1221,Republic of Moldova,Moldova Violence against Children and Youth Survey,,,,MDA,VACS,Voilence against Children Survey,VACS
+1222,Côte d'Ivoire,Côte d’Ivoire Violence against Children and Youth Survey,,,,CIV,VACS,Voilence against Children Survey,VACS
+1223,Lesotho,Lesotho Violence Against Children and Youth Survey,,,,LSO,VACS,Voilence against Children Survey,VACS
+1224,El Salvador,El Salvador Violence Against Children Survey,,,,SLV,VACS,Voilence against Children Survey,VACS
+1225,Uganda,Uganda Violence against Children Survey,,,,UGA,VACS,Voilence against Children Survey,VACS
+1226,Botswana,Botwana National Survey on Life Experiences and Risk of HIV Infection Among 13-24 Year Old Males and Females,,,,BWA,VACS,Voilence against Children Survey,VACS
+1227,Zambia,Zambia Violence against Children Survey,,,,ZMB,VACS,Voilence against Children Survey,VACS
+1228,Lao People's Democratic Republic,Lao People's Democratic Republic National Violence against Children Survey,,,,LAO,VACS,Voilence against Children Survey,VACS
+1229,Haiti,Haiti National Violence against Children Survey,,,,HTI,VACS,Voilence against Children Survey,VACS
+1230,Nigeria,Nigeria Violence against Children Survey,,,,NGA,VACS,Voilence against Children Survey,VACS
+1231,Eswatini,Eswatini National Violence against Children Study,,,,SWZ,VACS,Voilence against Children Survey,VACS
+1232,United Republic of Tanzania,Tanzania Violence against Children Study,,,,TZA,VACS,Voilence against Children Survey,VACS
+1233,Sudan (Former),Sudan (Former) Maternal and Child Health Survey,,,,SNF,PAPFAM,Pan Arab Project for Family Health,PAPFAM
+1234,Tunisia,Tunisia Family Health Survey,Enquête Tunisienne sur la Santé de la Famille,,,TUN,PAPFAM,Pan Arab Project for Family Health,PAPFAM
+1235,El Salvador,El Salvador Multipurpose Household Survey,"Encuesta de Hogares de Propositos Multiples, El Salvador",EHPM,,SLV,,,
+1236,South Africa,South Africa National Income Dynamics Study - Coronavirus Rapid Mobile Survey,,NIDS-CRAM,,ZAF,,,
+1237,Djibouti,Djibouti COVID-19 National Panel Phone Survey,,,,DJI,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1238,Afghanistan,Afghanistan Flash Survey,,,,AFG,,,
+1239,Chile,Chile Longitudinal Survey of Early Childhood,"Encuesta Longitudinal de la Primera Infancia, Chile",ELPI,,CHL,,,
+1240,Bangladesh,Bangladesh Integrated Household Survey,,BIHS,,BGD,,,
+1241,Myanmar,Myanmar Micronutrient and Food Consumption Survey,,MMFCS,,MMR,,,
+1242,Portugal,Portugal World Fertility Survey,,,,PRT,WFS,World Fertility Survey,WFS
+1243,Portugal,Portugal World Health Survey,,,,PRT,WHS,World Health Survey,WHS
+1244,Portugal,Portugal National Health Survey,"Inquerito Nacional de Saude, Portugal",INS,,PRT,,,
+1245,Portugal,Portugal National Food and Physical Activity Survey,"Inquérito Alimentar Nacional e de Atividade Física, Portugal",IAN-AF,,PRT,,,
+1246,Nigeria,Nigeria Core Welfare Indicator Survey,,,,NGA,CWIQ,Core Welfare Indicator Survey,CWIQ
+1247,Ireland,Ireland National Pre-School Nutrition Survey,,NPNS,,IRL,NNS,National Nutrition Survey,NNS
+1248,Poland,Poland OLA Study,,,,POL,,,
+1249,Chad,Chad COVID-19 High Frequency Phone Survey,,,,TCD,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1250,Viet Nam,Viet Nam COVID-19 High Frequency Phone Survey of Households,,,,VNM,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1251,Chile,Chile National Food Consumption Survey,"Encuesta Nacional de Consumo Alimentario, Chile",ENCA,,CHL,,,
+1252,Niger,Niger National Survey on the Living Conditions of Households,"Enquête Nationale sur les Conditions de Vie des Ménages, Niger",,,NER,,,
+1253,Niger,Niger Child Survival and Mortality Survey,"Enquête Survie des Enfants des enfants de 0 à 59 mois et Mortalité , Niger",,,NER,,,
+1254,Zimbabwe,"Zimbabwe Rapid Poverty, Income, Consumption and Expenditure Survey",,,,ZWE,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1255,Cambodia,Cambodia High-Frequency Phone Survey of Households,,,,KHM,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1256,Indonesia,Indonesia High-Frequency Monitoring of Households,,,,IDN,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1257,Saint Lucia,Saint Lucia High-Frequency Phone Survey,,,,LCA,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1258,Mongolia,Mongolia COVID-19 Household Response Phone Survey,,,,MNG,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1259,Myanmar,Myanmar COVID-19 High Frequency Monitoring Survey,,,,MMR,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1260,Philippines,Philippines COVID-19 High-Frequency Household Survey,,,,PHL,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1261,Tajikistan,Listening to Tajikistan Survey,,,,TJK,,,
+1262,Uzbekistan,Listening to Citizens of Uzbekistan Survey,,,,UZB,,,
+1263,South Sudan,South Sudan High-Frequency COVID-19 Survey,,,,SSD,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1264,Zambia,Zambia COVID-19 High-Frequency Phone Survey,,,,ZMB,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1265,Sri Lanka,Sri Lanka Annual Report of the Family Health Bureau,,,,LKA,Surveillance,Surveillance System,Surveillance
+1266,Hungary,Hungary European Health Interview Survey,Egészségfelmérés,ELEF,,HUN,EHIS,European Health Interview Survey,EHIS
+1267,Solomon Islands,Solomon Islands High Frequency Phone Survey on COVID-19,,,,SLB,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1268,Papua New Guinea,Papua New Guinea High Frequency Phone Survey on COVID-19,,,,PNG,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1269,Côte d'Ivoire,Côte d’Ivoire Population-Based HIV Impact Assessment,,CIPHIA,,CIV,PHIA,Population-based HIV Impact Assessment,PHIA
+1270,Zimbabwe,Zimbabwe Population-Based HIV Impact Assessment,,ZIMPHIA,,ZWE,PHIA,Population-based HIV Impact Assessment,PHIA
+1271,Rwanda,Rwanda Population-based HIV Impact Assessment,,RPHIA,,RWA,PHIA,Population-based HIV Impact Assessment,PHIA
+1272,Ethiopia,Ethiopia Population-based HIV Impact Assessment,,EPHIA,,ETH,PHIA,Population-based HIV Impact Assessment,PHIA
+1273,Mali,"Mali Anthropometric, Nutrition and Mortality Survey","Enquête Nutritionnelle Anthropométrique et de Mortalité rétrospective, Mali",,,MLI,SMART,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART
+1274,Panama,Panama National Health Survey,Encuesta Nacional de Salud de Panamá,ENSPA,,PAN,,,
+1275,Burkina Faso,Burkina Faso Population and Housing Census,Recensement Général de la Population et de l’Habitation du Burkina Faso,,,BFA,Census,Census,Census
+1276,Georgia,Georgia COVID-19 High Frequency Survey,,,,GEO,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1277,Paraguay,Paraguay Integrated Household Survey,"Encuesta Integrada de Hogares, Paraguay",EIH,,PRY,,,
+1278,Sri Lanka,Sri Lanka Nutrition Month Survey,,NM,,LKA,,,
+1279,Georgia,Georgia COVID-19 Monitor Survey,,,,GEO,,,
+1280,Finland,Finland Infant Feeding Survey,,Imeväisikäisten ruokinta Suomessa vuonna,,FIN,,,
+1281,Finland,Finland World Health Survey,,,,FIN,WHS,World Health Survey,WHS
+1282,Finland,Finland Health Checks at a Health Clinic or School Health Care,,Terveystarkastukset lastenneuvolassa ja kouluterveydenhuollossa,,FIN,Surveillance,Surveillance System,Surveillance
+1283,Mongolia,Mongolia Multiple Indicator Cluster Survey Plus,,,,MNG,MICS Plus,Multiple Indicator Cluster Survey - Plus,MICS Plus
+1285,Peru,Peru Experimental Demographic and Health Survey,,,,PER,ExDHS,Experimental Demographic and Health Survey,ExDHS
+1286,China,China Monitoring of nutrition and health status of children and lactating women,,,,CHN,,,
+1287,Saudi Arabia,Saudi Arabia Health Monitoring System,,,,SAU,Surveillance,Surveillance System,Surveillance
+1288,Chile,Chile National Breastfeeding in Primary Care Facilities Survey,"Encuesta Nacional de Lactancia Materna en la Atencion Primaria, Chile",ENALMA,,CHL,NNS,National Nutrition Survey,NNS
+1289,Armenia,Armenia COVID-19 High Frequency Survey of Households and Children,,,,ARM,LSMS-HFPS,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS
+1290,Syrian Arab Republic,Syria Integrated Multi-Purpose Socio-demographic Survey,,,,SYR,,,
+1291,Burundi,Burundi Iodine Deficiency Disorders Survey,Enquête sur les troubles dus à la carence iodée au Burundi,,,BDI,Iodine Survey,Iodine Status Focused Survey,Iodine Survey
+1292,Madagascar,Madagascar Malaria Indicator Survey,Enquête sur les Indicateurs du Paludisme à Madagascar,EPIMD,,MDG,MIS,Malaria Indicator Survey,MIS
+1293,Kenya,Kenya Service Delivery Indicators Health Survey,,,,KEN,SDI,Service Delivery Indicators Survey,SDI
+1294,Kenya,Kenya Service Delivery Indicators Education Survey,,,,KEN,SDI,Service Delivery Indicators Survey,SDI

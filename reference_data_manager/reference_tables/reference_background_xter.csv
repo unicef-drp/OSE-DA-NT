@@ -1,0 +1,65 @@
+ID,Background Characteristics,Characteristic ID,Level,Compliance Asset Id,Description,Consitutents
+1,National,national,Basic,,,National
+2,Sex,sex,Basic,,,Sex
+3,Area,area_type,Basic,,,Area
+4,Household Wealth Quintile,windex5,Basic,,,Household Wealth Quintile
+5,Household Wealth Decile,wealth_decile,Basic,,,Household Wealth Decile
+6,Household Wealth Tercile,wealth_tercile,Basic,,,Household Wealth Tercile
+7,Disability,disability,Basic,,,Disability
+8,Age Group,age_group,Basic,,,Age Group
+9,Ethnicity,ethnicity,Basic,,,Ethnicity
+10,Mother's Education,melevel,Basic,,,Mother's Education
+11,Mother's Age at Birth,mother_age,Basic,,,Mother's Age at Birth
+12,Subnational Region,region_id,Basic,,,Subnational Region
+13,Singleton or Multiple Births,type_births,Basic,,,Singleton or Multiple Births
+14,Place of Delivery,birth_delivery_location,Basic,,,Place of Delivery
+15,Gestational Age,age_gestational,Basic,,,Gestational Age
+16,Sex of Household Head,sex_hh,Basic,,,Sex of Household Head
+17,Household Wealth Share,wealth_share,Basic,,,Household Wealth Share
+18,Area Household Wealth Quintile,area_type+windex5,Compound,,,"Area, Household Wealth Quintile"
+19,Area Household Wealth Share,area_type+wealth_share,Compound,,,"Household Wealth Share, Area"
+20,Area Subnational Region,area_type+region_id,Compound,,,"Area, Subnational Region"
+21,Household Wealth Share Subnational Region,wealth_share+region_id,Compound,,,"Household Wealth Share, Subnational Region"
+22,Household Wealth Quintile Subnational Region,windex5+region_id,Compound,,,"Household Wealth Quintile, Subnational Region"
+23,Area Sex,area_type+sex,Compound,,,"Area, Sex"
+24,Household Wealth Quintile Sex,windex5+sex,Compound,,,"Sex, Household Wealth Quintile"
+25,Age Group Sex,age_group+sex,Compound,,,"Age Group, Sex"
+26,Household Wealth Share Sex,wealth_share+sex,Compound,,,"Sex, Household Wealth Share"
+27,Subnational Region Sex,region_id+sex,Compound,,,"Subnational Region, Sex"
+28,Age Group Area,age_group+area_type,Compound,,,"Age Group, Area"
+29,Age Group Subnational Region,age_group+region_id,Compound,,,"Age Group, Subnational Region"
+30,Age in months,child_age_in_months,Basic,,,Age in months
+31,Household Wealth Decile Sex,wealth_decile+sex,Compound,,,"Household Wealth Decile, Sex"
+32,Household Wealth Tercile Sex,wealth_tercile+sex,Compound,,,"Household Wealth Tercile, Sex"
+33,Household Wealth Decile Subnational Region,wealth_decile+region_id,Compound,,,"Household Wealth Decile, Subnational Region"
+34,Household Wealth Tercile Subnational Region,wealth_tercile+region_id,Compound,,,"Household Wealth Tercile, Subnational Region"
+35,Area Household Wealth Tercile,area_type+wealth_tercile,Compound,,,"Household Wealth Tercile, Area"
+36,Area Household Wealth Decile,area_type+wealth_decile,Compound,,,"Household Wealth Decile, Area"
+37,Education,elevel,Basic,,,Education
+38,HIV Status,hiv_blood_test_result,Basic,,,HIV Status
+39,Marital Status,mstatus,Basic,,,Marital Status
+40,Sexually Active,sex_active,Basic,,,Sexually Active
+41,Age Group HIV Status,age_group+hiv_blood_test_result,Compound,,,"Age Group, HIV Status"
+42,Sexually Active Age Group,sex_active+age_group,Compound,,,"Sexually Active, Age Group"
+43,Sexually Active Education,sex_active+elevel,Compound,,,"Sexually Active, Education"
+44,Sexually Active Marital Status,sex_active+mstatus,Compound,,,"Sexually Active, Marital Status"
+45,Sexually Active Subnational Region,sex_active+region_id,Compound,,,"Sexually Active, Subnational Region"
+46,Sexually Active Household Wealth Quintile,sex_active+windex5,Compound,,,"Sexually Active, Household Wealth Quintile"
+47,Births,births,Basic,,,Births
+48,Delivery by c-section,delivery_csec,Basic,,,Delivery by c-section
+49,Delivery by c-section Area,delivery_csec+area_type,Compound,,,"Delivery by c-section, Area"
+50,Delivery by c-section Household Wealth Quintile,delivery_csec+windex5,Compound,,,"Delivery by c-section, Household Wealth Quintile"
+51,Delivery by c-section Mother's Education,delivery_csec+melevel,Compound,,,"Delivery by c-section, Mother's Education"
+52,Delivery by c-section Mother's Age,delivery_csec+mother_age,Compound,,,"Delivery by c-section, Mother's Age at Birth"
+53,Delivery by c-section Subnational Region,delivery_csec+region_id,Compound,,,"Delivery by c-section, Subnational Region"
+54,Delivery by c-section Age Group,delivery_csec+age_group,Compound,,,"Delivery by c-section, Age Group"
+55,Caste,caste,Basic,,,Caste
+56,Religion,religion,Basic,,,Religion
+57,Assistance at Delivery,del_assistance,Basic,,,Assistance at Delivery
+58,Area-Specific Wealth Quintile,residence_spec_windex5,Basic,,"DHS Description:
+
+Wealth index for urban/rural. As a response to criticism that a single wealth index (as provided by HV270 and HV271) is too urban in its construction and not able to distinguish the poorest of the poor from other poor households, this variable provides an urban- and rural-specific wealth index​
+
+",Area-Specific Wealth Quintile
+59,Breastfeeding Status,bfstatus,Basic,,,Breastfeeding Status
+60,Parity,parity,Basic,,,

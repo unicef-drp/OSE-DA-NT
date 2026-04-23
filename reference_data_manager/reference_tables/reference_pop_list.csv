@@ -1,0 +1,13 @@
+ID,Base Population Name,CND_REGEX,Description,Compliance Asset Id,Source
+1,0 to 59 months,pop_month_0_59,Sum of Age 0 through 4,,Direct
+2,All Births,births,Total Births,,Direct
+3,0 to 23 months,pop_month_0_23,Sum of Age 0 and Age 1,,Direct
+4,12 to 15 months,pop_month_12_15,One third of Age 1,,Derived
+5,20 to 23 months,pop_month_20_23,One third of Age 1,,Derived
+6,0 to 5 months,pop_month_0_5,Half of Age 0,,Derived
+7,6 to 59 months,pop_month_6_59,Half of Age 0 and the sum of Age 1 through 4,,Derived
+8,6 to 23 months,pop_month_6_23,Half of Age 0 plus Age 1,,Derived
+9,12 to 23 months,pop_month_12_23,Age 1,,Direct
+10,6 to 8 months,pop_month_6_8,Quarter of Age 0,,Direct
+11,0 to 11 months,pop_month_0_11,Age 0,,Direct
+12,Total Population,pop_year_0_100,Sum of Age 0 through 100,,Direct

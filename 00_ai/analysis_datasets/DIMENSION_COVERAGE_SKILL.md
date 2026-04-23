@@ -89,7 +89,7 @@ Use fallback functions in `0_layer2_utils.r` when:
 
 DW-Production fetches `reference_disaggregations.csv` **directly from the GitHub main branch** via raw URL:
 ```
-https://raw.githubusercontent.com/unicef-drp/OSE-DA-NT/refs/heads/main/reference_data_manager/indicators/reference_disaggregations.csv
+https://raw.githubusercontent.com/unicef-drp/OSE-DA-NT/refs/heads/main/reference_data_manager/reference_tables/reference_disaggregations.csv
 ```
 
 DW uses `transmute()` selecting only these columns:
@@ -167,7 +167,7 @@ These should remain as fallback functions unless a new HELIX column is added to 
 
 | File | Role |
 |---|---|
-| `reference_data_manager/indicators/reference_disaggregations.csv` | Primary mapping reference; consumed by DW-Production via GitHub raw URL |
+| `reference_data_manager/reference_tables/reference_disaggregations.csv` | Primary mapping reference; consumed by DW-Production via GitHub raw URL |
 | `analysis_datasets/02_codes/0_layer2_utils.r` | Fallback dimension functions and `apply_dataset_fallback_dims()` |
 | `analysis_datasets/02_codes/2_build_cmrs2_*.r` | Per-dataset build scripts |
 | `C:/.../nt_sdmx_codebooks.xlsx` | SDMX standard reference — use for context only; does NOT define DW accepted codes |

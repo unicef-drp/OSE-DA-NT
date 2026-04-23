@@ -1,0 +1,12 @@
+ID,Sub-domain,Sub-domain code,Nutrition Domain,Compliance Asset Id
+1,Iodine,IOD,Micronutrients,
+2,Vitamin A,VAS,Micronutrients,
+3,Child Anthropometry,ANT,Anthropometry,
+4,Breastfeeding,BRS,Infant and Young Child Feeding,
+5,Complementary Feeding,CF,Infant and Young Child Feeding,
+6,Birthweight,BW,Anthropometry,
+7,Severe Acute Malnutrition,SAM,Anthropometry,
+8,Anaemia,ANE,Micronutrients,
+9,Iron Deficiency,IDE,Micronutrients,
+10,School-age Children and Adolescents Anthropometry,SANT,Anthropometry,
+11,Adult Anthropometry,DANT,Anthropometry,

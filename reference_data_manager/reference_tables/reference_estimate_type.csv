@@ -1,0 +1,8 @@
+ID,Estimate Type,Compliance Asset Id,Description
+1,Reanalyzed,,Indicator was calculated by the DAIU team
+2,Reported,,
+3,Modeled,,
+4,Adjusted,,
+5,Estimated,,
+6,External Reanalysis (DHS Stat Compiler),,Indicator was calculated by ICF and extracted from StatCompiler
+7,External Reanalysis,,Indicator was calculated from the dataset by an external party (e.g. WHO or a country office on our behalf)

@@ -1,0 +1,8 @@
+ID,Data Source Decision Category,Compliance Asset Id,Data Source Category Code
+1,Accepted,,ACCEPTED
+2,Follow-up,,FOLLOW_UP
+3,Pending Review,,PENDING_REVIEW
+4,Rejected,,REJECTED
+5,Preliminary,,PRELIMINARY
+6,Indicator Not Found,,NF
+7,Filed,,FILED

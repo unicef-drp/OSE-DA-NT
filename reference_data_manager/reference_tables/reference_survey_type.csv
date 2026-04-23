@@ -1,0 +1,75 @@
+ID,Survey Type (Expanded),Survey Type,Survey Type (Display Name),Compliance Asset Id,Survey Type Code
+1,Multiple Indicator Cluster Survey,MICS,MICS,,MICS
+2,Demographic and Health Survey,DHS,DHS,,DHS
+3,Combined Demographic and Health Survey and Mulitple Indicator Cluster Survey,MICS-DHS,MICS-DHS,,MICSD
+4,Living Standards Measurement Survey,LSMS,LSMS,,LSMS
+5,Surveillance System,Surveillance,Surveillance System,,SUV
+6,Other Survey,Other,OS,,OS
+7,Iodine Status Focused Survey,Iodine Survey,Iodine Survey,,IOD
+8,HIV Service Provision Assessment,HIV SPA,HIV SPA,,HIVSP
+9,National Health and Nutrition Examination Survey,NHANES,NHANES,,NHANE
+11,Pan Arab Project for Family Health,PAPFAM,PAPFAM,,PAPFA
+13,Special Demograhic and Health Survey,SDHS,Special DHS,,SDHS
+14,Interim Demographic and Health Survey,IDHS,Interim DHS,,IDHS
+15,World Health Survey,WHS,WHS,,WHS
+16,DHS-Style Survey,DHS-Style,DHS-Style Survey,,DHSSS
+17,"Knowledge, Attitudes and Practices Survey",KAP,KAP,,KAP
+18,Core Welfare Indicator Survey,CWIQ,CWIQ,,CWIQ
+19,STEPS Global School-Based Student Health Survey,STEPS GSHS,GSHS,,GSHS
+20,Comprehensive Food Security and Vulnerability Analysis,CFSVA,Comprehensive Food Security and Vulnerability Analysis,,CFSVA
+21,Vitamin A Deficiency Survey,VAD Survey,VAD Survey,,VADS
+22,MICS-Style Survey,MICS-Style,MICS-Style Survey,,MICSS
+23,Continuous Demographic and Health Survey,CDHS,Continuous DHS,,CDHS
+24,Education Management Information Systems,EMIS,Education Management Information Systems,,EMIS
+25,AIDS Indicator Survey,AIS,AIDS Indicator Survey,,AIS
+26,"Performance, Monitoring, and Accountability Survey",PMA,PMA2020,,PMA
+27,Reproductive Health Survey,RHS,RHS,,RHS
+28,Civil Registration and Vital Statistics,CRVS,CRVS,,CRVS
+29,Census,Census,Census,,CENSU
+30,Service Provision Assessment,SPA,SPA,,SPA
+31,Malaria Indicator Survey,MIS,MIS,,MIS
+32,Statistical Yearbook,Statistical Yearbook,Statistical Yearbook,,STYR
+33,Service Availability and Readiness Assessment,SARA,SARA,,SARA
+34,Service Availability Mapping,SAM,SAM,,SAM
+35,Population-based HIV Impact Assessment,PHIA,PHIA,,PHIA
+36,STEPS Noncommunicable Disease Risk Factors Survey,STEPS NCD Risk Factors Survey,STEPS NCD,,NCD
+37,WHO European Childhood Obesity Surveillance Initiative (COSI),COSI,WHO COSI,,COSI
+38,World Fertility Survey,WFS,World Fertility Survey,,WFS
+39,Voilence against Children Survey,VACS,VAC Survey,,VACS
+40,Women's Health Survey,Women's Health Survey,Women's Health Survey,,WOMHS
+41,Labour Force Survey,LFS,LFS,,LFS
+42,Post-Event Coverage Survey,PECS,PECS,,PECS
+43,European Health Interview Survey,EHIS,EHIS,,EHIS
+44,Intercensal Survey,Intercensal Survey,Intercensal Survey,,ICS
+45,International Integrated Public Use Microdata Series Census,IPUMS Census,IPUMS Census,,IPCEN
+46,Caribbean Region HIV and AIDS Service Provision Assessment Surveys,HSPA,HSPA,,HSPA
+47,SDG Monitoring Platform,SDG Monitoring,SDG MN,,SDGM
+48,Standardized Monitoring and Assessment of Relief and Transitions Survey,SMART,SMART,,SMART
+50,National Nutrition Survey,NNS,NNS,,NNS
+51,Households International Migration Surveys in the Mediterranean countries,MED-HIMS,MED-HIMS,,HIMS
+52,Priority Survey,Priority Survey,Priority Survey,,PRIOR
+53,Post-Enumeration Survey,Post-Enumeration Survey,Post-Enumeration Survey,,PES
+54,Fortification Assessment Coverage Toolkit,FACT Survey,FACT Survey,,FACT
+55,Young Lives Survey,Young Lives Survey,YL Survey,,YLS
+56,Combined Food Security and Vulnerability Analysis and Standardized Monitoring and Assessment of Relief and Transitions Survey,CFSVA-SMART,CFSVA-SMART,,CFSMA
+57,Gulf Family Health Survey,GFHS,GFHS,,GFHS
+58,In Depth Study (DHS),In Depth (DHS),In Depth Study (DHS),,IDDHS
+59,Food Insecurity Experience Scale Survey ,FIES,FIES,,FIES
+60,Maternal and Child Health Service Provision Assessment,MCH SPA,MCH SPA,,MCHSP
+61,European Union Statistics on Income and Living Conditions,EU-SILC,EU-SILC,,EUSIL
+62,LSMS-Supported High-Frequency Phone Surveys,LSMS-HFPS,LSMS-HFPS,,LHFPS
+63,Multiple Indicator Cluster Survey - Plus ,MICS Plus,MICS Plus,,MICSP
+64,Experimental Demographic and Health Survey,ExDHS,ExDHS,,EXDHS
+65,Service Delivery Indicators Survey,SDI,SDI,,SDI
+66,Semi-Quantitative Evaluation of Access and Coverage,SQUEAC,SQUEAC,,SQUEA
+67,Simplified Lot Quality Assurance Sampling Evaluation of Access and Coverage,SLEAC,SLEAC,,SLEAC
+68,Multi-Sectoral Needs Assessment,MSNA,MSNA,,MSNA
+69,Country Poverty Assessment,Country Poverty Assessment,CPA,,CPA
+70,Enquête Harmonisée sur les  Conditions de Vie des Ménages (Living Standards Measurment Survey),EHCVM-LSMS,EHCVM-LSMS,,EHCVM
+71,WHO Study on Global AGEing and Adult Health,SAGE,SAGE,,SAGE
+72,Agricultural Census,Agricultural Census,Agricultural Census,,AGCEN
+73,World Health Organization Health Behavior in School-aged Children,HBSC,HBSC,,HBSC
+74,Health Management Information System - District Health Information Software Version 2,HMIS-DHIS2,HMIS-DHIS2,,DHIS2
+75,Health Management Information System,HMIS,HMIS,,HMIS
+76,Medical Birth/Death Registry,Medical Birth/Death Registry,Medical Birth/Death Registry,,MEDRE
+77,Standardised Expanded Nutrition Survey,,SENS,,SENS

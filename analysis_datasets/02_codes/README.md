@@ -120,7 +120,7 @@ Each output dataset includes 12 analytical dimension columns, populated by a
 two-layer strategy:
 
 - **Layer 1 (reference lookup):** The `standard_disagg` ID from each source row
-  is joined to `reference_data_manager/indicators/reference_disaggregations.csv`.
+  is joined to `reference_data_manager/reference_tables/reference_disaggregations.csv`.
   HELIX_* columns provide the standard DW dimensions; OSE_* columns provide
   nutrition-specific dimensions.
 
@@ -158,5 +158,5 @@ to `r_raw` as a substitute for `r`.
 
 - **R packages:** dplyr, stringr, readr, arrow, haven, tibble
 - **Config:** `profile_OSE-DA-NT.R` (reads `~/.config/user_config.yml`)
-- **Reference data:** `reference_data_manager/indicators/reference_disaggregations.csv`
+- **Reference data:** `reference_data_manager/reference_tables/reference_disaggregations.csv`
 - **Upstream inputs:** CMRS Stata files (path set by `cmrsInputDir` in profile)

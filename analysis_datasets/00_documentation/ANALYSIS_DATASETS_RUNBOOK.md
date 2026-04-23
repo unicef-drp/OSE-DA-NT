@@ -126,8 +126,8 @@ This rule resolved the final IOD accepted-key collisions in April 2026.
 
 | Asset | Path |
 |-------|------|
-| Disaggregation mapping | `reference_data_manager/indicators/reference_disaggregations.csv` |
-| Indicator directory | `reference_data_manager/indicators/directory_indicator.csv` |
+| Disaggregation mapping | `reference_data_manager/reference_tables/reference_disaggregations.csv` |
+| Indicator directory | `reference_data_manager/reference_tables/directory_indicator.csv` |
 | User config | `~/.config/user_config.yml` |
 | Path profile | `profile_OSE-DA-NT.R` |
 

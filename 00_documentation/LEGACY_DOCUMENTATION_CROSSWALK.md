@@ -67,8 +67,8 @@ The legacy corpus repeatedly relies on these structured assets:
 - Indicator appendix files describing custodianship, time-trend status, and available disaggregations.
 
 Current repo alignment:
-- reference_data_manager/indicators/directory_indicator.csv
-- reference_data_manager/indicators/reference_disaggregations.csv
+- reference_data_manager/reference_tables/directory_indicator.csv
+- reference_data_manager/reference_tables/reference_disaggregations.csv
 
 The repo should eventually document whether additional legacy reference assets also need first-class repository homes.
 
