@@ -21,11 +21,19 @@ load_country_names <- function() {
 # Very low <2.5%, Low 2.5-<10%, Medium 10-<20%, High 20-<30%, Very high >=30%
 # ---------------------------------------------------------------------------
 threshold_colors <- c(
-  "Very low"  = "#2DC937",
-  "Low"       = "#99C140",
-  "Medium"    = "#E7B416",
-  "High"      = "#DB7B2B",
-  "Very high" = "#CC3232"
+  "Very low"  = "#1a9641",
+  "Low"       = "#a6d96a",
+  "Medium"    = "#ffffbf",
+  "High"      = "#fd8d3c",
+  "Very high" = "#b10026"
+)
+
+threshold_labels <- c(
+  "Very low"  = "Very low (<2.5%)",
+  "Low"       = "Low (2.5\u2013<10%)",
+  "Medium"    = "Medium (10\u2013<20%)",
+  "High"      = "High (20\u2013<30%)",
+  "Very high" = "Very high (\u226530%)"
 )
 
 threshold_levels <- c("Very low", "Low", "Medium", "High", "Very high")
@@ -195,7 +203,8 @@ build_country_scatterplot <- function(country_data,
   } else if (color_by == "threshold") {
     color_mapping <- ggplot2::aes(color = threshold)
     color_scale   <- ggplot2::scale_color_manual(
-      values = threshold_colors, name = "Prevalence\nclassification", drop = FALSE
+      values = threshold_colors, labels = threshold_labels,
+      name = "Prevalence\nclassification", drop = FALSE
     )
   } else {
     color_mapping <- ggplot2::aes(color = color_val)
@@ -873,35 +882,43 @@ build_scatterplot <- function(reg_rep,
     gganimate::transition_reveal(year)
 }
 
-# Render base GIF and MP4
-render_base_animations <- function(p, file_prefix, output_dir) {
+# Render base GIF and/or MP4
+# produce_gif / produce_mp4: set by the calling script (defaults TRUE for back-compat)
+render_base_animations <- function(p, file_prefix, output_dir,
+                                   produce_gif = TRUE, produce_mp4 = TRUE) {
   gif_path <- file.path(output_dir, paste0(file_prefix, "_regions_bubble.gif"))
   mp4_path <- file.path(output_dir, paste0(file_prefix, "_regions_bubble.mp4"))
 
-  anim_obj <- gganimate::animate(
-    p,
-    nframes     = 120,
-    fps         = 6,
-    start_pause = 10,
-    end_pause   = 10,
-    width       = 900,
-    height      = 600,
-    renderer    = gifski_renderer(),
-    dev         = "ragg_png",
-    bg          = "white"
-  )
-  gganimate::anim_save(gif_path, animation = anim_obj)
+  if (produce_gif) {
+    anim_obj <- gganimate::animate(
+      p,
+      nframes     = 120,
+      fps         = 6,
+      start_pause = 10,
+      end_pause   = 10,
+      width       = 900,
+      height      = 600,
+      renderer    = gifski_renderer(),
+      dev         = "ragg_png",
+      bg          = "white"
+    )
+    gganimate::anim_save(gif_path, animation = anim_obj)
+    message("  Saved: ", gif_path)
+  }
 
-  gganimate::animate(
-    p,
-    nframes  = 120,
-    fps      = 10,
-    width    = 900,
-    height   = 600,
-    renderer = av_renderer(mp4_path),
-    dev      = "ragg_png",
-    bg       = "white"
-  )
+  if (produce_mp4) {
+    gganimate::animate(
+      p,
+      nframes  = 120,
+      fps      = 10,
+      width    = 900,
+      height   = 600,
+      renderer = av_renderer(mp4_path),
+      dev      = "ragg_png",
+      bg       = "white"
+    )
+    message("  Saved: ", mp4_path)
+  }
 
   gif_path
 }

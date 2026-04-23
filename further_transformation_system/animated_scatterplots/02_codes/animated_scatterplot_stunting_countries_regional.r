@@ -42,8 +42,8 @@ render_country_regional_scatterplots(
   focus_isos           = focus_isos_regional_default,
   focus_isos_by_region = focus_isos_by_region,
   color_by             = "threshold",
-  produce_gif          = TRUE,
-  produce_mp4          = TRUE
+  produce_gif          = .produce_gif,
+  produce_mp4          = .produce_mp4
 )
 
 message("Country-level stunting animated scatterplots (regional) complete.")

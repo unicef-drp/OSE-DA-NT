@@ -17,7 +17,8 @@ p <- build_scatterplot(
   y_limits      = c(0, 25)
 )
 
-gif_path <- render_base_animations(p, "overweight", outputdir_animated_scatterplots)
+gif_path <- render_base_animations(p, "overweight", outputdir_animated_scatterplots,
+                                   produce_gif = .produce_gif, produce_mp4 = .produce_mp4)
 
 render_looped_panel_version(
   gif_path    = gif_path,

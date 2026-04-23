@@ -16,7 +16,8 @@ p <- build_scatterplot(
   focus_colors  = c("South Asia" = "#0072B2", "East Asia and Pacific" = "#E69F00")
 )
 
-gif_path <- render_base_animations(p, "stunting", outputdir_animated_scatterplots)
+gif_path <- render_base_animations(p, "stunting", outputdir_animated_scatterplots,
+                                   produce_gif = .produce_gif, produce_mp4 = .produce_mp4)
 
 render_looped_panel_version(
   gif_path    = gif_path,

@@ -177,6 +177,12 @@ source(file.path(dwCodesScatterplots, "0_scatterplot_functions.r"))
 .population  <- load_population()
 
 #------------------------------------------------------------------------------
+# Output format controls — set here for all worker scripts
+#------------------------------------------------------------------------------
+.produce_gif <- FALSE
+.produce_mp4 <- TRUE
+
+#------------------------------------------------------------------------------
 # Source worker scripts
 #------------------------------------------------------------------------------
 # Regional (UNICEF reporting regions as data points)

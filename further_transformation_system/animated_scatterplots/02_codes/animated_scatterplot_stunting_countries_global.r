@@ -110,9 +110,7 @@ message("  Focus  (increase in number, top ", top_n_focus, "): ", paste(focus_is
 message("  Labels (increase in prevalence, top ", top_n_label, "): ", paste(label_isos_increase_prevalence, collapse = ", "))
 message("  Focus  (increase in prevalence, top ", top_n_focus, "): ", paste(focus_isos_increase_prevalence, collapse = ", "))
 
-# Output controls
-produce_gif_output <- TRUE
-produce_mp4_output <- FALSE
+# Output format is controlled by .produce_gif / .produce_mp4 set in 1_execute.r
 
 # -----------------------------------------------------------------------------
 # Global (all-countries) figures, one per focus set
@@ -127,50 +125,50 @@ render_country_global_scatterplot(
   focus_isos      = focus_isos_drop_number,
   top_n_per_region = 1000,
   color_by        = "threshold",
-  produce_gif     = produce_gif_output,
-  produce_mp4     = produce_mp4_output
+  produce_gif     = .produce_gif,
+  produce_mp4     = .produce_mp4
 )
 
-render_country_global_scatterplot(
-  country_data    = country_data,
-  indicator_label = "stunting_drop_prevalence",
-  y_axis_label    = "Stunting prevalence (% <-2 height-for-age z-score)",
-  all_title       = "Child stunting by country: top 10 largest prevalence drop (2000-2024)",
-  output_dir      = outdir_stunting_countries,
-  label_isos      = label_isos_drop_prevalence,
-  focus_isos      = focus_isos_drop_prevalence,
-  top_n_per_region = 1000,
-  color_by        = "threshold",
-  produce_gif     = produce_gif_output,
-  produce_mp4     = produce_mp4_output
-)
+# render_country_global_scatterplot(
+#   country_data    = country_data,
+#   indicator_label = "stunting_drop_prevalence",
+#   y_axis_label    = "Stunting prevalence (% <-2 height-for-age z-score)",
+#   all_title       = "Child stunting by country: top 10 largest prevalence drop (2000-2024)",
+#   output_dir      = outdir_stunting_countries,
+#   label_isos      = label_isos_drop_prevalence,
+#   focus_isos      = focus_isos_drop_prevalence,
+#   top_n_per_region = 1000,
+#   color_by        = "threshold",
+#   produce_gif     = .produce_gif,
+#   produce_mp4     = .produce_mp4
+# )
 
-render_country_global_scatterplot(
-  country_data    = country_data,
-  indicator_label = "stunting_increase_number",
-  y_axis_label    = "Stunting prevalence (% <-2 height-for-age z-score)",
-  all_title       = "Child stunting by country: top 10 largest increase in number affected (2000-2024)",
-  output_dir      = outdir_stunting_countries,
-  label_isos      = label_isos_increase_number,
-  focus_isos      = focus_isos_increase_number,
-  top_n_per_region = 1000,
-  color_by        = "threshold",
-  produce_gif     = produce_gif_output,
-  produce_mp4     = produce_mp4_output
-)
+# render_country_global_scatterplot(
+#   country_data    = country_data,
+#   indicator_label = "stunting_increase_number",
+#   y_axis_label    = "Stunting prevalence (% <-2 height-for-age z-score)",
+#   all_title       = "Child stunting by country: top 10 largest increase in number affected (2000-2024)",
+#   output_dir      = outdir_stunting_countries,
+#   label_isos      = label_isos_increase_number,
+#   focus_isos      = focus_isos_increase_number,
+#   top_n_per_region = 1000,
+#   color_by        = "threshold",
+#   produce_gif     = .produce_gif,
+#   produce_mp4     = .produce_mp4
+# )
 
-render_country_global_scatterplot(
-  country_data    = country_data,
-  indicator_label = "stunting_increase_prevalence",
-  y_axis_label    = "Stunting prevalence (% <-2 height-for-age z-score)",
-  all_title       = "Child stunting by country: top 10 largest prevalence increase (2000-2024)",
-  output_dir      = outdir_stunting_countries,
-  label_isos      = label_isos_increase_prevalence,
-  focus_isos      = focus_isos_increase_prevalence,
-  top_n_per_region = 1000,
-  color_by        = "threshold",
-  produce_gif     = produce_gif_output,
-  produce_mp4     = produce_mp4_output
-)
+# render_country_global_scatterplot(
+#   country_data    = country_data,
+#   indicator_label = "stunting_increase_prevalence",
+#   y_axis_label    = "Stunting prevalence (% <-2 height-for-age z-score)",
+#   all_title       = "Child stunting by country: top 10 largest prevalence increase (2000-2024)",
+#   output_dir      = outdir_stunting_countries,
+#   label_isos      = label_isos_increase_prevalence,
+#   focus_isos      = focus_isos_increase_prevalence,
+#   top_n_per_region = 1000,
+#   color_by        = "threshold",
+#   produce_gif     = .produce_gif,
+#   produce_mp4     = .produce_mp4
+# )
 
 message("Country-level stunting animated scatterplots (global) complete.")
