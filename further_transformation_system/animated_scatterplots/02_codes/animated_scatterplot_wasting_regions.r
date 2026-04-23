@@ -6,7 +6,8 @@
 
 message("Building animated scatterplot: wasting")
 
-reg_rep <- load_wasting_series(wasting_csv_path, .crosswalk, .population)
+reg_rep <- load_wasting_series(wasting_csv_path, .crosswalk, .population,
+                               year_min = 2000, year_max = 2024)
 
 p <- build_scatterplot(
   reg_rep,

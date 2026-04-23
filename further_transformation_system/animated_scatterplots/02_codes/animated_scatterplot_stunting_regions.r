@@ -5,7 +5,8 @@
 
 message("Building animated scatterplot: stunting")
 
-reg_rep <- load_regional_series("ANT_HAZ_NE2_MOD", .crosswalk, .population)
+reg_rep <- load_regional_series("ANT_HAZ_NE2_MOD", .crosswalk, .population,
+                                year_min = 2000, year_max = 2024)
 
 p <- build_scatterplot(
   reg_rep,

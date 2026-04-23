@@ -179,7 +179,11 @@ source(file.path(dwCodesScatterplots, "0_scatterplot_functions.r"))
 #------------------------------------------------------------------------------
 # Source worker scripts
 #------------------------------------------------------------------------------
-#source(file.path(dwCodesScatterplots, "animated_scatterplot_stunting.r"))
-#source(file.path(dwCodesScatterplots, "animated_scatterplot_overweight.r"))
-#source(file.path(dwCodesScatterplots, "animated_scatterplot_wasting.r"))
-source(file.path(dwCodesScatterplots, "animated_scatterplot_stunting_countries.r"))
+# Regional (UNICEF reporting regions as data points)
+#source(file.path(dwCodesScatterplots, "animated_scatterplot_stunting_regions.r"))
+#source(file.path(dwCodesScatterplots, "animated_scatterplot_overweight_regions.r"))
+#source(file.path(dwCodesScatterplots, "animated_scatterplot_wasting_regions.r"))
+
+# Country-level — global must be sourced before regional (loads country_data)
+source(file.path(dwCodesScatterplots, "animated_scatterplot_stunting_countries_global.r"))
+#source(file.path(dwCodesScatterplots, "animated_scatterplot_stunting_countries_regional.r"))

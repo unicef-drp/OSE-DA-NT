@@ -5,7 +5,8 @@
 
 message("Building animated scatterplot: overweight")
 
-reg_rep <- load_regional_series("ANT_WHZ_PO2_MOD", .crosswalk, .population)
+reg_rep <- load_regional_series("ANT_WHZ_PO2_MOD", .crosswalk, .population,
+                                year_min = 2000, year_max = 2024)
 
 p <- build_scatterplot(
   reg_rep,

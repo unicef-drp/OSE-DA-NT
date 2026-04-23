@@ -46,7 +46,9 @@ classify_threshold <- function(prev) {
 # and the UNICEF programming-region assignment.
 # ---------------------------------------------------------------------------
 load_country_series <- function(indicator_code, crosswalk, population,
-                                classification = "UNICEF_PROG_REG_GLOBAL") {
+                                classification = "UNICEF_PROG_REG_GLOBAL",
+                                year_min = NULL,
+                                year_max = NULL) {
   series_raw <- arrow::open_dataset(
     file.path(analysisDatasetsInputDir, "cmrs2_series_accepted.parquet")
   ) %>%
@@ -57,7 +59,11 @@ load_country_series <- function(indicator_code, crosswalk, population,
       year       = as.integer(TIME_PERIOD),
       prevalence = as.numeric(r) * 100
     ) %>%
-    dplyr::filter(!is.na(year), !is.na(prevalence), prevalence > 0)
+    dplyr::filter(
+      !is.na(year), !is.na(prevalence), prevalence > 0,
+      if (!is.null(year_min)) year >= year_min else TRUE,
+      if (!is.null(year_max)) year <= year_max else TRUE
+    )
 
   cw_region <- crosswalk %>%
     dplyr::filter(Classification == classification) %>%
@@ -82,6 +88,8 @@ load_country_series <- function(indicator_code, crosswalk, population,
 # country_data: data frame from load_country_series (or a region subset)
 # label_top_n : number of countries to label (by latest-year pop_affected)
 #               NULL = label all countries
+# label_isos  : optional explicit ISO3 vector for label selection; overrides
+#               label_top_n when provided
 # color_by    : "region" (colour bubbles by Region), "country" (single hue),
 #               or "threshold" (colour by prevalence classification)
 # ---------------------------------------------------------------------------
@@ -90,7 +98,9 @@ build_country_scatterplot <- function(country_data,
                                       plot_title,
                                       plot_subtitle = "Modeled estimates \u2014 Year: {round(frame_along)}",
                                       label_top_n   = NULL,
+                                      label_isos    = NULL,
                                       focus_top_n   = 3,
+                                      focus_isos    = NULL,
                                       color_by      = c("region", "country", "threshold"),
                                       y_limits      = NULL,
                                       overlap_threshold = 1.5,
@@ -105,19 +115,25 @@ build_country_scatterplot <- function(country_data,
     dplyr::filter(year == latest_year) %>%
     dplyr::arrange(dplyr::desc(pop_affected))
 
-  if (!is.null(label_top_n) && label_top_n < nrow(ranked)) {
+  if (!is.null(label_isos)) {
+    label_isos <- intersect(label_isos, ranked$REF_AREA)
+  } else if (!is.null(label_top_n) && label_top_n < nrow(ranked)) {
     label_isos <- ranked$REF_AREA[seq_len(label_top_n)]
   } else {
     label_isos <- ranked$REF_AREA
   }
 
-  # Determine focus countries (top N by burden per region) --------------
-  focus_isos <- ranked %>%
-    dplyr::group_by(Region) %>%
-    dplyr::slice_max(order_by = pop_affected, n = focus_top_n,
-                     with_ties = FALSE) %>%
-    dplyr::ungroup() %>%
-    dplyr::pull(REF_AREA)
+  # Determine focus countries (top N by burden per region, or explicit set) ----
+  if (!is.null(focus_isos)) {
+    focus_isos <- intersect(focus_isos, ranked$REF_AREA)
+  } else {
+    focus_isos <- ranked %>%
+      dplyr::group_by(Region) %>%
+      dplyr::slice_max(order_by = pop_affected, n = focus_top_n,
+                       with_ties = FALSE) %>%
+      dplyr::ungroup() %>%
+      dplyr::pull(REF_AREA)
+  }
 
   # Prevalence classification (used when color_by = "threshold") --------
   if (color_by == "threshold") {
@@ -321,39 +337,46 @@ build_country_scatterplot <- function(country_data,
 }
 
 # ---------------------------------------------------------------------------
-# Render country-level scatterplots: one "all countries" + per-region plots
+# Render the all-countries (global) country-level scatterplot
 #
 # country_data     : full data frame from load_country_series
 # indicator_label  : short indicator name for filenames, e.g. "stunting"
 # y_axis_label     : y-axis text
-# all_title        : plot title for the all-countries plot
-# region_title_fn  : function(region_name) → plot title for regional plots
+# all_title        : plot title
 # output_dir       : destination folder
-# label_top_n_all  : how many countries to label in the all-countries view
-# max_countries_per_plot : if a region has more countries than this, only the
-#                    top N by pop_affected are labelled (all are still plotted)
+# label_top_n_all  : how many countries to label
+# label_isos       : optional explicit ISO3 vector to label in the all-countries
+#                    view (overrides label_top_n_all when provided)
+# focus_top_n      : top N per region to bold-highlight (auto, when focus_isos is NULL)
+# focus_isos       : explicit ISO3 vector of countries to bold-highlight;
+#                    overrides focus_top_n when provided
+# top_n_per_region : max countries per region included in the plot
+# produce_gif      : whether to write a .gif output
+# produce_mp4      : whether to write a .mp4 output
 # ---------------------------------------------------------------------------
-render_country_scatterplots <- function(country_data,
-                                        indicator_label,
-                                        y_axis_label,
-                                        all_title,
-                                        region_title_fn = function(r) paste0(r, ": country trends"),
-                                        output_dir,
-                                        label_top_n_all = 15,
-                                        focus_top_n = 3,
-                                        top_n_per_region = 10,
-                                        color_by = NULL,
-                                        y_limits = NULL,
-                                        nframes  = 120,
-                                        fps_gif  = 6,
-                                        fps_mp4  = 10,
-                                        plot_width  = 900,
-                                        plot_height = 600) {
+render_country_global_scatterplot <- function(country_data,
+                                              indicator_label,
+                                              y_axis_label,
+                                              all_title,
+                                              output_dir,
+                                              label_top_n_all  = 15,
+                                              label_isos       = NULL,
+                                              focus_top_n      = 3,
+                                              focus_isos       = NULL,
+                                              top_n_per_region = 10,
+                                              color_by         = NULL,
+                                              y_limits         = NULL,
+                                              nframes          = 120,
+                                              fps_gif          = 6,
+                                              fps_mp4          = 10,
+                                              produce_gif      = TRUE,
+                                              produce_mp4      = TRUE,
+                                              plot_width       = 900,
+                                              plot_height      = 600) {
 
   dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   out_files <- character(0)
 
-  # --- 1. All countries (top N per region by burden) --------------------
   latest_year_all <- max(country_data$year, na.rm = TRUE)
   top_isos_all <- country_data %>%
     dplyr::filter(year == latest_year_all) %>%
@@ -371,7 +394,9 @@ render_country_scatterplots <- function(country_data,
     y_axis_label = y_axis_label,
     plot_title   = all_title,
     label_top_n  = label_top_n_all,
+    label_isos   = label_isos,
     focus_top_n  = focus_top_n,
+    focus_isos   = focus_isos,
     color_by     = if (!is.null(color_by)) color_by else "region",
     y_limits     = y_limits,
     plot_width   = plot_width,
@@ -379,46 +404,103 @@ render_country_scatterplots <- function(country_data,
   )
 
   prefix_all <- paste0(indicator_label, "_countries_all")
-  gif_all    <- file.path(output_dir, paste0(prefix_all, ".gif"))
-  mp4_all    <- file.path(output_dir, paste0(prefix_all, ".mp4"))
 
-  anim_all <- gganimate::animate(
-    p_all, nframes = nframes, fps = fps_gif,
-    start_pause = 10, end_pause = 10,
-    width = plot_width, height = plot_height,
-    renderer = gifski_renderer(), dev = "ragg_png", bg = "white"
-  )
-  gganimate::anim_save(gif_all, animation = anim_all)
-  gganimate::animate(
-    p_all, nframes = nframes, fps = fps_mp4,
-    width = plot_width, height = plot_height,
-    renderer = av_renderer(mp4_all), dev = "ragg_png", bg = "white"
-  )
-  out_files <- c(out_files, gif_all, mp4_all)
-  message("  Saved: ", gif_all)
+  if (produce_gif) {
+    gif_all  <- file.path(output_dir, paste0(prefix_all, ".gif"))
+    anim_all <- gganimate::animate(
+      p_all, nframes = nframes, fps = fps_gif,
+      start_pause = 10, end_pause = 10,
+      width = plot_width, height = plot_height,
+      renderer = gifski_renderer(), dev = "ragg_png", bg = "white"
+    )
+    gganimate::anim_save(gif_all, animation = anim_all)
+    out_files <- c(out_files, gif_all)
+    message("  Saved: ", gif_all)
+  }
 
-  # --- 2. Per-region ---------------------------------------------------
+  if (produce_mp4) {
+    mp4_all <- file.path(output_dir, paste0(prefix_all, ".mp4"))
+    gganimate::animate(
+      p_all, nframes = nframes, fps = fps_mp4,
+      width = plot_width, height = plot_height,
+      renderer = av_renderer(mp4_all), dev = "ragg_png", bg = "white"
+    )
+    out_files <- c(out_files, mp4_all)
+    message("  Saved: ", mp4_all)
+  }
+
+  invisible(out_files)
+}
+
+# ---------------------------------------------------------------------------
+# Render per-region country-level scatterplots
+#
+# country_data         : full data frame from load_country_series
+# indicator_label      : short indicator name for filenames, e.g. "stunting"
+# y_axis_label         : y-axis text
+# region_title_fn      : function(region_name) → plot title for each region
+# output_dir           : destination folder
+# focus_top_n          : top N per region to bold-highlight (auto fallback)
+# focus_isos           : ISO3 vector applied as the highlight set across all
+#                        regions (overrides focus_top_n when provided)
+# focus_isos_by_region : named list of ISO3 vectors for per-region overrides,
+#                        e.g. list("South Asia" = c("IND", "PAK", "BGD"))
+#                        Takes precedence over focus_isos for that region.
+# top_n_per_region     : max countries per region included in the plot
+# produce_gif          : whether to write .gif outputs
+# produce_mp4          : whether to write .mp4 outputs
+# ---------------------------------------------------------------------------
+render_country_regional_scatterplots <- function(country_data,
+                                                  indicator_label,
+                                                  y_axis_label,
+                                                  region_title_fn      = function(r) paste0(r, ": country trends"),
+                                                  output_dir,
+                                                  focus_top_n          = 3,
+                                                  focus_isos           = NULL,
+                                                  focus_isos_by_region = list(),
+                                                  top_n_per_region     = 10,
+                                                  color_by             = NULL,
+                                                  y_limits             = NULL,
+                                                  nframes              = 120,
+                                                  fps_gif              = 6,
+                                                  fps_mp4              = 10,
+                                                  produce_gif          = TRUE,
+                                                  produce_mp4          = TRUE,
+                                                  plot_width           = 900,
+                                                  plot_height          = 600) {
+
+  dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+  out_files <- character(0)
+
   latest_year <- max(country_data$year, na.rm = TRUE)
-  regions <- sort(unique(country_data$Region))
+  regions     <- sort(unique(country_data$Region))
+
   for (reg in regions) {
     reg_all <- country_data %>% dplyr::filter(Region == reg)
     n_total <- length(unique(reg_all$REF_AREA))
 
-    # Keep only top N countries by burden in the latest year
     top_isos <- reg_all %>%
       dplyr::filter(year == latest_year) %>%
       dplyr::slice_max(order_by = pop_affected, n = top_n_per_region,
                        with_ties = FALSE) %>%
       dplyr::pull(REF_AREA)
-    reg_data <- reg_all %>% dplyr::filter(REF_AREA %in% top_isos)
+    reg_data   <- reg_all %>% dplyr::filter(REF_AREA %in% top_isos)
     n_countries <- length(unique(reg_data$REF_AREA))
     message("  Building ", reg, " (top ", n_countries, " of ", n_total, " countries)")
+
+    # Region-specific highlight set: by-region override > global focus_isos > auto top-N
+    reg_focus <- if (reg %in% names(focus_isos_by_region)) {
+      focus_isos_by_region[[reg]]
+    } else {
+      focus_isos
+    }
 
     p_reg <- build_country_scatterplot(
       reg_data,
       y_axis_label = y_axis_label,
       plot_title   = region_title_fn(reg),
       focus_top_n  = focus_top_n,
+      focus_isos   = reg_focus,
       color_by     = if (!is.null(color_by)) color_by else "country",
       y_limits     = y_limits,
       plot_width   = plot_width,
@@ -427,26 +509,102 @@ render_country_scatterplots <- function(country_data,
 
     safe_name  <- tolower(gsub("[^A-Za-z0-9]+", "_", reg))
     prefix_reg <- paste0(indicator_label, "_countries_", safe_name)
-    gif_reg    <- file.path(output_dir, paste0(prefix_reg, ".gif"))
-    mp4_reg    <- file.path(output_dir, paste0(prefix_reg, ".mp4"))
 
-    anim_reg <- gganimate::animate(
-      p_reg, nframes = nframes, fps = fps_gif,
-      start_pause = 10, end_pause = 10,
-      width = plot_width, height = plot_height,
-      renderer = gifski_renderer(), dev = "ragg_png", bg = "white"
-    )
-    gganimate::anim_save(gif_reg, animation = anim_reg)
-    gganimate::animate(
-      p_reg, nframes = nframes, fps = fps_mp4,
-      width = plot_width, height = plot_height,
-      renderer = av_renderer(mp4_reg), dev = "ragg_png", bg = "white"
-    )
-    out_files <- c(out_files, gif_reg, mp4_reg)
-    message("  Saved: ", gif_reg)
+    if (produce_gif) {
+      gif_reg  <- file.path(output_dir, paste0(prefix_reg, ".gif"))
+      anim_reg <- gganimate::animate(
+        p_reg, nframes = nframes, fps = fps_gif,
+        start_pause = 10, end_pause = 10,
+        width = plot_width, height = plot_height,
+        renderer = gifski_renderer(), dev = "ragg_png", bg = "white"
+      )
+      gganimate::anim_save(gif_reg, animation = anim_reg)
+      out_files <- c(out_files, gif_reg)
+      message("  Saved: ", gif_reg)
+    }
+
+    if (produce_mp4) {
+      mp4_reg <- file.path(output_dir, paste0(prefix_reg, ".mp4"))
+      gganimate::animate(
+        p_reg, nframes = nframes, fps = fps_mp4,
+        width = plot_width, height = plot_height,
+        renderer = av_renderer(mp4_reg), dev = "ragg_png", bg = "white"
+      )
+      out_files <- c(out_files, mp4_reg)
+      message("  Saved: ", mp4_reg)
+    }
   }
 
   invisible(out_files)
+}
+
+# ---------------------------------------------------------------------------
+# Convenience wrapper: render both global and regional country-level plots
+#
+# Calls render_country_global_scatterplot() then
+# render_country_regional_scatterplots() with the same shared parameters.
+# For per-figure control (different country sets, selective gif/mp4) call
+# those two functions directly.
+# ---------------------------------------------------------------------------
+render_country_scatterplots <- function(country_data,
+                                        indicator_label,
+                                        y_axis_label,
+                                        all_title,
+                                        region_title_fn  = function(r) paste0(r, ": country trends"),
+                                        output_dir,
+                                        label_top_n_all  = 15,
+                                        focus_top_n      = 3,
+                                        top_n_per_region = 10,
+                                        color_by         = NULL,
+                                        y_limits         = NULL,
+                                        nframes          = 120,
+                                        fps_gif          = 6,
+                                        fps_mp4          = 10,
+                                        produce_gif      = TRUE,
+                                        produce_mp4      = TRUE,
+                                        plot_width       = 900,
+                                        plot_height      = 600) {
+
+  out_global <- render_country_global_scatterplot(
+    country_data    = country_data,
+    indicator_label = indicator_label,
+    y_axis_label    = y_axis_label,
+    all_title       = all_title,
+    output_dir      = output_dir,
+    label_top_n_all  = label_top_n_all,
+    focus_top_n      = focus_top_n,
+    top_n_per_region = top_n_per_region,
+    color_by         = color_by,
+    y_limits         = y_limits,
+    nframes          = nframes,
+    fps_gif          = fps_gif,
+    fps_mp4          = fps_mp4,
+    produce_gif      = produce_gif,
+    produce_mp4      = produce_mp4,
+    plot_width       = plot_width,
+    plot_height      = plot_height
+  )
+
+  out_regional <- render_country_regional_scatterplots(
+    country_data    = country_data,
+    indicator_label = indicator_label,
+    y_axis_label    = y_axis_label,
+    region_title_fn  = region_title_fn,
+    output_dir       = output_dir,
+    focus_top_n      = focus_top_n,
+    top_n_per_region = top_n_per_region,
+    color_by         = color_by,
+    y_limits         = y_limits,
+    nframes          = nframes,
+    fps_gif          = fps_gif,
+    fps_mp4          = fps_mp4,
+    produce_gif      = produce_gif,
+    produce_mp4      = produce_mp4,
+    plot_width       = plot_width,
+    plot_height      = plot_height
+  )
+
+  invisible(c(out_global, out_regional))
 }
 
 # Load crosswalk and population once (cached in calling environment)
@@ -476,7 +634,9 @@ load_population <- function() {
 load_regional_series <- function(indicator_code, crosswalk, population,
                                  exclude_regions = c("Western Europe",
                                                      "Eastern Europe and Central Asia",
-                                                     "Sub-Saharan Africa")) {
+                                                     "Sub-Saharan Africa"),
+                                 year_min = NULL,
+                                 year_max = NULL) {
   series_raw <- arrow::open_dataset(
     file.path(analysisDatasetsInputDir, "cmrs2_series_accepted.parquet")
   ) %>%
@@ -487,7 +647,11 @@ load_regional_series <- function(indicator_code, crosswalk, population,
       year       = as.integer(TIME_PERIOD),
       prevalence = as.numeric(r) * 100
     ) %>%
-    dplyr::filter(!is.na(year), !is.na(prevalence), prevalence > 0)
+    dplyr::filter(
+      !is.na(year), !is.na(prevalence), prevalence > 0,
+      if (!is.null(year_min)) year >= year_min else TRUE,
+      if (!is.null(year_max)) year <= year_max else TRUE
+    )
 
   cw_regional <- crosswalk %>%
     dplyr::filter(Classification == "UNICEF_REP_REG_GLOBAL")
@@ -516,7 +680,9 @@ load_wasting_series <- function(csv_path, crosswalk, population,
                                 indicator_code = "NT_ANT_WHZ_NE2",
                                 exclude_regions = c("Western Europe",
                                                     "Eastern Europe and Central Asia",
-                                                    "Sub-Saharan Africa")) {
+                                                    "Sub-Saharan Africa"),
+                                year_min = NULL,
+                                year_max = NULL) {
   # Read the pre-aggregated CSV (columns: Classification, Region, INDICATOR,
   # SEX, OBS_VALUE, REF_AREA, TIME_PERIOD, OBS_FOOTNOTE)
   wst <- readr::read_csv(csv_path, show_col_types = FALSE) %>%
@@ -530,7 +696,11 @@ load_wasting_series <- function(csv_path, crosswalk, population,
       year       = as.integer(TIME_PERIOD),
       prevalence = as.numeric(OBS_VALUE)
     ) %>%
-    dplyr::filter(!is.na(year), !is.na(prevalence), prevalence > 0)
+    dplyr::filter(
+      !is.na(year), !is.na(prevalence), prevalence > 0,
+      if (!is.null(year_min)) year >= year_min else TRUE,
+      if (!is.null(year_max)) year <= year_max else TRUE
+    )
 
   # Harmonise CSV region names to the crosswalk names used elsewhere
   region_map <- c(
