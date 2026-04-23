@@ -1,6 +1,6 @@
 # Further Transformation System Runbook
 
-Last updated: 2026-04-16
+Last updated: 2026-04-23
 
 ## Scope
 
@@ -116,9 +116,16 @@ instructions for adding new indicators.
 
 1. 1_execute.r — loads libraries, resolves paths, sources shared functions
 2. 0_scatterplot_functions.r — shared data-loading, plotting, and rendering functions
-3. animated_scatterplot_stunting.r — stunting indicator (parquet → regional aggregation)
-4. animated_scatterplot_overweight.r — overweight indicator (parquet → regional aggregation)
-5. animated_scatterplot_wasting.r — wasting indicator (pre-aggregated CSV, special case)
+3. animated_scatterplot_stunting_regions.r — stunting regional indicator (parquet → regional aggregation)
+4. animated_scatterplot_overweight_regions.r — overweight regional indicator (parquet → regional aggregation)
+5. animated_scatterplot_wasting_regions.r — wasting regional indicator (pre-aggregated CSV, special case)
+6. animated_scatterplot_stunting_countries_global.r — stunting country-level global render
+7. animated_scatterplot_stunting_countries_regional.r — stunting country-level per-region renders
+
+Notes:
+- Global country script should be sourced before regional when `country_data` is shared.
+- `1_execute.r` controls output formats centrally via `.produce_gif` and `.produce_mp4`.
+- Current worker scripts load data with `year_min = 2000` and `year_max = 2024`.
 
 ### Input Sources
 
@@ -147,6 +154,23 @@ instructions for adding new indicators.
 - `{indicator}_frames_unicef/` — individual frame PNGs
 
 Indicators: stunting, overweight, wasting
+
+### Country-Level Stunting Outputs
+
+- `{indicator}_countries_all.{gif,mp4}` — global country render
+- `{indicator}_countries_{region_slug}.{gif,mp4}` — per-region country renders
+
+Country-level stunting global rendering currently supports category-specific
+ISO3 label/focus sets from 2000-2024 change metrics:
+- Top 10 labels per selected category
+- Top 3 bold focus countries per selected category
+
+Threshold-based country coloring uses legend labels with cutoffs:
+- Very low (<2.5%)
+- Low (2.5-<10%)
+- Medium (10-<20%)
+- High (20-<30%)
+- Very high (>=30%)
 
 ### Dependencies
 

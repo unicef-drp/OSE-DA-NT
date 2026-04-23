@@ -17,6 +17,38 @@ Or build a single domain:
 source("analysis_datasets/02_codes/2_build_cmrs2_bw.r")
 ```
 
+## Visual Schema
+
+```mermaid
+flowchart LR
+    A[CMRS Stata files\ncmrsInputDir] --> B[1_execute_conductor.r\nsource ordered build scripts]
+    R[reference_disaggregations.csv] --> C[0_layer2_utils.r\nmap + fallback dimensions]
+    C --> B
+
+    B --> D[2_build_cmrs2_*.r\nstandardize + write all-estimates + accepted parquets]
+    D --> E[3_preferred_*.r\nassign DATA_SOURCE_PRIORITY + LATEST_PRIORITY_SOURCE on accepted outputs]
+    E --> F[{analysisDatasetsOutputDir}\ntypically {nutritionRoot}/github/analysis_datasets]
+
+    F --> G[further_transformation_system/projections_progress_class/012_codes/1_execute.r]
+    F --> H[further_transformation_system/animated_scatterplots/02_codes/1_execute.r]
+    F --> I[adhoc_analysis/stunting_top20_briefing/02_codes/1_execute_conductor.r]
+```
+
+Analysis summary:
+- Harmonizes CMRS domain-specific source files into a consistent parquet schema.
+- Derives a fixed set of analytical dimensions via lookup plus fallback parsing rules.
+- Produces both all-estimates and accepted-only datasets, then adds preferred-source priority fields.
+
+Final outputs and storage:
+- Output root is `analysisDatasetsOutputDir` (normally `{nutritionRoot}/github/analysis_datasets`).
+- Core files include `cmrs2_series*.parquet`, `cmrs2_ant*.parquet`, `cmrs2_bw*.parquet`, `cmrs2_iod*.parquet`, `cmrs2_iycf*.parquet`.
+
+Used by other execute scripts:
+- Yes. This folder's outputs are direct inputs to:
+  - `further_transformation_system/projections_progress_class/012_codes/1_execute.r`
+  - `further_transformation_system/animated_scatterplots/02_codes/1_execute.r`
+  - `adhoc_analysis/stunting_top20_briefing/02_codes/1_execute_conductor.r`
+
 ## File Inventory
 
 | File | Purpose |
