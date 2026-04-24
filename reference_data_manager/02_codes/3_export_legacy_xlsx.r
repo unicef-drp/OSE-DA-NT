@@ -6,17 +6,15 @@
 #          so downstream consumers (e.g. Stata code, Power BI) keep working.
 #
 #          The wide computed crosswalk (output of 2_build_directory_crosswalk.r)
-#          is also written as both directory_crosswalk.xlsx and the legacy
-#          "DIRECTORY_CROSSWALK (Beta).xlsx" — the latter is the editable base
-#          (re-exported as-is so the SharePoint folder remains a complete copy).
+#          is also written as `directory_crosswalk.xlsx`.
 #
-# Outputs are written ONLY to the repo output mirror:
-#   {githubOutputRoot}/reference_data_manager/DIRECTORY_COUNTRY.xlsx
-#   {githubOutputRoot}/reference_data_manager/DIRECTORY_REGION.xlsx
-#   {githubOutputRoot}/reference_data_manager/DIRECTORY_INDICATOR.xlsx
-#   {githubOutputRoot}/reference_data_manager/DIRECTORY_CROSSWALK (Beta).xlsx
-#   {githubOutputRoot}/reference_data_manager/REFERENCE_*.xlsx
-#   {githubOutputRoot}/reference_data_manager/directory_crosswalk.xlsx (computed wide)
+# Outputs are written ONLY to the repo output mirror, under an `xlsx/`
+# subfolder:
+#   {githubOutputRoot}/reference_data_manager/xlsx/DIRECTORY_COUNTRY.xlsx
+#   {githubOutputRoot}/reference_data_manager/xlsx/DIRECTORY_REGION.xlsx
+#   {githubOutputRoot}/reference_data_manager/xlsx/DIRECTORY_INDICATOR.xlsx
+#   {githubOutputRoot}/reference_data_manager/xlsx/REFERENCE_*.xlsx
+#   {githubOutputRoot}/reference_data_manager/xlsx/directory_crosswalk.xlsx (computed wide)
 #
 # This script never writes to the legacy SharePoint Export folder. To update
 # SharePoint, copy files manually from the repo output mirror after review.
@@ -27,6 +25,9 @@ if (!exists("projectFolder", envir = .GlobalEnv)) {
 }
 
 stopifnot(exists("rdmInputDir"), exists("rdmOutputDir"))
+
+xlsx_out_dir <- file.path(rdmOutputDir, "xlsx")
+dir.create(xlsx_out_dir, recursive = TRUE, showWarnings = FALSE)
 
 # Mapping: repo csv (relative to rdmInputDir) -> legacy xlsx name + sheet name
 exports <- tibble::tribble(
@@ -51,8 +52,7 @@ exports <- tibble::tribble(
   "reference_tables/reference_year_assignment_method.csv",    "REFERENCE_YEAR_ASSIGNMENT_METHOD.xlsx", "REFERENCE_YEAR_ASSIGNMENT_METHO",
   "reference_tables/reference_years_of_survey.csv",           "REFERENCE_YEARS_OF_SURVEY.xlsx",    "REFERENCE_YEARS_OF_SURVEY",
   "reference_tables/directory_indicator.csv",                 "DIRECTORY_INDICATOR.xlsx",          "DIRECTORY_INDICATOR",
-  "reference_tables/reference_disaggregations.csv",           "REFERENCE_DISAGGREGATIONS.xlsx",    "REFERENCE_DISAGGREGATIONS",
-  "crosswalk/directory_crosswalk_base.csv",                   "DIRECTORY_CROSSWALK (Beta).xlsx",   "DIRECTORY_CROSSWALK (Beta)"
+  "reference_tables/reference_disaggregations.csv",           "REFERENCE_DISAGGREGATIONS.xlsx",    "REFERENCE_DISAGGREGATIONS"
 )
 
 write_xlsx_repo <- function(df, xlsx_name, sheet) {
@@ -63,8 +63,7 @@ write_xlsx_repo <- function(df, xlsx_name, sheet) {
   }
 
   # Write to repo output mirror only — never touch the original SharePoint folder.
-  out_repo <- file.path(rdmOutputDir, xlsx_name)
-  dir.create(dirname(out_repo), recursive = TRUE, showWarnings = FALSE)
+  out_repo <- file.path(xlsx_out_dir, xlsx_name)
   writexl::write_xlsx(stats::setNames(list(df), sheet), out_repo)
   message("Wrote: ", out_repo)
 }

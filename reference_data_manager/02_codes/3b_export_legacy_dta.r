@@ -10,12 +10,11 @@
 #          are migrated, but until then this keeps them refreshable from the
 #          repo without going through Access.
 #
-# Outputs (written ONLY to repo output mirror; never to SharePoint):
-#   {githubOutputRoot}/reference_data_manager/DIRECTORY_COUNTRY.dta
-#   {githubOutputRoot}/reference_data_manager/DIRECTORY_INDICATOR.dta
-#   {githubOutputRoot}/reference_data_manager/DIRECTORY_CROSSWALK (Beta).dta
-#   {githubOutputRoot}/reference_data_manager/REFERENCE_*.dta
-#   (18 files matching the legacy CND Import/ folder)
+# Outputs (written ONLY to repo output mirror under `dta/`; never to SharePoint):
+#   {githubOutputRoot}/reference_data_manager/dta/DIRECTORY_COUNTRY.dta
+#   {githubOutputRoot}/reference_data_manager/dta/DIRECTORY_INDICATOR.dta
+#   {githubOutputRoot}/reference_data_manager/dta/REFERENCE_*.dta
+#   {githubOutputRoot}/reference_data_manager/dta/directory_crosswalk.dta (computed wide)
 #
 # To update the legacy CND Import/ folder, copy from the repo output mirror
 # manually after review. This script never touches the SharePoint folder.
@@ -26,6 +25,9 @@ if (!exists("projectFolder", envir = .GlobalEnv)) {
 }
 
 stopifnot(exists("rdmInputDir"), exists("rdmOutputDir"))
+
+dta_out_dir <- file.path(rdmOutputDir, "dta")
+dir.create(dta_out_dir, recursive = TRUE, showWarnings = FALSE)
 
 # Mapping: repo csv (relative to rdmInputDir) -> legacy dta name
 # Subset matches the 18 .dta files historically produced to CND Import/.
@@ -61,8 +63,7 @@ sanitise_stata_names <- function(nms) {
 
 write_dta_repo <- function(df, dta_name) {
   names(df) <- sanitise_stata_names(names(df))
-  out_repo <- file.path(rdmOutputDir, dta_name)
-  dir.create(dirname(out_repo), recursive = TRUE, showWarnings = FALSE)
+  out_repo <- file.path(dta_out_dir, dta_name)
   haven::write_dta(df, out_repo)
   message("Wrote: ", out_repo)
 }
@@ -79,12 +80,12 @@ for (i in seq_len(nrow(dta_exports))) {
   write_dta_repo(df, dta_exports$dta_name[i])
 }
 
-# --- 2. Computed wide crosswalk --> DIRECTORY_CROSSWALK (Beta).dta ---------
+# --- 2. Computed wide crosswalk --> directory_crosswalk.dta ---------------
 wide_csv <- file.path(rdmOutputDir, "directory_crosswalk.csv")
 if (file.exists(wide_csv)) {
   wide <- readr::read_csv(wide_csv, show_col_types = FALSE,
                           col_types = readr::cols(.default = readr::col_character()))
-  write_dta_repo(wide, "DIRECTORY_CROSSWALK (Beta).dta")
+  write_dta_repo(wide, "directory_crosswalk.dta")
 } else {
   message("Skipping wide crosswalk dta export — run 2_build_directory_crosswalk.r first.")
 }

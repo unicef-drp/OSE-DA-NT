@@ -58,8 +58,6 @@ ID,Background Characteristics,Characteristic ID,Level,Compliance Asset Id,Descri
 57,Assistance at Delivery,del_assistance,Basic,,,Assistance at Delivery
 58,Area-Specific Wealth Quintile,residence_spec_windex5,Basic,,"DHS Description:
 
-Wealth index for urban/rural. As a response to criticism that a single wealth index (as provided by HV270 and HV271) is too urban in its construction and not able to distinguish the poorest of the poor from other poor households, this variable provides an urban- and rural-specific wealth index​
-
-",Area-Specific Wealth Quintile
+Wealth index for urban/rural. As a response to criticism that a single wealth index (as provided by HV270 and HV271) is too urban in its construction and not able to distinguish the poorest of the poor from other poor households, this variable provides an urban- and rural-specific wealth index",Area-Specific Wealth Quintile
 59,Breastfeeding Status,bfstatus,Basic,,,Breastfeeding Status
 60,Parity,parity,Basic,,,

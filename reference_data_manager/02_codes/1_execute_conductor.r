@@ -2,7 +2,7 @@
 # Script:  1_execute_conductor.r
 # Purpose: Orchestrator for the reference_data_manager pipeline.
 #          1. Build the wide directory_crosswalk.csv from the editable
-#             base csv + external classifications + SOFI progress.
+#             base csv + external classifications.
 #          2. Re-export every editable repo csv as a legacy-named xlsx so
 #             the SharePoint Export folder stays a complete drop-in copy.
 #          3. (Optional) Run a crosswalk check vs the latest archive snapshot.
@@ -34,6 +34,7 @@ suppressPackageStartupMessages({
 
 rdmCodes <- file.path(projectFolder, "reference_data_manager", "02_codes")
 
+source(file.path(rdmCodes, "0_validate_csvs.r"))
 source(file.path(rdmCodes, "2_build_directory_crosswalk.r"))
 source(file.path(rdmCodes, "3_export_legacy_xlsx.r"))
 source(file.path(rdmCodes, "3b_export_legacy_dta.r"))

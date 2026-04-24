@@ -58,11 +58,6 @@ JOBS: list[tuple[str, str | None, Path]] = [
     ("DIRECTORY_CROSSWALK (Beta).xlsx",       None, CROSSWALK / "directory_crosswalk_base.csv"),
 ]
 
-# Plain CSVs to copy verbatim into reference_tables/.
-CSV_COPIES: list[tuple[str, Path]] = [
-    ("reference_sofi_progress.csv", REF_TABLES / "reference_sofi_progress.csv"),
-]
-
 
 def drop_attachments(df: pd.DataFrame) -> pd.DataFrame:
     """SharePoint exports include an 'Attachments' column that is always empty.
@@ -90,15 +85,6 @@ def main() -> None:
         # Replace Excel artefacts: nan strings written by dtype=str path.
         df = df.replace({"nan": pd.NA})
         dest.parent.mkdir(parents=True, exist_ok=True)
-        df.to_csv(dest, index=False, lineterminator="\n")
-        print(f"OK {fname} -> {dest.relative_to(REPO_ROOT)}  ({df.shape[0]} rows x {df.shape[1]} cols)")
-
-    for fname, dest in CSV_COPIES:
-        src = SRC / fname
-        if not src.exists():
-            print(f"SKIP missing csv: {fname}")
-            continue
-        df = pd.read_csv(src, dtype=str, keep_default_na=False, na_values=[""])
         df.to_csv(dest, index=False, lineterminator="\n")
         print(f"OK {fname} -> {dest.relative_to(REPO_ROOT)}  ({df.shape[0]} rows x {df.shape[1]} cols)")
 

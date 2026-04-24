@@ -4,24 +4,20 @@
 #            * crosswalk/directory_crosswalk_base.csv  (editable in repo)
 #            * external classifications fetched from
 #                unicef-drp/Country-and-Region-Metadata (GitHub)
-#            * reference_tables/reference_sofi_progress.csv
-#          Output is written both to the repo (githubOutputRoot) and to the
-#          legacy SharePoint Export folder for back-compatibility.
+#          Output is written to the repo output mirror only
+#          ({githubOutputRoot}/reference_data_manager/).
 #
 #          Replaces the legacy R scripts:
 #            EXTENSION/CROSSWALK/R/SECTION_WIDE_ADD.R
 #            EXTENSION/CROSSWALK/R/LDC_UPDATE.R
-#            EXTENSION/CROSSWALK/R/SOFI_PROGRESS.R
 #
 # Inputs:
 #   - reference_data_manager/crosswalk/directory_crosswalk_base.csv
-#   - reference_data_manager/reference_tables/reference_sofi_progress.csv
 #   - https://raw.githubusercontent.com/unicef-drp/Country-and-Region-Metadata/
 #       refs/heads/main/output/all_regions_long_format.csv
 #
 # Outputs:
 #   - {githubOutputRoot}/reference_data_manager/directory_crosswalk.csv
-#   - {refSharepointDir}/directory_crosswalk.csv  (NOT written; copy manually if needed)
 # ---------------------------------------------------------------------------
 
 if (!exists("projectFolder", envir = .GlobalEnv)) {
@@ -32,7 +28,6 @@ stopifnot(exists("rdmInputDir"), exists("rdmOutputDir"))
 
 # Editable inputs (repo)
 base_csv <- file.path(rdmInputDir, "crosswalk", "directory_crosswalk_base.csv")
-sofi_csv <- file.path(rdmInputDir, "reference_tables", "reference_sofi_progress.csv")
 
 # External classification table (long format)
 ext_long_url <- "https://raw.githubusercontent.com/unicef-drp/Country-and-Region-Metadata/refs/heads/main/output/all_regions_long_format.csv"
@@ -139,17 +134,7 @@ if (!is.null(ext_long)) {
   }
 }
 
-# --- 4. SOFI progress merge (legacy SOFI_PROGRESS.R) -----------------------
-if (file.exists(sofi_csv)) {
-  sofi <- readr::read_csv(sofi_csv, show_col_types = FALSE,
-                          col_types = readr::cols(.default = readr::col_character()))
-  data.table::setDT(sofi)
-  sofi_wide <- data.table::dcast(sofi, M49 ~ SecondLevelCode,
-                                 value.var = "SecondLevelName")
-  crosswalk <- dplyr::left_join(crosswalk, as.data.frame(sofi_wide), by = "M49")
-}
-
-# --- 5. Write outputs ------------------------------------------------------
+# --- 4. Write outputs ------------------------------------------------------
 out_repo <- file.path(rdmOutputDir, "directory_crosswalk.csv")
 dir.create(dirname(out_repo), recursive = TRUE, showWarnings = FALSE)
 readr::write_csv(crosswalk, out_repo)
